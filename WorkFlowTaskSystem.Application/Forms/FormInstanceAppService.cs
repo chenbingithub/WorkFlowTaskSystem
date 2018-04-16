@@ -5,13 +5,14 @@ using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using WorkFlowTaskSystem.Application.Forms.Dto;
-using WorkFlowTaskSystem.Core.Entitys.Forms;
+using WorkFlowTaskSystem.Core.Damain.Entities;
+using WorkFlowTaskSystem.Core.IRepositories;
 
 namespace WorkFlowTaskSystem.Application.Forms
 {
     public class FormInstanceAppService : AsyncCrudAppService<FormInstance, FormInstanceDto, string, PagedResultRequestDto, CreateFormInstanceDto, FormInstanceDto>, IFormInstanceAppService
     {
-        public FormInstanceAppService(IRepository<FormInstance, string> repository) : base(repository)
+        public FormInstanceAppService(IFormInstanceRepository repository) : base(repository)
         {
         }
     }

@@ -2,7 +2,7 @@
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 
-namespace WorkFlowTaskSystem.Core.Entitys
+namespace WorkFlowTaskSystem.Core.Damain.Entities
 {
     public class BaseEntity : AuditedEntity<string>, IDeletionAudited, IPassivable
     {

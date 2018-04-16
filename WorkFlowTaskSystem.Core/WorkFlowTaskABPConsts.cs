@@ -4,6 +4,9 @@ using System.Text;
 
 namespace WorkFlowTaskSystem.Core
 {
+    /// <summary>
+    /// 配置常量
+    /// </summary>
     public class WorkFlowTaskAbpConsts
     {
         public const string ConnectionStringName = "mongodb";

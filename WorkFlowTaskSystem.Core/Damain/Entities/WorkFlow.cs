@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WorkFlowTaskSystem.Core.Entitys.WorkFlows
+namespace WorkFlowTaskSystem.Core.Damain.Entities
 {
     /// <summary>
     /// 定义工作流类
@@ -15,10 +15,7 @@ namespace WorkFlowTaskSystem.Core.Entitys.WorkFlows
         /// 流程编码
         /// </summary>
         public string Code { get; set; }
-        /// <summary>
-        /// 流程id
-        /// </summary>
-        public string WorkFlowId { get; set; }
+        
         /// <summary>
         /// 活动节点 或 任务节点
         /// </summary>

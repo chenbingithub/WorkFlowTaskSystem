@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-using WorkFlowTaskSystem.Core.Entitys.WorkFlows;
+using WorkFlowTaskSystem.Core.Damain.Entities;
 
 namespace WorkFlowTaskSystem.Application.WorkFlows.Dto
 {
     [AutoMap(typeof(WorkFlowInstance))]
     public class WorkFlowInstanceDto : EntityDto<string>
     {
-        /// <summary>
-        /// 当前实例id
-        /// </summary>
-        public string WorkFlowInsId { get; set; }
+       
         /// <summary>
         /// 当前任务id
         /// </summary>
@@ -58,9 +55,9 @@ namespace WorkFlowTaskSystem.Application.WorkFlows.Dto
         public List<WorkFlowRecord> WorkFlowRecords { get; set; }
 
         /// <summary>
-        /// 定义的流程
+        /// 流程定义id
         /// </summary>
-        public WorkFlow WorkFlowIns { get; set; }
+        public string WorkFlowId { get; set; }
     }
     
 }

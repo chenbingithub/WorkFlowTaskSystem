@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-using WorkFlowTaskSystem.Core.Entitys.Forms;
-using WorkFlowTaskSystem.Core.Entitys.WorkFlows;
+using WorkFlowTaskSystem.Core.Damain.Entities;
 
 namespace WorkFlowTaskSystem.Application.WorkFlows.Dto
 {
@@ -14,10 +13,13 @@ namespace WorkFlowTaskSystem.Application.WorkFlows.Dto
         {
             Id = Guid.NewGuid().ToString("N");
         }
+
         /// <summary>
-        /// 当前实例id
+        /// 流程定义id
         /// </summary>
-        public string WorkFlowInsId { get; set; }
+        public string WorkFlowId { get; set; }
+
+        
         /// <summary>
         /// 当前任务id
         /// </summary>
@@ -29,10 +31,7 @@ namespace WorkFlowTaskSystem.Application.WorkFlows.Dto
         public string FormInsId { get; set; }
 
 
-        /// <summary>
-        /// 流程状态
-        /// </summary>
-        public WorkFlowState WorkFlowStateId { get; set; }
+        
         /// <summary>
         /// 标题名称
         /// </summary>
@@ -49,23 +48,12 @@ namespace WorkFlowTaskSystem.Application.WorkFlows.Dto
         /// 创建者工号
         /// </summary>
         public string CreateUserNo { get; set; }
-        /// <summary>
-        /// 创建时间
-        /// </summary>
-        public DateTime CreateTime { get; set; }
-        /// <summary>
-        /// 结束时间
-        /// </summary>
-        public DateTime? EndTime { get; set; }
-        /// <summary>
-        /// 操作任务记录
-        /// </summary>
-        public List<WorkFlowRecord> WorkFlowRecords { get; set; }
 
         /// <summary>
-        /// 定义的流程
+        /// 处理人
         /// </summary>
-        public WorkFlowDto WorkFlowIns { get; set; }
+        public List<OperationUser> OperationUsers { get; set; }
+
     }
     
 }

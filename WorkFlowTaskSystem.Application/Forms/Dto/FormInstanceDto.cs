@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-using WorkFlowTaskSystem.Core.Entitys.Forms;
+using WorkFlowTaskSystem.Core.Damain.Entities;
 
 namespace WorkFlowTaskSystem.Application.Forms.Dto
 {

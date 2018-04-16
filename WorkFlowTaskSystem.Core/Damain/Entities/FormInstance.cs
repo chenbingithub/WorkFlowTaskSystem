@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WorkFlowTaskSystem.Core.Entitys.Forms
+namespace WorkFlowTaskSystem.Core.Damain.Entities
 {
      public class FormInstance: BaseEntity
     {

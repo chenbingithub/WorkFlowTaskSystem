@@ -5,7 +5,7 @@ using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using MongoDB.Bson;
 using WorkFlowTaskSystem.Core;
-using WorkFlowTaskSystem.Core.Entitys.Forms;
+using WorkFlowTaskSystem.Core.Damain.Entities;
 
 namespace WorkFlowTaskSystem.Application.Forms.Dto
 {

@@ -6,8 +6,7 @@ using System.Reflection;
 using Abp.Domain.Repositories;
 using Abp.Reflection.Extensions;
 using WorkFlowTaskSystem.Core;
-using WorkFlowTaskSystem.Core.Entitys.Forms;
-using WorkFlowTaskSystem.Core.Entitys.WorkFlows;
+using WorkFlowTaskSystem.Core.Damain.Entities;
 using WorkFlowTaskSystem.MongoDb.Repositories;
 
 namespace WorkFlowTaskSystem.MongoDb
@@ -18,8 +17,8 @@ namespace WorkFlowTaskSystem.MongoDb
         public override void PreInitialize()
         {
             
-            IocManager.Register<IRepository<Form,string>, FormRepository>();
-            IocManager.Register<IRepository<FormInstance, string>, FormInstanceRepository>();
+            //IocManager.Register<IRepository<Form,string>, FormRepository>();
+            //IocManager.Register<IRepository<FormInstance, string>, FormInstanceRepository>();
             IocManager.Register<IRepository<WorkFlowInstance, string>, WorkFlowInstanceRepository>();
             IocManager.Register<IRepository<WorkFlow, string>, WorkFlowRepository>();
         }

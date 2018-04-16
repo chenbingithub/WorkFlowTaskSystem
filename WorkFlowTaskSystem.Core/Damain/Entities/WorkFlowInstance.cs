@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WorkFlowTaskSystem.Core.Entitys.WorkFlows
+namespace WorkFlowTaskSystem.Core.Damain.Entities
 {
     /// <summary>
     /// 流程实例
@@ -9,12 +9,9 @@ namespace WorkFlowTaskSystem.Core.Entitys.WorkFlows
     public class WorkFlowInstance: BaseEntity
     {
        
+        
         /// <summary>
-        /// 当前实例id
-        /// </summary>
-        public string WorkFlowInsId { get; set; }
-        /// <summary>
-        /// 当前任务id
+        /// 工作任务id
         /// </summary>
         public string WorkTaskId { get; set; }
 
@@ -58,9 +55,9 @@ namespace WorkFlowTaskSystem.Core.Entitys.WorkFlows
         public List<WorkFlowRecord> WorkFlowRecords { get; set; }
 
         /// <summary>
-        /// 定义的流程
+        /// 流程id
         /// </summary>
-        public WorkFlow WorkFlowIns { get; set; }
+        public string WorkFlowId { get; set; }
     }
 
     public class WorkFlowRecord {

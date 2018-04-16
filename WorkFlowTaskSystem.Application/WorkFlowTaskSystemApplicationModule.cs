@@ -9,7 +9,7 @@ using WorkFlowTaskSystem.MongoDb;
 
 namespace WorkFlowTaskSystem.Application
 {
-    [DependsOn(typeof(AbpAutoMapperModule), typeof(WorkFlowTaskSystemCoreModule), typeof(WorkFlowTaskSystemMongoDbModule))]
+    [DependsOn(typeof(AbpAutoMapperModule), typeof(WorkFlowTaskSystemMongoDbModule))]
     public class WorkFlowTaskSystemApplicationModule:AbpModule
     {
         public override void PreInitialize()

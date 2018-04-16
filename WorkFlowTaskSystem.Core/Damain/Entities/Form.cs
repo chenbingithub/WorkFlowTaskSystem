@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 
-namespace WorkFlowTaskSystem.Core.Entitys.Forms
+namespace WorkFlowTaskSystem.Core.Damain.Entities
 {
     public class Form: BaseEntity
     {
-        /// <summary>
-        /// 表单项
-        /// </summary>
-        public List<FormItem> FormItems { get; set; }
+        
         /// <summary>
         /// 表单名称
         /// </summary>
         public string Name { get; set; }
 
         public string Code { get; set; }
+        /// <summary>
+        /// 表单项
+        /// </summary>
+        public List<FormItem> FormItems { get; set; }
     }
     public class FormItem
     {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-using WorkFlowTaskSystem.Core.Entitys.WorkFlows;
+using WorkFlowTaskSystem.Core.Damain.Entities;
 
 namespace WorkFlowTaskSystem.Application.WorkFlows.Dto
 {
@@ -16,10 +16,7 @@ namespace WorkFlowTaskSystem.Application.WorkFlows.Dto
         /// 流程编码
         /// </summary>
         public string Code { get; set; }
-        /// <summary>
-        /// 流程id
-        /// </summary>
-        public string WorkFlowId { get; set; }
+       
         /// <summary>
         /// 活动节点 或 任务节点
         /// </summary>

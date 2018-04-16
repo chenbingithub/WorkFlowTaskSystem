@@ -8,13 +8,14 @@ using Abp.Domain.Repositories;
 using MongoDB.Bson;
 using WorkFlowTaskSystem.Application.Forms.Dto;
 using WorkFlowTaskSystem.Core;
-using WorkFlowTaskSystem.Core.Entitys.Forms;
+using WorkFlowTaskSystem.Core.Damain.Entities;
+using WorkFlowTaskSystem.Core.IRepositories;
 
 namespace WorkFlowTaskSystem.Application.Forms
 {
     public class FormAppService : AsyncCrudAppService<Form, FormDto, string, PagedResultRequestDto, CreateFormDto, FormDto>, IFormAppService
     {
-        public FormAppService(IRepository<Form, string> repository) : base(repository)
+        public FormAppService(IFormRepository repository) : base(repository)
         {
             
         }

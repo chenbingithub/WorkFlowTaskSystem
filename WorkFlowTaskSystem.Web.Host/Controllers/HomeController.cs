@@ -23,12 +23,12 @@ namespace WorkFlowTaskSystem.Web.Host.Controllers
         {
             _formAppService.Create(new CreateFormDto()
             {
-                Name = "test1",
-                Code = "first1",
+                Name = "test2",
+                Code = "first2",
 
             });
-            FormDto dto=new FormDto(){Id = "4736e6dc28be46949a2b1fcaea84b1ad" }; 
-            _formAppService.Delete(dto);
+            //FormDto dto=new FormDto(){Id = "4736e6dc28be46949a2b1fcaea84b1ad" }; 
+            //_formAppService.Delete(dto);
             return View();
         }
 
