@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Abp.AspNetCore;
+using Abp.AspNetCore.Configuration;
 using Abp.Configuration.Startup;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
@@ -25,6 +26,15 @@ namespace WorkFlowTaskSystem.Web.Core
             _env = env;
             _appConfiguration = env.GetAppConfiguration();
         }
+
+        public override void PreInitialize()
+        {
+            Configuration.Modules.AbpAspNetCore()
+                .CreateControllersForAppServices(
+                    typeof(WorkFlowTaskSystemApplicationModule).GetAssembly()
+                );
+        }
+
         public override void Initialize()
         {
             //mongodb数据库连接地址

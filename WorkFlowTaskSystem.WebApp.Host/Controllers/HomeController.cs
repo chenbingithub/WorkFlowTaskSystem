@@ -4,11 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WorkFlowTaskSystem.Controllers;
 using WorkFlowTaskSystem.WebApp.Host.Models;
 
 namespace WorkFlowTaskSystem.WebApp.Host.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : WorkFlowTaskSystemControllerBase
     {
         public IActionResult Index()
         {
