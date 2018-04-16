@@ -89,20 +89,65 @@ namespace WorkFlowTaskSystem.Application.WorkFlows
             Repository.Insert(workFlowInstance);
             return;
         }
-
-        public void Back()
+        /// <summary>
+        /// 退回流程
+        /// </summary>
+        /// <param name="backTask"></param>
+        public void Back(BackTask backTask)
         {
-            throw new NotImplementedException();
+            //找到当前流程
+            WorkFlowInstance currentFlow = Repository.FirstOrDefault(backTask.WorkflowInsId);
+            List<WorkFlowRecord> workFlowRecords = currentFlow.WorkFlowRecords.Where(u => u.WorkTaskIns.WorkTaskId == currentFlow.WorkTaskId).ToList();
+            //找到定义的流程
+            WorkFlow workFlow = _workFlowRepository.FirstOrDefault(currentFlow.WorkFlowId);
+            WorkTask currenTask = workFlow.WorkTasks.Find(u => u.WorkTaskId == currentFlow.WorkTaskId);
+            foreach (var record in workFlowRecords)
+            {
+                if (string.Equals(record.ApplyUserNo, backTask.CurrentUser.UserNo,
+                    StringComparison.CurrentCultureIgnoreCase))
+                {
+                    record.ActivityStateId = ActivityState.SendBacked;
+                    record.EndTime = DateTime.Now;
+                    record.ApplyContent = backTask.ApplyContent ?? "不同意";
+                }
+                else
+                {
+                    if (currenTask.OperationTypeId == OperationType.All || currenTask.OperationTypeId == OperationType.ChocieOne)
+                    {
+                        record.ActivityStateId = ActivityState.End;
+                        record.EndTime = DateTime.Now;
+                        record.ApplyContent = "流程已结束";
+                    }
+                }
+            }
+            string backtaskId = backTask.BackWorkTaskId ;
+            List<WorkFlowRecord> wrs= currentFlow.WorkFlowRecords.Where(u => u.WorkTaskIns.WorkTaskId == backtaskId).ToList();
+            foreach (var record in wrs)
+            {
+                WorkFlowRecord r = record;
+                r.ActivityStateId = ActivityState.Running;
+                r.CreateTime=DateTime.Now;
+                r.EndTime = null;
+                r.ApplyContent = "";
+                currentFlow.WorkFlowRecords.Add(r);
+
+            }
+            Repository.Update(currentFlow);
         }
-        ///
+        /// <summary>
+        ///处理当前任务，提交至下一步
+        /// </summary>
+        /// <param name="nextTask"></param>
         public void Next(NextTask nextTask)
         {
             //找到当前流程
             WorkFlowInstance currentFlow= Repository.FirstOrDefault(nextTask.WorkflowInsId);
-           List<WorkFlowRecord> workFlowRecords= currentFlow.WorkFlowRecords.Where(u => u.WorkTaskIns.WorkTaskId == nextTask.WorktaskId).ToList();
+           List<WorkFlowRecord> workFlowRecords= currentFlow.WorkFlowRecords.Where(u => u.WorkTaskIns.WorkTaskId == currentFlow.WorkTaskId).ToList();
             //找到定义的流程
             WorkFlow workFlow = _workFlowRepository.FirstOrDefault(currentFlow.WorkFlowId);
-            WorkTask currenTask = workFlow.WorkTasks.Find(u=>u.WorkTaskId==nextTask.WorktaskId);
+            WorkTask currenTask = workFlow.WorkTasks.Find(u => u.WorkTaskId == currentFlow.WorkTaskId);
+           
+            
             foreach (var record in workFlowRecords)
             {
                 if (string.Equals(record.ApplyUserNo, nextTask.CurrentUser.UserNo,
@@ -130,6 +175,7 @@ namespace WorkFlowTaskSystem.Application.WorkFlows
             {
                 
                string nextTaskid = string.IsNullOrEmpty(nextTask.NextWorkTaskId) ?  currenTask.NextWorkTaskId:nextTask.NextWorkTaskId;
+                currentFlow.WorkTaskId = nextTaskid;
                 WorkTask nextworkTask = workFlow.WorkTasks.Find(u => u.WorkTaskId == nextTaskid);
                 if (nextTask.OperationUsers != null && nextTask.OperationUsers.Count > 0)
                 {
@@ -190,16 +236,49 @@ namespace WorkFlowTaskSystem.Application.WorkFlows
 
     public class NextTask
     {
+        /// <summary>
+        /// 流程实例id
+        /// </summary>
         public string WorkflowInsId { get; set; }
-        public string WorktaskId { get; set; }
+      
 
         /// <summary>
-        /// 为空时，走默认定义的
+        /// 下一步任务,为空时执行默认任务
         /// </summary>
         public string NextWorkTaskId { get; set; }
-
+        /// <summary>
+        /// 当前操作人
+        /// </summary>
         public OperationUser CurrentUser { get; set; }
+        /// <summary>
+        /// 下一步任务操作人
+        /// </summary>
         public List<OperationUser> OperationUsers { get; set; }
+        /// <summary>
+        /// 审批意见
+        /// </summary>
+        public string ApplyContent { get; set; }
+    }
+
+    public class BackTask
+    {
+        /// <summary>
+        /// 流程实例id
+        /// </summary>
+        public string WorkflowInsId { get; set; }
+
+        /// <summary>
+        /// 退回任务
+        /// </summary>
+        public string BackWorkTaskId { get; set; }
+        /// <summary>
+        /// 当前操作人
+        /// </summary>
+        public OperationUser CurrentUser { get; set; }
+
+        /// <summary>
+        /// 审批意见
+        /// </summary>
         public string ApplyContent { get; set; }
     }
 }
