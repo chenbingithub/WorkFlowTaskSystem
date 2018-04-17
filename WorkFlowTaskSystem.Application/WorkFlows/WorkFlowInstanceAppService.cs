@@ -6,6 +6,7 @@ using System.Text;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
+using Abp.Net.Mail.Smtp;
 using WorkFlowTaskSystem.Application.WorkFlows.Dto;
 using WorkFlowTaskSystem.Core.Damain.Entities;
 using WorkFlowTaskSystem.Core.IRepositories;
@@ -14,10 +15,12 @@ namespace WorkFlowTaskSystem.Application.WorkFlows
 {
     public class WorkFlowInstanceAppService : AsyncCrudAppService<WorkFlowInstance, WorkFlowInstanceDto, string, PagedResultRequestDto, CreateWorkFlowInstanceDto, WorkFlowInstanceDto>, IWorkFlowInstanceAppService
     {
+        private ISmtpEmailSender _emailSender;
         private IWorkFlowRepository _workFlowRepository;
-        public WorkFlowInstanceAppService(IWorkFlowInstanceRepository repository, IWorkFlowRepository workFlowRepository) : base(repository)
+        public WorkFlowInstanceAppService(IWorkFlowInstanceRepository repository, IWorkFlowRepository workFlowRepository, ISmtpEmailSender emailSender) : base(repository)
         {
             _workFlowRepository = workFlowRepository;
+            _emailSender = emailSender;
         }
         /// <summary>
         /// 发起流程

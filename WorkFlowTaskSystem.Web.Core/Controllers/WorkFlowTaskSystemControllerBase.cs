@@ -1,10 +1,11 @@
 using Abp.AspNetCore.Mvc.Controllers;
+using WorkFlowTaskSystem.Web.Core.Email;
 
 namespace WorkFlowTaskSystem.Controllers
 {
-    public abstract class WorkFlowTaskSystemControllerBase : AbpController
+    public  class WorkFlowTaskSystemControllerBase : AbpController
     {
-        
        
+
     }
 }

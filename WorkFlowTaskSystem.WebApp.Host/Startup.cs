@@ -47,6 +47,7 @@ namespace WorkFlowTaskSystem.WebApp.Host
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseAbp();
+            
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
