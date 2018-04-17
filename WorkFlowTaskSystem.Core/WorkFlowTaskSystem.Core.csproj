@@ -8,4 +8,8 @@
     <PackageReference Include="abp" Version="3.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Damain\Uow\" />
+  </ItemGroup>
+
 </Project>

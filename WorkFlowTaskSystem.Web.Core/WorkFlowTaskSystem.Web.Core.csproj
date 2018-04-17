@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WorkFlowTaskSystem.Application\WorkFlowTaskSystem.Application.csproj" />
+    <ProjectReference Include="..\WorkFlowTaskSystem.MongoDb\WorkFlowTaskSystem.MongoDb.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -17,7 +17,7 @@ using WorkFlowTaskSystem.Web.Core.Email;
 
 namespace WorkFlowTaskSystem.Web.Core
 {
-   [DependsOn(typeof(WorkFlowTaskSystemApplicationModule),typeof(AbpRedisCacheModule),typeof(AbpAspNetCoreModule))]
+   [DependsOn(typeof(WorkFlowTaskSystemApplicationModule),typeof(AbpRedisCacheModule),typeof(AbpAspNetCoreModule),typeof(WorkFlowTaskSystemMongoDbModule))]
     public class WorkFlowTaskSystemWebCoreModule:AbpModule
     {
 

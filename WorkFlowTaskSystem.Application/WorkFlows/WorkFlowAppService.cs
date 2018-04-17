@@ -7,7 +7,7 @@ using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using WorkFlowTaskSystem.Application.WorkFlows.Dto;
 using WorkFlowTaskSystem.Core.Damain.Entities;
-using WorkFlowTaskSystem.Core.IRepositories;
+using WorkFlowTaskSystem.Core.Damain.Repositories;
 
 namespace WorkFlowTaskSystem.Application.WorkFlows
 {

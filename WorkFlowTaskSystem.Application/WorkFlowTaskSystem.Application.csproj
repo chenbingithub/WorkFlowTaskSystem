@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WorkFlowTaskSystem.MongoDb\WorkFlowTaskSystem.MongoDb.csproj" />
+    <PackageReference Include="Abp.automapper" Version="3.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.automapper" Version="3.5.0" />
+    <ProjectReference Include="..\WorkFlowTaskSystem.Core\WorkFlowTaskSystem.Core.csproj" />
   </ItemGroup>
 
 </Project>

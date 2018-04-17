@@ -7,7 +7,7 @@ using Abp.MongoDb.Repositories;
 using MongoDB.Bson;
 using WorkFlowTaskSystem.Core;
 using WorkFlowTaskSystem.Core.Damain.Entities;
-using WorkFlowTaskSystem.Core.IRepositories;
+using WorkFlowTaskSystem.Core.Damain.Repositories;
 
 namespace WorkFlowTaskSystem.MongoDb.Repositories
 {

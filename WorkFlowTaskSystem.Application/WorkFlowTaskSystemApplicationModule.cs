@@ -5,11 +5,10 @@ using Abp.Modules;
 using Abp.Reflection.Extensions;
 using WorkFlowTaskSystem.Application.Forms;
 using WorkFlowTaskSystem.Core;
-using WorkFlowTaskSystem.MongoDb;
 
 namespace WorkFlowTaskSystem.Application
 {
-    [DependsOn(typeof(AbpAutoMapperModule), typeof(WorkFlowTaskSystemMongoDbModule))]
+    [DependsOn(typeof(AbpAutoMapperModule), typeof(WorkFlowTaskSystemCoreModule))]
     public class WorkFlowTaskSystemApplicationModule:AbpModule
     {
         public override void PreInitialize()
