@@ -1,25 +1,124 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+
 <div id="app">
-    <i-button v-on:click="show">Click me!</i-button>
-    <Modal v-model="visible" title="Welcome">Welcome to iView</Modal>
+    <Row style="height: 67px;background-image: url('/images/bg3.png') repeat-x;">
+        <i-col span="24">
+            变体
+        </i-col>
+    </Row>
+    <Row >
+        <i-col span="5" >
+            <Menu :theme="theme2" width="auto" style="min-height:500px;">
+                <Submenu key="1">
+                    <template slot="title">
+                        <Icon type="ios-paper"></Icon>
+                        内容管理
+                    </template>
+                    <Menu-item key="1-1">文章管理</Menu-item>
+                    <Menu-item key="1-2">评论管理</Menu-item>
+                    <Menu-item key="1-3">举报管理</Menu-item>
+                </Submenu>
+                <Submenu key="2">
+                    <template slot="title">
+                        <Icon type="ios-people"></Icon>
+                        用户管理
+                    </template>
+                    <Menu-item key="2-1">新增用户</Menu-item>
+                    <Menu-item key="2-2">活跃用户</Menu-item>
+                </Submenu>
+                </Menu>
+
+        </i-col>
+        <i-col span="19">
+            <i-table border :content="self" :columns="columns7" :data="data6"></i-table>
+        </i-col>
+    </Row>
+    
 </div>
 <script>
-    new Vue({
+   var vm=new Vue({
         el: '#app',
-        data: {
-            visible: false
+         data () {
+            return {
+                self: this,
+                columns7: [
+                    {
+                        title: '姓名',
+                        key: 'name',
+                        render (row, column, index) {
+                            return `<Icon type="person"></Icon> <strong>${row.name}</strong>`;
+                        }
+                    },
+                    {
+                        title: '年龄',
+                        key: 'age'
+                    },
+                    {
+                        title: '地址',
+                        key: 'address'
+                    },
+                    {
+                        title: '操作',
+                        key: 'action',
+                        width: 150,
+                        align: 'center',
+                        render (row, column, index) {
+                            return `<i-button type="primary" size="small" v-on:click="show(${index})">查看</i-button> <i-button type="error" size="small" v-on:click="remove(${index})">删除</i-button>`;
+                        }
+                    }
+                ],
+                data6: [
+                    {
+                        name: '王小明',
+                        age: 18,
+                        address: '北京市朝阳区芍药居'
+                    },
+                    {
+                        name: '张小刚',
+                        age: 25,
+                        address: '北京市海淀区西二旗'
+                    },
+                    {
+                        name: '李小红',
+                        age: 30,
+                        address: '上海市浦东新区世纪大道'
+                    },
+                    {
+                        name: '周小伟',
+                        age: 26,
+                        address: '深圳市南山区深南大道'
+                    }
+                ]
+            }
         },
         methods: {
-            show: function () {
-                this.visible = true;
+            show (index) {
+                this.$Modal.info({
+                    title: '用户信息',
+                    content: `姓名：${this.data6[index].name}<br>年龄：${this.data6[index].age}<br>地址：${this.data6[index].address}`
+                })
+            },
+            remove (index) {
+                this.data6.splice(index, 1);
+            },
+            init() {
+                //alert();
             }
-        }
+
+       },
+       created() {
+           this.init();
+       },
+       mounted() {
+           this.init();
+           
+       }
+
     })
+
 </script>
-
-
-
-
-

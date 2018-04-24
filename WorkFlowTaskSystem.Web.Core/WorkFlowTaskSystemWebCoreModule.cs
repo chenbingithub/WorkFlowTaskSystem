@@ -37,6 +37,16 @@ namespace WorkFlowTaskSystem.Web.Core
                 .CreateControllersForAppServices(
                     typeof(WorkFlowTaskSystemApplicationModule).GetAssembly()
                 );
+
+            //配置跨域
+
+            //GlobalConfiguration.Configuration.EnableCors(new System.Web.Http.Cors.EnableCorsAttribute("*", "*", "*"));
+
+            //配置输出json时不使用骆驼式命名法，按对象属性原名输出
+
+            //GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
+
+            
             //设置所有缓存的默认过期时间
             Configuration.Caching.ConfigureAll(cache =>
             {

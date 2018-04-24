@@ -4,6 +4,7 @@ using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using WorkFlowTaskSystem.Application.Forms;
+using WorkFlowTaskSystem.Application.Roles;
 using WorkFlowTaskSystem.Core;
 
 namespace WorkFlowTaskSystem.Application
@@ -13,7 +14,7 @@ namespace WorkFlowTaskSystem.Application
     {
         public override void PreInitialize()
         {
-            //IocManager.Register<IFormAppService, FormAppService>();
+            IocManager.Register<IRoleAppService, RoleAppService>();
             base.PreInitialize();
         }
 

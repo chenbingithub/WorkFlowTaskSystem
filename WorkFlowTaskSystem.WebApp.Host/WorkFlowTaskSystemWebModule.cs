@@ -7,7 +7,11 @@ namespace WorkFlowTaskSystem.WebApp.Host
     [DependsOn(typeof(WorkFlowTaskSystemWebCoreModule))]
     public class WorkFlowTaskSystemWebModule: AbpModule
     {
-       
+        public override void PreInitialize()
+        {
+            
+            base.PreInitialize();
+        }
 
         public override void Initialize()
         {
