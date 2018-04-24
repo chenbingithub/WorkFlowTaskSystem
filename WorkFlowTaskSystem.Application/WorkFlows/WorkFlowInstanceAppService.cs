@@ -13,7 +13,7 @@ using WorkFlowTaskSystem.Core.Damain.Repositories;
 
 namespace WorkFlowTaskSystem.Application.WorkFlows
 {
-    public class WorkFlowInstanceAppService : AsyncCrudAppService<WorkFlowInstance, WorkFlowInstanceDto, string, PagedResultRequestDto, CreateWorkFlowInstanceDto, WorkFlowInstanceDto>, IWorkFlowInstanceAppService
+    public class WorkFlowInstanceAppService : WorkFlowTaskSystemAppServiceBase<WorkFlowInstance, WorkFlowInstanceDto,CreateWorkFlowInstanceDto>, IWorkFlowInstanceAppService
     {
         private ISmtpEmailSender _emailSender;
         private IWorkFlowRepository _workFlowRepository;

@@ -20,9 +20,15 @@ namespace WorkFlowTaskSystem.Application
 
         public override void Initialize()
         {
+            var thisAssembly = typeof(WorkFlowTaskSystemApplicationModule).GetAssembly();
 
-            //把当前程序集的特定类或接口注册到依赖容器中
-            IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
+            IocManager.RegisterAssemblyByConvention(thisAssembly);
+
+            Configuration.Modules.AbpAutoMapper().Configurators.Add(
+                // Scan the assembly for classes which inherit from AutoMapper.Profile
+                cfg => cfg.AddProfiles(thisAssembly)
+            );
+           
         }
     }
 }

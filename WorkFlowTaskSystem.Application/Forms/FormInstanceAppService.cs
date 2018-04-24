@@ -10,7 +10,7 @@ using WorkFlowTaskSystem.Core.Damain.Repositories;
 
 namespace WorkFlowTaskSystem.Application.Forms
 {
-    public class FormInstanceAppService : AsyncCrudAppService<FormInstance, FormInstanceDto, string, PagedResultRequestDto, CreateFormInstanceDto, FormInstanceDto>, IFormInstanceAppService
+    public class FormInstanceAppService : WorkFlowTaskSystemAppServiceBase<FormInstance, FormInstanceDto,CreateFormInstanceDto>, IFormInstanceAppService
     {
         public FormInstanceAppService(IFormInstanceRepository repository) : base(repository)
         {

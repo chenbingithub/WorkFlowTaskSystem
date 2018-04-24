@@ -7,7 +7,7 @@ using WorkFlowTaskSystem.Application.Forms.Dto;
 
 namespace WorkFlowTaskSystem.Application.Forms
 {
-    public interface IFormInstanceAppService : IAsyncCrudAppService<FormInstanceDto, string, PagedResultRequestDto, CreateFormInstanceDto, FormInstanceDto>
+    public interface IFormInstanceAppService : IWorkFlowTaskSystemAppServiceBase<FormInstanceDto,CreateFormInstanceDto>
     {
     }
 }

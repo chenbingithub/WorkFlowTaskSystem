@@ -14,7 +14,7 @@ using WorkFlowTaskSystem.Core.Damain.Repositories;
 
 namespace WorkFlowTaskSystem.Application.Forms
 {
-    public class FormAppService : AsyncCrudAppService<Form, FormDto, string, PagedResultRequestDto, CreateFormDto, FormDto>, IFormAppService
+    public class FormAppService : WorkFlowTaskSystemAppServiceBase<Form, FormDto,  CreateFormDto>, IFormAppService
     {
        
         private ICacheManager _cacheManager;

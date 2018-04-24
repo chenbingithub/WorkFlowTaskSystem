@@ -9,7 +9,7 @@ using WorkFlowTaskSystem.Core.Damain.Entities;
 
 namespace WorkFlowTaskSystem.Application.WorkFlows
 {
-    public interface IWorkFlowAppService : IAsyncCrudAppService<WorkFlowDto, string, PagedResultRequestDto, CreateWorkFlowDto, WorkFlowDto>
+    public interface IWorkFlowAppService : IWorkFlowTaskSystemAppServiceBase<WorkFlowDto, CreateWorkFlowDto>
     {
     }
 }

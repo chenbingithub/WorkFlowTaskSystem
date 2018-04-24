@@ -11,7 +11,7 @@ using WorkFlowTaskSystem.Core.Damain.Repositories;
 
 namespace WorkFlowTaskSystem.Application.WorkFlows
 {
-    public class WorkFlowAppService : AsyncCrudAppService<WorkFlow, WorkFlowDto, string, PagedResultRequestDto, CreateWorkFlowDto, WorkFlowDto>, IWorkFlowAppService
+    public class WorkFlowAppService : WorkFlowTaskSystemAppServiceBase<WorkFlow, WorkFlowDto,CreateWorkFlowDto>, IWorkFlowAppService
     {
         public WorkFlowAppService(IWorkFlowRepository repository) : base(repository)
         {

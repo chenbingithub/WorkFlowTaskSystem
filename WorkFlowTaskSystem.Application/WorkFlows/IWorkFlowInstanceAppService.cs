@@ -7,7 +7,7 @@ using WorkFlowTaskSystem.Application.WorkFlows.Dto;
 
 namespace WorkFlowTaskSystem.Application.WorkFlows
 {
-    public interface IWorkFlowInstanceAppService : IAsyncCrudAppService<WorkFlowInstanceDto, string, PagedResultRequestDto, CreateWorkFlowInstanceDto, WorkFlowInstanceDto>
+    public interface IWorkFlowInstanceAppService : IWorkFlowTaskSystemAppServiceBase<WorkFlowInstanceDto,  CreateWorkFlowInstanceDto>
     {
         
     }

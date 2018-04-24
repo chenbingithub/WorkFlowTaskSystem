@@ -40,10 +40,13 @@ namespace WorkFlowTaskSystem.WebApp.Host.Controllers
             // _cacheManager.GetCache("test3").Set("one", t.Result);
             // var dd= _formAppService.Get(new EntityDto<string>("25ae7f404d37420297939ffd427c2111"));
             //_emailSender.Send("1028374217@qq.com","test","哈哈哈哈");
-            _roleAppService.Create(new CreateRoleDto()
+            _roleAppService.Update(new RoleDto()
             {
+                Id= "f7e4fa3aa53b41d2896955fbfe3cd6c8",
+                Description="tttt",
+                IsActive=true,
                 Name = "管理员",
-                Code = "admin"
+                Code = "adminasf"
             });
             return View();
         }
