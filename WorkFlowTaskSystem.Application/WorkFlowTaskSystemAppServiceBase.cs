@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using Abp.Domain.Repositories;
 using Abp.ObjectMapping;
 using WorkFlowTaskSystem.Application.Forms.Dto;
@@ -18,7 +21,7 @@ namespace WorkFlowTaskSystem.Application
     {
     }
 
-    public interface IWorkFlowTaskSystemAppServiceBase<TEntityDto, TCreateInput> : IWorkFlowTaskSystemAppServiceBase<TEntityDto, string, PagedResultRequestDto, TCreateInput, TEntityDto>
+    public interface IWorkFlowTaskSystemAppServiceBase<TEntityDto, TCreateInput> : IWorkFlowTaskSystemAppServiceBase<TEntityDto, string, PagedAndSortedResultRequestDto, TCreateInput, TEntityDto>
         where TEntityDto : IEntityDto<string>
     {
     }
@@ -39,9 +42,24 @@ namespace WorkFlowTaskSystem.Application
             Repository.Update(entity);
             return MapToEntityDto(entity);
         }
+
+        protected override IQueryable<TEntity> ApplySorting(IQueryable<TEntity> query, TGetAllInput input)
+        {
+            var sortInput = input as ISortedResultRequest;
+            if (sortInput != null)
+            {
+                if (typeof(IAudited).GetTypeInfo().IsAssignableFrom(typeof(TEntity))) {
+                    (input as ISortedResultRequest).Sorting = "CreationTime DESC";
+                }
+                    
+            }
+            return base.ApplySorting(query, input);
+        }
+
         
+
     }
-    public class WorkFlowTaskSystemAppServiceBase<TEntity, TEntityDto, TCreateInput> : WorkFlowTaskSystemAppServiceBase<TEntity, TEntityDto, string, PagedResultRequestDto, TCreateInput, TEntityDto>
+    public class WorkFlowTaskSystemAppServiceBase<TEntity, TEntityDto, TCreateInput> : WorkFlowTaskSystemAppServiceBase<TEntity, TEntityDto, string, PagedAndSortedResultRequestDto, TCreateInput, TEntityDto>
         where TEntity : class, IEntity<string>
         where TEntityDto : IEntityDto<string>
     {
