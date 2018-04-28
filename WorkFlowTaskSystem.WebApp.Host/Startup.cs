@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WorkFlowTaskSystem.Web.Core.Configuration;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace WorkFlowTaskSystem.WebApp.Host
 {
@@ -94,6 +95,15 @@ namespace WorkFlowTaskSystem.WebApp.Host
             //app.UseAuthentication();
 
             //app.UseAbpRequestLocalization();
+            // Enable middleware to serve generated Swagger as a JSON endpoint
+            app.UseSwagger();
+            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+            app.UseSwaggerUI(options =>
+            {
+                options.InjectOnCompleteJavaScript("/swagger/ui/abp.js");
+                options.InjectOnCompleteJavaScript("/swagger/ui/on-complete.js");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "WorkFlowService API V1");
+            }); // URL: /swagger
 
             app.UseMvc(routes =>
             {

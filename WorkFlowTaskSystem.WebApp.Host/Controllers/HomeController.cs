@@ -8,6 +8,7 @@ using Abp.Net.Mail.Smtp;
 using Abp.Runtime.Caching;
 using Microsoft.AspNetCore.Mvc;
 using WorkFlowTaskSystem.Application.Forms;
+using WorkFlowTaskSystem.Application.PermissionInfos;
 using WorkFlowTaskSystem.Application.Roles;
 using WorkFlowTaskSystem.Application.Roles.Dto;
 using WorkFlowTaskSystem.Controllers;
@@ -21,12 +22,14 @@ namespace WorkFlowTaskSystem.WebApp.Host.Controllers
         private ICacheManager _cacheManager;
         private ISmtpEmailSender _emailSender;
         private IRoleAppService _roleAppService;
-        public HomeController(ICacheManager cacheManager, IFormAppService formAppService, ISmtpEmailSender emailSender, IRoleAppService roleAppService)
+        private IPermissionInfoAppService _permissionInfoAppService;
+        public HomeController(ICacheManager cacheManager, IFormAppService formAppService, ISmtpEmailSender emailSender, IRoleAppService roleAppService, IPermissionInfoAppService permissionInfoAppService)
         {
             _cacheManager = cacheManager;
             _formAppService = formAppService;
             _emailSender = emailSender;
             _roleAppService = roleAppService;
+            _permissionInfoAppService = permissionInfoAppService;
         }
 
         public IActionResult Index()
@@ -48,7 +51,14 @@ namespace WorkFlowTaskSystem.WebApp.Host.Controllers
             //    Name = "管理员",
             //    Code = "adminasf"
             //});
-            return View();
+            //_permissionInfoAppService.Create(new Application.PermissionInfos.Dto.CreatePermissionInfoDto {
+            //    Name="主菜单",
+            //    Code="Home",
+            //    ParentId="-1",
+            //    ParentName=""
+            //});
+            //return View();
+            return Redirect("/swagger");
         }
         public ActionResult NavMenu() {
             return PartialView();
