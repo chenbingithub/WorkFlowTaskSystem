@@ -14,7 +14,7 @@ using Abp.Domain.Entities.Auditing;
 
 namespace WorkFlowTaskSystem.MongoDb
 {
-    public class WorkFlowTaskRepositoryBase<TEntity, TPrimaryKey> : MongoDbRepositoryBase<TEntity, TPrimaryKey>
+    public  class WorkFlowTaskRepositoryBase<TEntity, TPrimaryKey> : MongoDbRepositoryBase<TEntity, TPrimaryKey>
          where TEntity : class, IEntity<TPrimaryKey>
     {
         public WorkFlowTaskRepositoryBase(IMongoDatabaseProvider databaseProvider) : base(databaseProvider)

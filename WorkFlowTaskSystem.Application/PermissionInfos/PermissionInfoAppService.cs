@@ -14,10 +14,10 @@ namespace WorkFlowTaskSystem.Application.PermissionInfos
 {
     public class PermissionInfoAppService : WorkFlowTaskSystemAppServiceBase<PermissionInfo, PermissionInfoDto, CreatePermissionInfoDto>, IPermissionInfoAppService
     {
-        private IPermissionInfoManager _permissionManager;
-        public PermissionInfoAppService(IPermissionInfoRepository repository, IPermissionInfoManager permissionInfoManager) : base(repository)
+        private PermissionInfoManager _permissionManager;
+        public PermissionInfoAppService(IPermissionInfoRepository repository, PermissionInfoManager permissionManager) : base(repository)
         {
-            _permissionManager = permissionInfoManager;
+            _permissionManager = permissionManager;
         }
 
 

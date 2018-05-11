@@ -8,7 +8,7 @@ using WorkFlowTaskSystem.Core.Damain.Repositories;
 
 namespace WorkFlowTaskSystem.Core.Damain.Services
 {
-    public class PermissionInfoManager : DomainService, IPermissionInfoManager
+    public class PermissionInfoManager : DomainService
     {
         private IPermissionInfoRepository _permissionInfoRepository;
         public PermissionInfoManager(IPermissionInfoRepository permissionInfoRepository)
