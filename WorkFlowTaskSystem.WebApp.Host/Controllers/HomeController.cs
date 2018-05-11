@@ -7,11 +7,12 @@ using Abp.Application.Services.Dto;
 using Abp.Net.Mail.Smtp;
 using Abp.Runtime.Caching;
 using Microsoft.AspNetCore.Mvc;
+using WorkFlowTaskSystem.Application.Basics.PermissionInfos;
+using WorkFlowTaskSystem.Application.Basics.PermissionInfos.Dto;
+using WorkFlowTaskSystem.Application.Basics.Roles;
 using WorkFlowTaskSystem.Application.Forms;
-using WorkFlowTaskSystem.Application.PermissionInfos;
-using WorkFlowTaskSystem.Application.Roles;
-using WorkFlowTaskSystem.Application.Roles.Dto;
 using WorkFlowTaskSystem.Controllers;
+using WorkFlowTaskSystem.Core.Damain.Services.Basics;
 using WorkFlowTaskSystem.WebApp.Host.Models;
 
 namespace WorkFlowTaskSystem.WebApp.Host.Controllers
@@ -23,16 +24,22 @@ namespace WorkFlowTaskSystem.WebApp.Host.Controllers
         private ISmtpEmailSender _emailSender;
         private IRoleAppService _roleAppService;
         private IPermissionInfoAppService _permissionInfoAppService;
-        public HomeController(ICacheManager cacheManager, IFormAppService formAppService, ISmtpEmailSender emailSender, IRoleAppService roleAppService, IPermissionInfoAppService permissionInfoAppService)
+        private UserManager _userManager;
+        private RoleManager _roleManager;
+        private OrganizationUnitManager _organizationUnitManager;
+        public HomeController(ICacheManager cacheManager, IFormAppService formAppService, ISmtpEmailSender emailSender, IRoleAppService roleAppService, IPermissionInfoAppService permissionInfoAppService, UserManager userManager, RoleManager roleManager, OrganizationUnitManager organizationUnitManager)
         {
             _cacheManager = cacheManager;
             _formAppService = formAppService;
             _emailSender = emailSender;
             _roleAppService = roleAppService;
             _permissionInfoAppService = permissionInfoAppService;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _organizationUnitManager = organizationUnitManager;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string [] dd)
         {
             //var t= _formAppService.Create(new CreateFormDto()
             // {
@@ -58,6 +65,22 @@ namespace WorkFlowTaskSystem.WebApp.Host.Controllers
             //    ParentName=""
             //});
             //return View();
+           //var p= _permissionInfoAppService.Create(new CreatePermissionInfoDto()
+           // {
+           //     Name = "test",
+           //     Code = "testcode",
+           // });
+           // var p2=_permissionInfoAppService.Create(new CreatePermissionInfoDto()
+           // {
+           //     Name = "test1",
+           //     Code = "testcode2",
+           // });
+           // _userManager.SetRole("1","2");
+           // _userManager.SetPermission("1", p.Result.Id);
+           // _userManager.SetOrganizationUnit("1","1","4");
+            //_roleManager.SetPermission("1", "d8ae87590c4a459ea6322f59e4f87375");
+            //_organizationUnitManager.SetRole("4", "1");
+            //var g=_userManager.GetAllPermissions("1");
             return Redirect("/swagger");
         }
         public ActionResult NavMenu() {
