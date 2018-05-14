@@ -3,7 +3,7 @@
     /// <summary>
     /// 定义权限
     /// </summary>
-    public class PermissionInfo: BaseEntity
+    public class PermissionInfo: BaseEntity,ITree
     {
         /// <summary>
         /// 名称

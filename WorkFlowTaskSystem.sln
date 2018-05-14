@@ -11,9 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkFlowTaskSystem.Applicat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkFlowTaskSystem.Web.Core", "WorkFlowTaskSystem.Web.Core\WorkFlowTaskSystem.Web.Core.csproj", "{35CF7D4A-20CA-4FA9-842A-ABF20CDA22C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkFlowTaskSystem.Web.Host", "WorkFlowTaskSystem.Web.Host\WorkFlowTaskSystem.Web.Host.csproj", "{76145802-8261-4F26-80B9-3263E6205DFE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkFlowTaskSystem.WebApp.Host", "WorkFlowTaskSystem.WebApp.Host\WorkFlowTaskSystem.WebApp.Host.csproj", "{F8927C62-939F-43E7-A4C0-5DC24DC73F28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkFlowTaskSystem.WebApp.Host", "WorkFlowTaskSystem.WebApp.Host\WorkFlowTaskSystem.WebApp.Host.csproj", "{F8927C62-939F-43E7-A4C0-5DC24DC73F28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +35,6 @@ Global
 		{35CF7D4A-20CA-4FA9-842A-ABF20CDA22C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35CF7D4A-20CA-4FA9-842A-ABF20CDA22C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35CF7D4A-20CA-4FA9-842A-ABF20CDA22C8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{76145802-8261-4F26-80B9-3263E6205DFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76145802-8261-4F26-80B9-3263E6205DFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76145802-8261-4F26-80B9-3263E6205DFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76145802-8261-4F26-80B9-3263E6205DFE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F8927C62-939F-43E7-A4C0-5DC24DC73F28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F8927C62-939F-43E7-A4C0-5DC24DC73F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8927C62-939F-43E7-A4C0-5DC24DC73F28}.Release|Any CPU.ActiveCfg = Release|Any CPU

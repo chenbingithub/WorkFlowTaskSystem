@@ -12,6 +12,7 @@ namespace WorkFlowTaskSystem.Application.Basics.OrganizationUnits.Dto
         public CreateOrganizationUnitDto()
         {
             Id = Guid.NewGuid().ToString("N");
+            ParentId = "-1";
         }
         [Required]
         public string Name { get; set; }
@@ -21,8 +22,11 @@ namespace WorkFlowTaskSystem.Application.Basics.OrganizationUnits.Dto
 
         
         public string Description { get; set; }
+        
 
-        public bool IsActive { get; set; }
+        public string ParentId { get; set; }
+
+        public string ParentName { get; set; }
 
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// 组织单位/组织架构
     /// </summary>
-   public class OrganizationUnit: BaseEntity
+   public class OrganizationUnit: BaseEntity,ITree
     {
         /// <summary>
         /// 名称

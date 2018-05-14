@@ -11,5 +11,6 @@ namespace WorkFlowTaskSystem.Core
     {
         public const string ConnectionStringName = "mongodb";
         public const string DatatabaseName = "database";
+        public const string DefaultPassPhrase = "workflowtoken";
     }
 }

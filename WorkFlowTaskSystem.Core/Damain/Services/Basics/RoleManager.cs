@@ -12,12 +12,14 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
 {
     public class RoleManager:DomainService
     {
+        private IRoleRepository _roleRepository;
         private IPermissionRoleUserOrganizationUnitRepository _permissionRoleUserOrganizationUnit;
         private IPermissionInfoRepository _permissionInfoRepository;
-        public RoleManager(IPermissionRoleUserOrganizationUnitRepository permissionRoleUserOrganizationUnit, IPermissionInfoRepository permissionInfoRepository)
+        public RoleManager(IPermissionRoleUserOrganizationUnitRepository permissionRoleUserOrganizationUnit, IPermissionInfoRepository permissionInfoRepository, IRoleRepository roleRepository)
         {
             _permissionRoleUserOrganizationUnit = permissionRoleUserOrganizationUnit;
             _permissionInfoRepository = permissionInfoRepository;
+            _roleRepository = roleRepository;
         }
 
         public Task<bool> SetPermission(string roleId, params string[] permissionIds)
@@ -55,5 +57,11 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
             var permissionInfos = _permissionInfoRepository.GetAll().Where(u => all.Contains(u.Id)).ToList();
             return Task.FromResult(permissionInfos);
         }
+
+        public IQueryable<Role> GetAll()
+        {
+            return _roleRepository.GetAll();
+        }
+
     }
 }

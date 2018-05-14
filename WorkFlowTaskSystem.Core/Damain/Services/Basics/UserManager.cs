@@ -19,8 +19,9 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
         private IPermissionRoleUserOrganizationUnitRepository _permissionRoleUserOrganizationUnit;
         private IOrganizationUnitUserRepository _organizationUnitUserRepository;
         private IOrganizationUnitRoleRepository _organizationUnitRoleRepository;
+        private IOrganizationUnitRepository _organizationUnitRepository;
 
-        public UserManager(IUserRepository userRepository, IRoleRepository roleRepository, IPermissionInfoRepository permissionInfoRepository, IPermissionRoleUserOrganizationUnitRepository permissionRoleUserOrganizationUnit, IUserRoleRepository userRoleRepository, IOrganizationUnitUserRepository organizationUnitUserRepository, IOrganizationUnitRoleRepository organizationUnitRoleRepository)
+        public UserManager(IUserRepository userRepository, IRoleRepository roleRepository, IPermissionInfoRepository permissionInfoRepository, IPermissionRoleUserOrganizationUnitRepository permissionRoleUserOrganizationUnit, IUserRoleRepository userRoleRepository, IOrganizationUnitUserRepository organizationUnitUserRepository, IOrganizationUnitRoleRepository organizationUnitRoleRepository, IOrganizationUnitRepository organizationUnitRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
@@ -29,9 +30,10 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
             _userRoleRepository = userRoleRepository;
             _organizationUnitUserRepository = organizationUnitUserRepository;
             _organizationUnitRoleRepository = organizationUnitRoleRepository;
+            _organizationUnitRepository = organizationUnitRepository;
         }
 
-        public Task<bool> SetRole(string userId,params string[] roleIds)
+        public bool SetRole(string userId,params string[] roleIds)
         {
             var all=_userRoleRepository.GetAll().Where(u => u.UserId == userId).ToList();
             if (all.Count > 0 && roleIds.Length >= 0)
@@ -56,18 +58,18 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
                 };
                 _userRoleRepository.Insert(userRole);
             }
-            return Task.FromResult(true);
+            return true;
         }
 
-        public Task<List<Role>> GetRoles(string userId)
+        public List<Role> GetRoles(string userId)
         {
             var all = _userRoleRepository.GetAll().Where(u => u.UserId == userId).Select(r=>r.RoleId).ToList();
-            if (all.Count <= 0) return Task.FromResult(new List<Role>());
+            if (all.Count <= 0) return new List<Role>();
             var roles=_roleRepository.GetAll().Where(u => all.Contains(u.Id)).ToList();
-            return Task.FromResult(roles);
+            return roles;
         }
 
-        public Task<bool> SetPermission(string userId, params string[] permissionIds)
+        public bool SetPermission(string userId, params string[] permissionIds)
         {
             var all = _permissionRoleUserOrganizationUnit.GetAll().Where(u => u.UserId == userId).ToList();
             if (all.Count > 0 && permissionIds.Length >= 0)
@@ -92,19 +94,19 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
                 };
                 _permissionRoleUserOrganizationUnit.Insert(permission);
             }
-            return Task.FromResult(true);
+            return true;
         }
         /// <summary>
         /// 获取该用户的直接权限
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public Task<List<PermissionInfo>> GetPermissions(string userId)
+        public List<PermissionInfo> GetPermissions(string userId)
         {
             var all = _permissionRoleUserOrganizationUnit.GetAll().Where(u => u.UserId == userId).Select(r => r.PermissionId).ToList();
-            if (all.Count <= 0) return Task.FromResult(new List<PermissionInfo>());
+            if (all.Count <= 0) return new List<PermissionInfo>();
             var permissionInfos = _permissionInfoRepository.GetAll().Where(u => all.Contains(u.Id)).ToList();
-            return Task.FromResult(permissionInfos);
+            return permissionInfos;
         }
         /// <summary>
         /// 设置部门
@@ -112,7 +114,7 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
         /// <param name="userId"></param>
         /// <param name="organizationUnitIds"></param>
         /// <returns></returns>
-        public Task<bool> SetOrganizationUnit(string userId, params string[] organizationUnitIds)
+        public bool SetOrganizationUnit(string userId, params string[] organizationUnitIds)
         {
             var all = _organizationUnitUserRepository.GetAll().Where(u => u.UserId == userId).ToList();
             if (all.Count > 0 && organizationUnitIds.Length >= 0)
@@ -137,15 +139,41 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
                 };
                 _organizationUnitUserRepository.Insert(organizationUnitUser);
             }
-            return Task.FromResult(true);
+            return true;
         }
 
+        public List<OrganizationUnit> GetOrganizationUnit(string userId)
+        {
+            var all = _organizationUnitUserRepository.GetAll().Where(u => u.UserId == userId).Select(r => r.OrganizationUnitId).ToList();
+            if (all.Count <= 0) return new List<OrganizationUnit>();
+            var organization = _organizationUnitRepository.GetAll().Where(u => all.Contains(u.Id)).ToList();
+            return organization;
+        }
+
+        public List<IviewTree> GetOrganizationTree(string userId)
+        {
+            var seleteids = _organizationUnitUserRepository.GetAll().Where(u => u.UserId == userId).Select(r => r.OrganizationUnitId).ToList();
+            var all=_organizationUnitRepository.GetAll().ToList();
+           return IviewTree.RecursiveQueries(all,seleteids);
+        }
+        public List<IviewTree> GetPermissionTree(string userId)
+        {
+            var seleteids = _permissionRoleUserOrganizationUnit.GetAll().Where(u => u.UserId == userId).Select(r => r.PermissionId).ToList();
+            var all = _permissionInfoRepository.GetAll().ToList();
+            return IviewTree.RecursiveQueries(all, seleteids);
+        }
+        public List<IviewTree> GetRoleTree(string userId)
+        {
+            var seleteids = _userRoleRepository.GetAll().Where(u => u.UserId == userId).Select(r => r.RoleId).ToList();
+            var all = _roleRepository.GetAll().ToList();
+            return IviewTree.LinearQueries(all, seleteids);
+        }
         /// <summary>
         /// 获取该用户下的所有权限
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public Task<List<PermissionInfo>> GetAllPermissions(string userId)
+        public List<PermissionInfo> GetAllPermissions(string userId)
         {
             var roles=_userRoleRepository.GetAll().Where(u => u.UserId == userId).Select(u => u.RoleId).ToList();
             var organizationUnits = _organizationUnitUserRepository.GetAll().Where(u => u.UserId == userId).Select(u => u.OrganizationUnitId).ToList();
@@ -157,7 +185,7 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
             }
             var all = _permissionRoleUserOrganizationUnit.GetAll().Where(u => u.UserId == userId|| roles.Contains(u.RoleId)||organizationUnits.Contains(u.OrganizationUnitId)).Select(r => r.PermissionId).ToList();
             var permissionInfos = _permissionInfoRepository.GetAll().Where(u => all.Contains(u.Id)).ToList();
-            return Task.FromResult(permissionInfos);
+            return permissionInfos;
         }
     }
 }

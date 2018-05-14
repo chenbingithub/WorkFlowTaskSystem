@@ -8,6 +8,7 @@ using Abp.Runtime.Security;
 using Abp.UI;
 using Microsoft.AspNetCore.Mvc;
 using WorkFlowTaskSystem.Controllers;
+using WorkFlowTaskSystem.Core;
 using WorkFlowTaskSystem.Web.Core.Models.TokenAuth;
 
 namespace WorkFlowTaskSystem.Web.Core.Controllers
@@ -15,9 +16,9 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
     [Route("api/[controller]/[action]")]
     public class TokenAuthController : WorkFlowTaskSystemControllerBase
     {
-       
 
-        
+
+
         //[HttpPost]
         //public async Task<AuthenticateResultModel> Authenticate([FromBody] AuthenticateModel model)
         //{
@@ -37,12 +38,12 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
         //    };
         //}
 
-        
-
-        
 
 
-       
+
+
+
+
 
         //private async Task<AbpLoginResult<Tenant, User>> GetLoginResultAsync(string usernameOrEmailAddress, string password)
         //{
@@ -89,9 +90,9 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
         //    return claims;
         //}
 
-        //private string GetEncrpyedAccessToken(string accessToken)
-        //{
-        //    return SimpleStringCipher.Instance.Encrypt(accessToken, AppConsts.DefaultPassPhrase);
-        //}
+        private string GetEncrpyedAccessToken(string accessToken)
+        {
+            return SimpleStringCipher.Instance.Encrypt(accessToken, WorkFlowTaskAbpConsts.DefaultPassPhrase);
+        }
     }
 }

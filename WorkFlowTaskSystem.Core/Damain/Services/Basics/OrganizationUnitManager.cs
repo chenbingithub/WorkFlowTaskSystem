@@ -18,7 +18,8 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
         private IRoleRepository _roleRepository;
         private IUserRepository _userRepository;
         private IPermissionInfoRepository _permissionInfoRepository;
-        public OrganizationUnitManager(IOrganizationUnitRoleRepository organizationUnitRoleRepository, IOrganizationUnitUserRepository organizationUnitUserRepository, IPermissionRoleUserOrganizationUnitRepository permissionRoleUserOrganizationUnitRepository, IRoleRepository roleRepository, IUserRepository userRepository, IPermissionInfoRepository permissionInfoRepository)
+        private IOrganizationUnitRepository _organizationUnitRepository;
+        public OrganizationUnitManager(IOrganizationUnitRoleRepository organizationUnitRoleRepository, IOrganizationUnitUserRepository organizationUnitUserRepository, IPermissionRoleUserOrganizationUnitRepository permissionRoleUserOrganizationUnitRepository, IRoleRepository roleRepository, IUserRepository userRepository, IPermissionInfoRepository permissionInfoRepository, IOrganizationUnitRepository organizationUnitRepository)
         {
             _organizationUnitRoleRepository = organizationUnitRoleRepository;
             _organizationUnitUserRepository = organizationUnitUserRepository;
@@ -26,6 +27,7 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
             _roleRepository = roleRepository;
             _userRepository = userRepository;
             _permissionInfoRepository = permissionInfoRepository;
+            _organizationUnitRepository = organizationUnitRepository;
         }
 
         public Task<bool> SetRole(string organizationUnitId, params string[] roleIds)
@@ -106,12 +108,12 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
         }
         
 
-        public Task<List<User>> GetUsers(string organizationUnitId)
+        public IQueryable<User> GetUsers(string organizationUnitId)
         {
             var all = _organizationUnitUserRepository.GetAll().Where(u => u.OrganizationUnitId == organizationUnitId).Select(r => r.UserId).ToList();
-            if (all.Count <= 0) return Task.FromResult(new List<User>());
-            var users = _userRepository.GetAll().Where(u => all.Contains(u.Id)).ToList();
-            return Task.FromResult(users);
+            if (all.Count <= 0) return _userRepository.GetAll().Where(u=>false);
+            var users = _userRepository.GetAll().Where(u => all.Contains(u.Id));
+            return users;
         }
 
         /// <summary>
@@ -124,6 +126,11 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
             var all = _permissionRoleUserOrganizationUnitRepository.GetAll().Where(u => u.OrganizationUnitId == organizationUnitId || roles.Contains(u.RoleId)).Select(r => r.PermissionId).ToList();
             var permissionInfos = _permissionInfoRepository.GetAll().Where(u => all.Contains(u.Id)).ToList();
             return Task.FromResult(permissionInfos);
+        }
+
+        public IQueryable<OrganizationUnit> GetAll()
+        {
+            return _organizationUnitRepository.GetAll();
         }
     }
 }

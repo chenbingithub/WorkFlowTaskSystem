@@ -3,7 +3,7 @@
     /// <summary>
     /// 角色
     /// </summary>
-    public class Role: BaseEntity
+    public class Role: BaseEntity,ILinear
     {
 
         /// <summary>

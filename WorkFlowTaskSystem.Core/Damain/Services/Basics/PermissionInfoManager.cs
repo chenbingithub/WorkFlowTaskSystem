@@ -17,5 +17,10 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
         public List<PermissionInfo> GetPermissionByParentId(string parentId) {
            return _permissionInfoRepository.GetAll().Where(u => u.ParentId == parentId).ToList();
         }
+
+        public IQueryable<PermissionInfo> GetAll()
+        {
+            return _permissionInfoRepository.GetAll();
+        }
     } 
 }

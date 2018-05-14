@@ -7,9 +7,13 @@ using Abp.Application.Services.Dto;
 using Abp.Net.Mail.Smtp;
 using Abp.Runtime.Caching;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.International.Converters.PinYinConverter;
+using WorkFlowTaskSystem.Application;
 using WorkFlowTaskSystem.Application.Basics.PermissionInfos;
 using WorkFlowTaskSystem.Application.Basics.PermissionInfos.Dto;
 using WorkFlowTaskSystem.Application.Basics.Roles;
+using WorkFlowTaskSystem.Application.Basics.Users;
+using WorkFlowTaskSystem.Application.Basics.Users.Dto;
 using WorkFlowTaskSystem.Application.Forms;
 using WorkFlowTaskSystem.Controllers;
 using WorkFlowTaskSystem.Core.Damain.Services.Basics;
@@ -27,7 +31,8 @@ namespace WorkFlowTaskSystem.WebApp.Host.Controllers
         private UserManager _userManager;
         private RoleManager _roleManager;
         private OrganizationUnitManager _organizationUnitManager;
-        public HomeController(ICacheManager cacheManager, IFormAppService formAppService, ISmtpEmailSender emailSender, IRoleAppService roleAppService, IPermissionInfoAppService permissionInfoAppService, UserManager userManager, RoleManager roleManager, OrganizationUnitManager organizationUnitManager)
+        private IUserAppService _userAppService;
+        public HomeController(ICacheManager cacheManager, IFormAppService formAppService, ISmtpEmailSender emailSender, IRoleAppService roleAppService, IPermissionInfoAppService permissionInfoAppService, UserManager userManager, RoleManager roleManager, OrganizationUnitManager organizationUnitManager, IUserAppService userAppService)
         {
             _cacheManager = cacheManager;
             _formAppService = formAppService;
@@ -37,9 +42,10 @@ namespace WorkFlowTaskSystem.WebApp.Host.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
             _organizationUnitManager = organizationUnitManager;
+            _userAppService = userAppService;
         }
 
-        public IActionResult Index(string [] dd)
+        public IActionResult Index()
         {
             //var t= _formAppService.Create(new CreateFormDto()
             // {
@@ -65,22 +71,29 @@ namespace WorkFlowTaskSystem.WebApp.Host.Controllers
             //    ParentName=""
             //});
             //return View();
-           //var p= _permissionInfoAppService.Create(new CreatePermissionInfoDto()
-           // {
-           //     Name = "test",
-           //     Code = "testcode",
-           // });
-           // var p2=_permissionInfoAppService.Create(new CreatePermissionInfoDto()
-           // {
-           //     Name = "test1",
-           //     Code = "testcode2",
-           // });
-           // _userManager.SetRole("1","2");
-           // _userManager.SetPermission("1", p.Result.Id);
-           // _userManager.SetOrganizationUnit("1","1","4");
+            //var p= _permissionInfoAppService.Create(new CreatePermissionInfoDto()
+            // {
+            //     Name = "test",
+            //     Code = "testcode",
+            // });
+            // var p2=_permissionInfoAppService.Create(new CreatePermissionInfoDto()
+            // {
+            //     Name = "test1",
+            //     Code = "testcode2",
+            // });
+            // _userManager.SetRole("1","2");
+            // _userManager.SetPermission("1", p.Result.Id);
+            // _userManager.SetOrganizationUnit("1","1","4");
             //_roleManager.SetPermission("1", "d8ae87590c4a459ea6322f59e4f87375");
             //_organizationUnitManager.SetRole("4", "1");
             //var g=_userManager.GetAllPermissions("1");
+            //_userAppService.Create(new CreateUserDto()
+            //{
+            //    UserName = "admin",
+            //    Password = "123456"
+            //});
+            //var dd = PinYinUtil.GetAllPinYin("陈斌");
+            //var ff = PinYinUtil.GetSimplePinYin("陈斌");
             return Redirect("/swagger");
         }
         public ActionResult NavMenu() {
