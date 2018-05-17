@@ -15,5 +15,8 @@
         public string ParentId { get; set; }
 
         public string ParentName { get; set; }
+
+        public string Path { get; set; }
+        public string PathName { get; set; }
     }
 }

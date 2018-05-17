@@ -22,5 +22,10 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
         {
             return _permissionInfoRepository.GetAll();
         }
+
+        public void Insert(PermissionInfo entity)
+        {
+            _permissionInfoRepository.Insert(entity);
+        }
     } 
 }

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Abp.Configuration.Startup;
 using Abp.Modules;
 using WorkFlowTaskSystem.Web.Core;
 
@@ -9,7 +10,7 @@ namespace WorkFlowTaskSystem.WebApp.Host
     {
         public override void PreInitialize()
         {
-            
+            Configuration.Modules.AbpWebCommon().SendAllExceptionsToClients = true;
             base.PreInitialize();
         }
 

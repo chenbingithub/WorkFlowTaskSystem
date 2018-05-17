@@ -8,6 +8,7 @@ using Abp.Extensions;
 using Castle.Facilities.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WorkFlowTaskSystem.Web.Core.Configuration;
@@ -30,7 +31,8 @@ namespace WorkFlowTaskSystem.WebApp.Host
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
+            services.AddSession();
+            //AuthConfigurer.Configure(services, _appConfiguration);
             // Configure CORS for angular2 UI
             services.AddCors(
                 options => options.AddPolicy(
@@ -80,15 +82,17 @@ namespace WorkFlowTaskSystem.WebApp.Host
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseBrowserLink();
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseBrowserLink();
+            //    app.UseDeveloperExceptionPage();
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Home/Error");
+            //}
+
+            app.UseSession();
             //初始化abp框架
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; });
             //设置跨域处理的 代理

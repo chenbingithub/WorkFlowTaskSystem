@@ -4,10 +4,10 @@
     {
         public string AccessToken { get; set; }
 
-        public string EncryptedAccessToken { get; set; }
+        public object EncryptedAccessToken { get; set; }
 
         public int ExpireInSeconds { get; set; }
 
-        public long UserId { get; set; }
+        public string UserId { get; set; }
     }
 }

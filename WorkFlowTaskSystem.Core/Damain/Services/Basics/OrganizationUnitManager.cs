@@ -107,15 +107,33 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
             return Task.FromResult(permissionInfos);
         }
         
-
+        /// <summary>
+        /// 获取当前部门下的用户
+        /// </summary>
+        /// <param name="organizationUnitId"></param>
+        /// <returns></returns>
         public IQueryable<User> GetUsers(string organizationUnitId)
         {
+
             var all = _organizationUnitUserRepository.GetAll().Where(u => u.OrganizationUnitId == organizationUnitId).Select(r => r.UserId).ToList();
             if (all.Count <= 0) return _userRepository.GetAll().Where(u=>false);
             var users = _userRepository.GetAll().Where(u => all.Contains(u.Id));
             return users;
         }
-
+        /// <summary>
+        /// 获取当前部门下以及子部门下所有用户
+        /// </summary>
+        /// <param name="organizationUnitId"></param>
+        /// <returns></returns>
+        public IQueryable<User> GetChildrenUsers(string organizationUnitId)
+        {
+           var child= _organizationUnitRepository.GetAll().Where(u => u.Path.Contains(organizationUnitId)).Select(u => u.Id)
+                .ToList();
+            var all = _organizationUnitUserRepository.GetAll().Where(u => u.OrganizationUnitId == organizationUnitId|| child.Contains(u.OrganizationUnitId)).Select(r => r.UserId).ToList();
+            if (all.Count <= 0) return _userRepository.GetAll().Where(u => false);
+            var users = _userRepository.GetAll().Where(u => all.Contains(u.Id));
+            return users;
+        }
         /// <summary>
         /// 获取该部门下的所有权限
         /// </summary>
@@ -128,9 +146,26 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
             return Task.FromResult(permissionInfos);
         }
 
-        public IQueryable<OrganizationUnit> GetAll()
+        public List<IviewTree> GetPermissionTree(string organizationUnitId)
         {
-            return _organizationUnitRepository.GetAll();
+            var seleteids = _permissionRoleUserOrganizationUnitRepository.GetAll().Where(u => u.OrganizationUnitId == organizationUnitId).Select(r => r.PermissionId).ToList();
+            var all = _permissionInfoRepository.GetAll().ToList();
+            return IviewTree.RecursiveQueries(all, seleteids);
+        }
+        public List<IviewTree> GetRoleTree(string organizationUnitId)
+        {
+            var seleteids = _organizationUnitRoleRepository.GetAll().Where(u => u.OrganizationUnitId == organizationUnitId).Select(r => r.RoleId).ToList();
+            var all = _roleRepository.GetAll().ToList();
+            return IviewTree.LinearQueries(all, seleteids);
+        }
+
+        public void Insert(OrganizationUnit entity)
+        {
+            _organizationUnitRepository.Insert(entity);
+        }
+        public void Save(OrganizationUnit entity)
+        {
+            _organizationUnitRepository.Update(entity);
         }
     }
 }

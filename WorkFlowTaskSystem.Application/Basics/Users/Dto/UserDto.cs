@@ -27,6 +27,7 @@ namespace WorkFlowTaskSystem.Application.Basics.Users.Dto
         /// ∆¥“ÙºÚ∆¥
         /// </summary>
         public string SName { get; set; }
+        public string Sex { get; set; }
         public string PhoneNumber { get; set; }
         /// <summary>
         ///  «∑Ò∆Ù”√ true∆Ù”√

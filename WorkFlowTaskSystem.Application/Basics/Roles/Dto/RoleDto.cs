@@ -17,6 +17,8 @@ namespace WorkFlowTaskSystem.Application.Basics.Roles.Dto
 
         
         public string Description { get; set; }
+        public string[] PersIds { get; set; }
+
 
 
     }

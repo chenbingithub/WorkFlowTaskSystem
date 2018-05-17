@@ -81,7 +81,7 @@ namespace WorkFlowTaskSystem.Application.Basics.Users
             {
                 if (!string.IsNullOrEmpty(organzitionId))
                 {
-                    var result = _organizationUnitManager.GetUsers(organzitionId);
+                    var result = _organizationUnitManager.GetChildrenUsers(organzitionId);
                     var totalCount = result.Count();
                     var query = result.OrderByDescending(u => u.CreationTime).PageBy(input);
                     var data = new PagedResultDto<UserDto>(
@@ -102,6 +102,7 @@ namespace WorkFlowTaskSystem.Application.Basics.Users
         /// <returns></returns>
         private string GetEncrpyedAccessToken(string accessToken)
         {
+            
             return SimpleStringCipher.Instance.Encrypt(accessToken, WorkFlowTaskAbpConsts.DefaultPassPhrase);
         }
     }

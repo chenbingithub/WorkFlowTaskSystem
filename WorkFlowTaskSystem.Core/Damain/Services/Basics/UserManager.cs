@@ -33,6 +33,11 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
             _organizationUnitRepository = organizationUnitRepository;
         }
 
+        public User FindById(string id)
+        {
+           return _userRepository.Get(id);
+        }
+
         public bool SetRole(string userId,params string[] roleIds)
         {
             var all=_userRoleRepository.GetAll().Where(u => u.UserId == userId).ToList();
@@ -186,6 +191,16 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
             var all = _permissionRoleUserOrganizationUnit.GetAll().Where(u => u.UserId == userId|| roles.Contains(u.RoleId)||organizationUnits.Contains(u.OrganizationUnitId)).Select(r => r.PermissionId).ToList();
             var permissionInfos = _permissionInfoRepository.GetAll().Where(u => all.Contains(u.Id)).ToList();
             return permissionInfos;
+        }
+
+        public IQueryable<User> GetAll()
+        {
+           return _userRepository.GetAll();
+        }
+
+        public void Save(User entity)
+        {
+            _userRepository.Update(entity);
         }
     }
 }

@@ -8,14 +8,18 @@ using Abp.Net.Mail.Smtp;
 using Abp.Runtime.Caching;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.International.Converters.PinYinConverter;
+using MongoDB.Driver;
 using WorkFlowTaskSystem.Application;
 using WorkFlowTaskSystem.Application.Basics.PermissionInfos;
 using WorkFlowTaskSystem.Application.Basics.PermissionInfos.Dto;
 using WorkFlowTaskSystem.Application.Basics.Roles;
+using WorkFlowTaskSystem.Application.Basics.Roles.Dto;
 using WorkFlowTaskSystem.Application.Basics.Users;
 using WorkFlowTaskSystem.Application.Basics.Users.Dto;
 using WorkFlowTaskSystem.Application.Forms;
 using WorkFlowTaskSystem.Controllers;
+using WorkFlowTaskSystem.Core;
+using WorkFlowTaskSystem.Core.Damain.Entities.Basics;
 using WorkFlowTaskSystem.Core.Damain.Services.Basics;
 using WorkFlowTaskSystem.WebApp.Host.Models;
 
@@ -32,7 +36,9 @@ namespace WorkFlowTaskSystem.WebApp.Host.Controllers
         private RoleManager _roleManager;
         private OrganizationUnitManager _organizationUnitManager;
         private IUserAppService _userAppService;
-        public HomeController(ICacheManager cacheManager, IFormAppService formAppService, ISmtpEmailSender emailSender, IRoleAppService roleAppService, IPermissionInfoAppService permissionInfoAppService, UserManager userManager, RoleManager roleManager, OrganizationUnitManager organizationUnitManager, IUserAppService userAppService)
+        private PermissionInfoManager _permissionInfoManager;
+        
+        public HomeController(ICacheManager cacheManager, IFormAppService formAppService, ISmtpEmailSender emailSender, IRoleAppService roleAppService, IPermissionInfoAppService permissionInfoAppService, UserManager userManager, RoleManager roleManager, OrganizationUnitManager organizationUnitManager, IUserAppService userAppService, PermissionInfoManager permissionInfoManager)
         {
             _cacheManager = cacheManager;
             _formAppService = formAppService;
@@ -43,6 +49,7 @@ namespace WorkFlowTaskSystem.WebApp.Host.Controllers
             _roleManager = roleManager;
             _organizationUnitManager = organizationUnitManager;
             _userAppService = userAppService;
+            _permissionInfoManager = permissionInfoManager;
         }
 
         public IActionResult Index()
@@ -94,8 +101,73 @@ namespace WorkFlowTaskSystem.WebApp.Host.Controllers
             //});
             //var dd = PinYinUtil.GetAllPinYin("陈斌");
             //var ff = PinYinUtil.GetSimplePinYin("陈斌");
+            //var dept = GetDataBase().GetCollection("PermissionModel");
+            //foreach (var document in dept.FindAll().ToList())
+            //{
+            //    _permissionInfoManager.Insert(new PermissionInfo()
+            //    {
+            //        Id = document["_id"].ToString(),
+            //        Name = document["Name"].ToString(),
+            //        Code = document["Code"]?.ToString(),
+            //        ParentId = document["ParentId"]?.ToString(),
+            //        ParentName = document["ParentName"].ToString(),
+            //        Path = document["Path"]?.ToString(),
+            //        PathName = document["Value"]?.ToString(),
+
+            //    });
+            //    //_roleAppService.Create(new CreateRoleDto()
+            //    //{
+            //    //    Id = document["_id"].ToString(),
+            //    //       Name = document["Name"].ToString(),
+            //    //    Code=PinYinUtil.GetAllPinYin(document["Name"].ToString()),
+            //    //    PersIds=new string[0]
+            //    //});
+            //    //var d = document["WorkDept"].AsBsonArray.ToList();
+            //    //var st = new string[d.Count];
+            //    //for (var i = 0; i < d.Count; i++)
+            //    //{
+            //    //    st[i] = d[i].AsString;
+            //    //}
+            //    //_userAppService.Create(new CreateUserDto()
+            //    //{
+            //    //    Id = document["_id"].ToString(),
+            //    //    Name = document["Name"].ToString(),
+            //    //    UserName = document["No"]?.ToString(),
+            //    //    EmailAddress = document["Email"]?.ToString(),
+            //    //    Sex = document["SEX"]?.ToString(),
+            //    //    OrganIds = st,
+            //    //    IsDeleted = !document["Status"].AsBoolean,
+            //    //    RoleIds = new string[0],
+            //    //    PersIds = new string[0],
+
+            //    //});
+            //    //_organizationUnitManager.Insert(new OrganizationUnit()
+            //    //{
+            //    //    Id = document["_id"].ToString(),
+            //    //    Name = document["Name"].ToString(),
+            //    //    Code = document["Code"]?.ToString(),
+            //    //    ParentId = document["ParentID"].ToString(),
+            //    //    No = document["No"].ToString(),
+            //    //    Path = document["PathID"]?.ToString(),
+            //    //    PathName = document["PathName"]?.ToString(),
+            //    //    Header = document["Header"]?.ToString(),
+            //    //    Leader = document["Leader"]?.ToString(),
+            //    //});
+            //}
+
             return Redirect("/swagger");
         }
+
+        public MongoDatabase GetDataBase()
+        {
+            var murl=MongoUrl.Create("mongodb://localhost:27017/WorkFlowTaskSystemDB");
+            var server = MongoServerSettings.FromUrl(murl);
+#pragma warning disable 618
+            return new MongoServer(server).GetDatabase(murl.DatabaseName);
+#pragma warning restore 618
+
+        }
+
         public ActionResult NavMenu() {
             return PartialView();
         }

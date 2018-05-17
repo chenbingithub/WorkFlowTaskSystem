@@ -58,9 +58,11 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
             return Task.FromResult(permissionInfos);
         }
 
-        public IQueryable<Role> GetAll()
+        public List<IviewTree> GetPermissionTree(string roleId)
         {
-            return _roleRepository.GetAll();
+            var seleteids = _permissionRoleUserOrganizationUnit.GetAll().Where(u => u.RoleId == roleId).Select(r => r.PermissionId).ToList();
+            var all = _permissionInfoRepository.GetAll().ToList();
+            return IviewTree.RecursiveQueries(all, seleteids);
         }
 
     }

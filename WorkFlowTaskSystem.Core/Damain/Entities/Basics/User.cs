@@ -24,6 +24,7 @@ namespace WorkFlowTaskSystem.Core.Damain.Entities.Basics
         /// 拼音简拼
         /// </summary>
         public string SName { get; set; }
+        public string Sex { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime? LastLoginTime { get; set; }
         public string RoleNames { get; set; }
