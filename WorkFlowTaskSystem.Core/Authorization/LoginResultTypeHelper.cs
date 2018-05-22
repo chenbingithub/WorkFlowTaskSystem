@@ -19,7 +19,7 @@ namespace WorkFlowTaskSystem.Core.Authorization
                 case AbpLoginResultType.Success:
                     return new Exception("Don't call this method with a success result!");
                 case AbpLoginResultType.InvalidUserNameOrEmailAddress:
-                    return new UserFriendlyException("登陆失败", "用户名或密码错误");
+                    return new UserFriendlyException( L("登陆失败"), L("用户名或密码错误"));
                 case AbpLoginResultType.InvalidPassword:
                     return new UserFriendlyException(L("登陆失败"), L("用户名或密码错误"));
                 case AbpLoginResultType.InvalidTenancyName:

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
@@ -14,7 +15,8 @@ namespace WorkFlowTaskSystem.Application
     {
         public override void PreInitialize()
         {
-            IocManager.Register<IRoleAppService, RoleAppService>();
+            IocManager.Register<IPermissionChecker, MyPermissionChecker>();
+            IocManager.Register<IAuthorizationHelper, MyAuthorizationHelper>();
             base.PreInitialize();
         }
 

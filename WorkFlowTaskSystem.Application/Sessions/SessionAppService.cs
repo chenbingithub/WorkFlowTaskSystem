@@ -11,6 +11,7 @@ using WorkFlowTaskSystem.Application.SignalR;
 using WorkFlowTaskSystem.Core;
 using WorkFlowTaskSystem.Core.Damain.Entities.Basics;
 using WorkFlowTaskSystem.Core.Damain.Services.Basics;
+using WorkFlowTaskSystem.Core.Session;
 
 namespace WorkFlowTaskSystem.Application.Sessions
 {

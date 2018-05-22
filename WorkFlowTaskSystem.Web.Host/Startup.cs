@@ -9,6 +9,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WorkFlowTaskSystem.Web.Core.Configuration;
+#if FEATURE_SIGNALR
+using Microsoft.AspNet.SignalR;
+using Microsoft.Owin.Cors;
+using Owin;
+using Abp.Owin;
+using WorkFlowTaskSystem.Owin;
+#elif FEATURE_SIGNALR_ASPNETCORE
+using Abp.AspNetCore.SignalR.Hubs;
+#endif
 
 namespace WorkFlowTaskSystem.Web.Host
 {
@@ -28,7 +37,9 @@ namespace WorkFlowTaskSystem.Web.Host
         {
             services.AddMvc();
             services.AddSession();
-            //AuthConfigurer.Configure(services, _appConfiguration);
+#if FEATURE_SIGNALR_ASPNETCORE
+                        services.AddSignalR();
+#endif
             // Configure CORS for angular2 UI
             services.AddCors(
                 options => options.AddPolicy(
@@ -46,7 +57,7 @@ namespace WorkFlowTaskSystem.Web.Host
                         .WithMethods(_appConfiguration["App:CorsMethods"]
                             .Split(",", StringSplitOptions.RemoveEmptyEntries)
                             .Select(o => o.RemovePostFix("/"))
-                            .ToArray())
+                            .ToArray()).AllowCredentials()
                 )
             );
             // Swagger - Enable this line and the related lines in Configure method to enable swagger UI
@@ -90,11 +101,11 @@ namespace WorkFlowTaskSystem.Web.Host
 
             app.UseSession();
             //初始化abp框架
-            app.UseAbp(options => { options.UseAbpRequestLocalization = false; });
+            app.UseAbp();
             //设置跨域处理的 代理
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
             app.UseStaticFiles();
-
+            app.UseAbpRequestLocalization();
             //app.UseAuthentication();
 
             //app.UseAbpRequestLocalization();
@@ -107,7 +118,15 @@ namespace WorkFlowTaskSystem.Web.Host
                 options.InjectOnCompleteJavaScript("/swagger/ui/on-complete.js");
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "WorkFlowService API V1");
             }); // URL: /swagger
-
+#if FEATURE_SIGNALR
+            // Integrate with OWIN
+            app.UseAppBuilder(ConfigureOwinServices);
+#elif FEATURE_SIGNALR_ASPNETCORE
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<AbpCommonHub>("/signalr");
+            });
+#endif
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -10,7 +10,7 @@ namespace WorkFlowTaskSystem.Core
     /// </summary>
     public class WorkFlowTaskAbpConsts
     {
-        public const string LocalizationSourceName = "VueABP";
+        public const string LocalizationSourceName = "WorkFlowTaskSystem-zh-CN";
         /// <summary>
         /// 数据库连接字符串key
         /// </summary>

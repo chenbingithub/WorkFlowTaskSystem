@@ -17,7 +17,13 @@ using WorkFlowTaskSystem.Web.Core.Email;
 
 namespace WorkFlowTaskSystem.Web.Core
 {
-   [DependsOn(typeof(WorkFlowTaskSystemApplicationModule),typeof(AbpRedisCacheModule),typeof(AbpAspNetCoreModule),typeof(WorkFlowTaskSystemMongoDbModule))]
+   [DependsOn(typeof(WorkFlowTaskSystemApplicationModule),typeof(AbpRedisCacheModule),typeof(AbpAspNetCoreModule),typeof(WorkFlowTaskSystemMongoDbModule)
+        #if FEATURE_SIGNALR
+        ,typeof(AbpWebSignalRModule)
+    #elif FEATURE_SIGNALR_ASPNETCORE
+        ,typeof(AbpAspNetCoreSignalRModule)
+    #endif
+        )]
     public class WorkFlowTaskSystemWebCoreModule:AbpModule
     {
 
