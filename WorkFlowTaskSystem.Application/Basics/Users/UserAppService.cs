@@ -21,6 +21,11 @@ namespace WorkFlowTaskSystem.Application.Basics.Users
         private PermissionInfoManager _permissionInfoManager;
         public UserAppService(IUserRepository repository, OrganizationUnitManager organizationUnitManager, RoleManager roleManager, PermissionInfoManager permissionInfoManager, UserManager userManager) : base(repository)
         {
+            CreatePermissionName = PermissionNames.Pages_Users_Create;
+            UpdatePermissionName = PermissionNames.Pages_Users_Update;
+            DeletePermissionName = PermissionNames.Pages_Users_Delete;
+            GetAllPermissionName = PermissionNames.Pages_Users_GetAll;
+            GetPermissionName = PermissionNames.Pages_Users_GetAll;
             _organizationUnitManager = organizationUnitManager;
             _roleManager = roleManager;
             _permissionInfoManager = permissionInfoManager;
@@ -29,12 +34,21 @@ namespace WorkFlowTaskSystem.Application.Basics.Users
 
         public override Task<UserDto> Create(CreateUserDto input)
         {
+            CheckCreatePermission();
             input.EName=PinYinUtil.GetAllPinYin(input.Name);
             input.SName=PinYinUtil.GetSimplePinYin(input.Name);
             input.Password = GetEncrpyedAccessToken(input.Password);
-            _userManager.SetOrganizationUnit(input.Id, input.OrganIds);
-            _userManager.SetRole(input.Id, input.RoleIds);
-            _userManager.SetPermission(input.Id, input.PersIds);
+            if (IsGranted(PermissionNames.Pages_Users_SetOrgan)) {
+                _userManager.SetOrganizationUnit(input.Id, input.OrganIds);
+            }
+            if (IsGranted(PermissionNames.Pages_Users_SetRole))
+            {
+                _userManager.SetRole(input.Id, input.RoleIds);
+            }
+            if (IsGranted(PermissionNames.Pages_Users_SetPers))
+            {
+                _userManager.SetPermission(input.Id, input.PersIds);
+            }
             return base.Create(input);
         }
 
@@ -42,27 +56,52 @@ namespace WorkFlowTaskSystem.Application.Basics.Users
 
         public override  Task<UserDto> Update(UserDto input)
         {
+            CheckUpdatePermission();
             input.EName = PinYinUtil.GetAllPinYin(input.Name);
             input.SName = PinYinUtil.GetSimplePinYin(input.Name);
-            _userManager.SetOrganizationUnit(input.Id, input.OrganIds);
-            _userManager.SetRole(input.Id, input.RoleIds);
-            _userManager.SetPermission(input.Id, input.PersIds);
+            if (IsGranted(PermissionNames.Pages_Users_SetOrgan))
+            {
+                _userManager.SetOrganizationUnit(input.Id, input.OrganIds);
+            }
+            if (IsGranted(PermissionNames.Pages_Users_SetRole))
+            {
+                _userManager.SetRole(input.Id, input.RoleIds);
+            }
+            if (IsGranted(PermissionNames.Pages_Users_SetPers))
+            {
+                _userManager.SetPermission(input.Id, input.PersIds);
+            }
+
             return base.Update(input);
         }
 
         public object GetRolePersOrgan(string userId)
         {
+            List<IviewTree> roles = new List<IviewTree>();
+            List<IviewTree> permissions = new List<IviewTree>();
+            List<IviewTree> organzitions = new List<IviewTree>();
+            if (IsGranted(PermissionNames.Pages_Users_SetOrgan))
+            {
+                 organzitions = _userManager.GetOrganizationTree(userId);
+            }
+            if (IsGranted(PermissionNames.Pages_Users_SetRole))
+            {
+                 roles = _userManager.GetRoleTree(userId);
+            }
+            if (IsGranted(PermissionNames.Pages_Users_SetPers))
+            {
+                 permissions = _userManager.GetPermissionTree(userId);
+            }
+            
            
-            var roles=_userManager.GetRoleTree(userId);
-            var permissions=_userManager.GetPermissionTree(userId);
-            var organzitions=_userManager.GetOrganizationTree(userId);
+           
             var data = new { roles, permissions, organzitions };
             return data;
         }
 
         public Task<PagedResultDto<UserDto>> GetAllOrSeach(string seachKey, string organzitionId, PagedAndSortedResultRequestDto input)
         {
-
+            CheckGetAllPermission();
 
             if (!string.IsNullOrEmpty(seachKey))
             {

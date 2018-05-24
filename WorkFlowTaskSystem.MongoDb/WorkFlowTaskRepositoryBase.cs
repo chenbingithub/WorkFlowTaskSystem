@@ -29,10 +29,10 @@ namespace WorkFlowTaskSystem.MongoDb
                 query = global::MongoDB.Driver.Builders.Query.And(query, query1);
             }
             var entity = Collection.FindOne(query);
-            if (entity == null)
-            {
-                throw new EntityNotFoundException("There is no such an entity with given primary key. Entity type: " + typeof(TEntity).FullName + ", primary key: " + id);
-            }
+            //if (entity == null)
+            //{
+            //    throw new EntityNotFoundException("There is no such an entity with given primary key. Entity type: " + typeof(TEntity).FullName + ", primary key: " + id);
+            //}
 
             return entity;
         }

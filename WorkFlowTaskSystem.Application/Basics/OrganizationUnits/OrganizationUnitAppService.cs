@@ -20,7 +20,7 @@ namespace WorkFlowTaskSystem.Application.Basics.OrganizationUnits
             UpdatePermissionName = PermissionNames.Pages_OrganizationUnits_Update;
             DeletePermissionName = PermissionNames.Pages_OrganizationUnits_Delete;
             GetAllPermissionName = PermissionNames.Pages_OrganizationUnits_GetAll;
-            GetPermissionName = PermissionNames.Pages_OrganizationUnits_Get;
+            GetPermissionName= PermissionNames.Pages_OrganizationUnits_GetAll;
             _organizationUnitManager = organizationUnitManager;
         }
 
@@ -91,7 +91,7 @@ namespace WorkFlowTaskSystem.Application.Basics.OrganizationUnits
 
         public Task<List<IviewTree>> GetAllTree()
         {
-            //CheckGetAllPermission();
+            CheckGetAllPermission();
             List<OrganizationUnitDto> all = Repository.GetAll().AsEnumerable().Select(MapToEntityDto).ToList();
             List<IviewTree> data = IviewTree.RecursiveQueries(all);
             return Task.FromResult(data);

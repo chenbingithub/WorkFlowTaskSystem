@@ -25,11 +25,15 @@ namespace WorkFlowTaskSystem.Core
         /// <returns></returns>
         public static List<IviewTree> RecursiveQueries<T> (List<T> all, string currentId = null) where T : ITree
         {
+            List<IviewTree> datatree = null;
             if (string.IsNullOrEmpty(currentId))
             {
-                currentId = "-1";
+                datatree = all.Where(u => u.ParentId is null|| u.ParentId=="-1"||u.ParentId=="").Select(e => new IviewTree() { title = e.Name, Id = e.Id, data = e }).ToList();
             }
-            List<IviewTree> datatree = all.Where(u => u.ParentId == currentId).Select(e => new IviewTree() { title = e.Name, Id = e.Id, data = e }).ToList();
+            else {
+                datatree = all.Where(u => u.ParentId == currentId).Select(e => new IviewTree() { title = e.Name, Id = e.Id, data = e }).ToList();
+            }
+             
             if (datatree == null || datatree.Count <= 0)
             {
                 return new List<IviewTree>();
@@ -51,11 +55,16 @@ namespace WorkFlowTaskSystem.Core
         /// <returns></returns>
         public static List<IviewTree> RecursiveQueries<T>(List<T> all, List<string> selectIds, string currentId = null) where T : ITree
         {
+            List<IviewTree> datatree = null;
             if (string.IsNullOrEmpty(currentId))
             {
-                currentId = "-1";
+                datatree = all.Where(u => u.ParentId is null || u.ParentId == "-1" || u.ParentId == "").Select(e => new IviewTree() { title = e.Name, Id = e.Id, @checked = selectIds.Contains(e.Id) }).ToList();
             }
-            List<IviewTree> datatree = all.Where(u => u.ParentId == currentId).Select(e => new IviewTree() { title = e.Name, Id = e.Id,@checked = selectIds.Contains(e.Id) }).ToList();
+            else
+            {
+                datatree = all.Where(u => u.ParentId == currentId).Select(e => new IviewTree() { title = e.Name, Id = e.Id, @checked = selectIds.Contains(e.Id) }).ToList();
+            }
+            
             if (datatree == null || datatree.Count <= 0)
             {
                 return new List<IviewTree>();
