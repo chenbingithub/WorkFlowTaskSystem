@@ -4,6 +4,7 @@ using System.Reflection;
 using Abp.Reflection.Extensions;
 using WorkFlowTaskSystem.Localization;
 using Abp.Localization;
+using WorkFlowTaskSystem.Core.Localization;
 
 namespace WorkFlowTaskSystem.Core
 {
@@ -11,8 +12,9 @@ namespace WorkFlowTaskSystem.Core
     {
         public override void PreInitialize()
         {
-            Configuration.Localization.Languages.Add(new LanguageInfo("zh-CN", "简体中文", isDefault: true));
+            Configuration.Localization.Languages.Add(new LanguageInfo("zh-CN", "简体中文", isDefault: true,isDisabled:true));
             WorkFlowTaskLocalizationConfigurer.Configure(Configuration.Localization);
+            Configuration.Settings.Providers.Add<AppSettingProvider>();
             base.PreInitialize();
         }
         public override void Initialize()
@@ -22,4 +24,5 @@ namespace WorkFlowTaskSystem.Core
             
         }
     }
+    
 }

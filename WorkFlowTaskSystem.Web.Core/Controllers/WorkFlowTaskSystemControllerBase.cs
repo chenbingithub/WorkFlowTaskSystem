@@ -1,13 +1,19 @@
 using Abp.AspNetCore.Mvc.Controllers;
-using WorkFlowTaskSystem.Core.Session;
-using WorkFlowTaskSystem.Web.Core.Email;
+using Abp.Web.Configuration;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+
 
 namespace WorkFlowTaskSystem.Controllers
 {
     public  class WorkFlowTaskSystemControllerBase : AbpController
     {
-        //隐藏父类的AbpSession
-        public new IAbpSessionExtension AbpSession { get; set; }
+        ////隐藏父类的AbpSession
+        //public new IAbpSessionExtension AbpSession { get; set; }
+
+
+
+       
 
     }
 }

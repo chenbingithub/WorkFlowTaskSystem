@@ -10,7 +10,7 @@ namespace WorkFlowTaskSystem.Core
     /// </summary>
     public class WorkFlowTaskAbpConsts
     {
-        public const string LocalizationSourceName = "WorkFlowTaskSystem-zh-CN";
+        public const string LocalizationSourceName = "WorkFlowTaskSystem";
         /// <summary>
         /// 数据库连接字符串key
         /// </summary>
@@ -61,5 +61,9 @@ namespace WorkFlowTaskSystem.Core
         /// Default pass phrase for SimpleStringCipher decrypt/encrypt operations
         /// </summary>
         public const string DefaultPassPhrase = "gsKxGZ012HLL3MI5";
+    }
+    public static class AppSettingNames
+    {
+        public const string UiTheme = "App.UiTheme";
     }
 }
