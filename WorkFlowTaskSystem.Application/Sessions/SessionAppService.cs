@@ -43,8 +43,9 @@ namespace WorkFlowTaskSystem.Application.Sessions
                     }
                 }
             };
-
-            var uid=Session.GetUserId();
+            _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(WorkFlowTaskAbpConsts.CookiesUserId,
+                out var cookiesId);
+            var uid=Session.GetUserId()?? Session.SetUserId(cookiesId);
             if (!uid.IsNullOrEmpty())
             {
                 output.User = ObjectMapper.Map<UserLoginInfoDto>(GetCurrentUser());

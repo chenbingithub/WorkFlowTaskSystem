@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using WorkFlowTaskSystem.Core;
 
 namespace WorkFlowTaskSystem.Application
 {
@@ -31,7 +32,10 @@ namespace WorkFlowTaskSystem.Application
             {
                 return Task.CompletedTask;
             }
-            if (Session.GetUserId().IsNullOrEmpty())
+            _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(WorkFlowTaskAbpConsts.CookiesUserId,
+                out var cookiesId);
+            var userid=Session.GetUserId() ?? Session.SetUserId(cookiesId);
+            if (userid.IsNullOrEmpty())
             {
                 throw new AbpAuthorizationException(
                     LocalizationManager.GetString(AbpConsts.LocalizationSourceName, "CurrentUserDidNotLoginToTheApplication")

@@ -28,6 +28,7 @@ namespace WorkFlowTaskSystem.Core
         /// 登陆id
         /// </summary>
         public const string UserId = "userId";
+        public const string CookiesUserId = "CookiesUserId";
         /// <summary>
         /// 验证码
         /// </summary>

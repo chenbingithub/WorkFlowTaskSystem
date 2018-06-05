@@ -26,9 +26,10 @@ namespace WorkFlowTaskSystem.Application
            return session.GetString(WorkFlowTaskAbpConsts.UserId);
         }
 
-        public static void Use(this ISession session,string userId)
+        public static string SetUserId(this ISession session,string userId)
         {
              session.SetString(WorkFlowTaskAbpConsts.UserId,userId);
+            return userId;
         }
 
     }

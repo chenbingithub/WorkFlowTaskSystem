@@ -42,7 +42,7 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
            var loginResult = GetLoginResult(model.UserNameOrEmailAddress, model.Password);
             //设置session
             HttpContext.Session.SetString(WorkFlowTaskAbpConsts.UserId, loginResult.User?.Id);
-
+            HttpContext.Response.Cookies.Append(WorkFlowTaskAbpConsts.CookiesUserId, loginResult.User?.Id);
             var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
 
             return new AuthenticateResultModel

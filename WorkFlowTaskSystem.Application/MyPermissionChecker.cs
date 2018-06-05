@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using WorkFlowTaskSystem.Core;
 using WorkFlowTaskSystem.Core.Damain.Repositories.Basics;
 using WorkFlowTaskSystem.Core.Damain.Services.Basics;
 using WorkFlowTaskSystem.Core.Session;
@@ -28,8 +29,10 @@ namespace WorkFlowTaskSystem.Application
             {
                 return Task.FromResult(true);
             }
-
-            if (Session.GetUserId().IsNullOrEmpty()) {
+            _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(WorkFlowTaskAbpConsts.CookiesUserId,
+                out var cookiesId);
+            var userid = Session.GetUserId() ?? Session.SetUserId(cookiesId);
+            if (userid.IsNullOrEmpty()) {
                 return Task.FromResult(false);
             }
             var allpers=_userManager.GetAllPermissions(Session.GetUserId());
