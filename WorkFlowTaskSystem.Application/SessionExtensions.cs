@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Abp.Extensions;
+using Abp.Runtime.Security;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using WorkFlowTaskSystem.Core;
@@ -28,8 +30,10 @@ namespace WorkFlowTaskSystem.Application
 
         public static string SetUserId(this ISession session,string userId)
         {
-             session.SetString(WorkFlowTaskAbpConsts.UserId,userId);
-            return userId;
+            if (userId.IsNullOrEmpty()) return "";
+            var duserid=SimpleStringCipher.Instance.Decrypt(userId, AppConsts.DefaultPassPhrase);
+            session.SetString(WorkFlowTaskAbpConsts.UserId, duserid);
+            return duserid;
         }
 
     }

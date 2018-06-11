@@ -3,7 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Linq.Extensions;
+using Abp.Localization;
 using Abp.Runtime.Security;
+using Abp.Runtime.Session;
 using WorkFlowTaskSystem.Application.Basics.OrganizationUnits.Dto;
 using WorkFlowTaskSystem.Application.Basics.Users.Dto;
 using WorkFlowTaskSystem.Core;
@@ -133,6 +135,15 @@ namespace WorkFlowTaskSystem.Application.Basics.Users
 
             }
             return base.GetAll(input);
+        }
+        public async Task ChangeLanguage(ChangeUserLanguageDto input)
+        {
+            if (AbpSession.TenantId != null)
+                await SettingManager.ChangeSettingForTenantAsync(
+                    AbpSession.TenantId.Value,
+                    LocalizationSettingNames.DefaultLanguage,
+                    input.LanguageName
+                );
         }
         /// <summary>
         /// 加密

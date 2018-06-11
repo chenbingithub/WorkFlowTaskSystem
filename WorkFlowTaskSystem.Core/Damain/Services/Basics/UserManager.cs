@@ -38,6 +38,11 @@ namespace WorkFlowTaskSystem.Core.Damain.Services.Basics
            return _userRepository.Get(id);
         }
 
+        public void Update(User user)
+        {
+            _userRepository.Update(user);
+        }
+
         public bool SetRole(string userId,params string[] roleIds)
         {
             var all=_userRoleRepository.GetAll().Where(u => u.UserId == userId).ToList();

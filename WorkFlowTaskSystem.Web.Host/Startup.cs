@@ -101,7 +101,7 @@ namespace WorkFlowTaskSystem.Web.Host
 
             app.UseSession();
             //初始化abp框架
-            app.UseAbp();
+            app.UseAbp(options => { options.UseAbpRequestLocalization = false; });
             //设置跨域处理的 代理
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
             app.UseStaticFiles();

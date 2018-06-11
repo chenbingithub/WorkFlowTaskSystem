@@ -10,7 +10,6 @@ using WorkFlowTaskSystem.Core.Damain.Services.Basics;
 
 namespace WorkFlowTaskSystem.Application.Basics.OrganizationUnits
 {
-    [AbpAuthorize(PermissionNames.Pages_OrganizationUnits)]
     public class OrganizationUnitAppService : WorkFlowTaskSystemAppServiceBase<OrganizationUnit, OrganizationUnitDto, CreateOrganizationUnitDto>, IOrganizationUnitAppService
     {
         private OrganizationUnitManager _organizationUnitManager;

@@ -5,8 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Localization\SourceFiles\WorkFlowTaskSystem-zh-CN.xml" />
+    <None Remove="Localization\SourceFiles\WorkFlowTaskSystem.xml" />
     <None Remove="Session\AbpSessionExtension.cs~RF842009.TMP" />
     <None Remove="WorkFlowTaskABPConsts.cs~RF74e56a.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\SourceFiles\WorkFlowTaskSystem-zh-CN.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Localization\SourceFiles\WorkFlowTaskSystem.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

@@ -2,9 +2,8 @@
 using Abp.Localization.Dictionaries;
 using Abp.Localization.Dictionaries.Xml;
 using Abp.Reflection.Extensions;
-using WorkFlowTaskSystem.Core;
 
-namespace WorkFlowTaskSystem.Localization
+namespace WorkFlowTaskSystem.Core.Localization
 {
     public static class WorkFlowTaskLocalizationConfigurer
     {
@@ -14,7 +13,7 @@ namespace WorkFlowTaskSystem.Localization
                 new DictionaryBasedLocalizationSource(WorkFlowTaskAbpConsts.LocalizationSourceName,
                     new XmlEmbeddedFileLocalizationDictionaryProvider(
                         typeof(WorkFlowTaskLocalizationConfigurer).GetAssembly(),
-                        "WorkFlowTaskSystem.Localization.SourceFiles"
+                        "WorkFlowTaskSystem.Core.Localization.SourceFiles"
                     )
                 )
             );

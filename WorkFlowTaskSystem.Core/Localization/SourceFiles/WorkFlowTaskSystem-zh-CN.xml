@@ -21,7 +21,7 @@
 
     <text name="LoginFailed" value="登录失败!" />
     
-    <text name="SmtpHost">SMTP主机</text>
+    <!--<text name="SmtpHost">SMTP主机</text>
     <text name="SmtpPort">SMTP端口</text>
     <text name="Username">用户名</text>
     <text name="Password">密码</text>
@@ -36,7 +36,7 @@
     <text name="TimeZone">时区</text>
     <text name="AllOfThesePermissionsMustBeGranted">您没有权限进行此操作,您需要以下权限: {0}</text>
     <text name="AtLeastOneOfThesePermissionsMustBeGranted">您没有权限进行此操作,您至少需要下列权限的其中一项: {0}</text>
-    <text name="MainMenu">主菜单</text>
+    <text name="MainMenu">主菜单</text>-->
     <text name="InternalServerError" value="对不起,在处理您的请求期间,产生了一个服务器内部错误!" />
     <text name="ValidationError" value="您的请求无效!" />
     <text name="AreYouSure" value="你确定吗?" />

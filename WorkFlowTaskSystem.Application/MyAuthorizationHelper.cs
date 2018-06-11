@@ -45,7 +45,7 @@ namespace WorkFlowTaskSystem.Application
 
             foreach (var authorizeAttribute in authorizeAttributes)
             {
-                 PermissionChecker.AuthorizeAsync(authorizeAttribute.RequireAllPermissions, authorizeAttribute.Permissions);
+                 PermissionChecker.Authorize(authorizeAttribute.RequireAllPermissions, authorizeAttribute.Permissions);
             }
             return Task.CompletedTask;
         }

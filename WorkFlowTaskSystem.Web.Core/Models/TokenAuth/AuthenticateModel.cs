@@ -12,4 +12,12 @@ namespace WorkFlowTaskSystem.Web.Core.Models.TokenAuth
         
         public bool RememberClient { get; set; }
     }
+
+    public class ChangePwdModel
+    {
+        public string NewPass { get; set; }
+        public string OldPass { get; set; }
+        public string RePass { get; set; }
+        
+    }
 }

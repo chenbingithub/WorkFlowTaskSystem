@@ -5,11 +5,13 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Abp.Extensions;
 using Abp.Runtime.Security;
 using Abp.UI;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WorkFlowTaskSystem.Application;
 using WorkFlowTaskSystem.Application.Basics.Users;
 using WorkFlowTaskSystem.Authentication.JwtBearer;
 using WorkFlowTaskSystem.Controllers;
@@ -17,6 +19,7 @@ using WorkFlowTaskSystem.Core;
 using WorkFlowTaskSystem.Core.Authorization;
 using WorkFlowTaskSystem.Core.Damain.Entities.Basics;
 using WorkFlowTaskSystem.Core.Damain.Services;
+using WorkFlowTaskSystem.Core.Damain.Services.Basics;
 using WorkFlowTaskSystem.Web.Core.Models.TokenAuth;
 
 namespace WorkFlowTaskSystem.Web.Core.Controllers
@@ -27,12 +30,14 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
         private LoginManager _loginManager;
         private LoginResultTypeHelper _loginResultTypeHelper;
         private TokenAuthConfiguration _configuration;
+        private UserManager _userManager;
 
-        public TokenAuthController(LoginManager loginManager, LoginResultTypeHelper loginResultTypeHelper, TokenAuthConfiguration tokenAuthConfiguration)
+        public TokenAuthController(LoginManager loginManager, LoginResultTypeHelper loginResultTypeHelper, TokenAuthConfiguration tokenAuthConfiguration, UserManager userManager)
         {
             _loginManager = loginManager;
             _loginResultTypeHelper = loginResultTypeHelper;
             _configuration = tokenAuthConfiguration;
+            _userManager = userManager;
         }
 
 
@@ -42,7 +47,7 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
            var loginResult = GetLoginResult(model.UserNameOrEmailAddress, model.Password);
             //设置session
             HttpContext.Session.SetString(WorkFlowTaskAbpConsts.UserId, loginResult.User?.Id);
-            HttpContext.Response.Cookies.Append(WorkFlowTaskAbpConsts.CookiesUserId, loginResult.User?.Id);
+            HttpContext.Response.Cookies.Append(WorkFlowTaskAbpConsts.CookiesUserId, GetEncrpyedAccessToken(loginResult.User?.Id??""));
             var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
 
             return new AuthenticateResultModel
@@ -66,8 +71,28 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
                     throw _loginResultTypeHelper.CreateExceptionForFailedLoginAttempt(loginResult.Result, usernameOrEmailAddress);
             }
         }
-
-
+        [HttpPost]
+        public void Changepwd([FromBody]ChangePwdModel changePwd)
+        {
+            HttpContext.Request.Cookies.TryGetValue(WorkFlowTaskAbpConsts.CookiesUserId,
+                out var cookiesId);
+            var uid = HttpContext.Session.GetUserId() ?? HttpContext.Session.SetUserId(cookiesId);
+            if (uid.IsNullOrEmpty())
+            {
+                throw new UserFriendlyException("更改失败", "登陆失效，请重新登陆");
+            }
+            if (changePwd.OldPass.IsNullOrEmpty() || changePwd.NewPass.IsNullOrEmpty())
+            {
+                throw new UserFriendlyException("更改失败", "旧密码或新密码不能为空！");
+            }
+            var user=_userManager.FindById(uid);
+            if (!user.Password.Equals(WorkFlowTaskAbpConsts.GetEncrpyedAccessToken(changePwd.OldPass)))
+            {
+                throw new UserFriendlyException("更改失败", "旧密码不正确");
+            }
+            user.Password = WorkFlowTaskAbpConsts.GetEncrpyedAccessToken(changePwd.NewPass);
+            _userManager.Update(user);
+        }
 
         private string CreateAccessToken(IEnumerable<Claim> claims, TimeSpan? expiration = null)
         {

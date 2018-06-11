@@ -11,6 +11,7 @@ using Abp.Domain.Entities.Auditing;
 using Abp.Domain.Repositories;
 using Abp.ObjectMapping;
 using WorkFlowTaskSystem.Application.Forms.Dto;
+using WorkFlowTaskSystem.Core;
 
 namespace WorkFlowTaskSystem.Application
 {
@@ -34,6 +35,7 @@ namespace WorkFlowTaskSystem.Application
     {
         public WorkFlowTaskSystemAppServiceBase(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
+            LocalizationSourceName = WorkFlowTaskAbpConsts.LocalizationSourceName;
         }
         public override async Task<TEntityDto> Update(TUpdateInput input)
         {

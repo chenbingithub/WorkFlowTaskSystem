@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Auditing;
@@ -49,6 +50,7 @@ namespace WorkFlowTaskSystem.Application.Sessions
             if (!uid.IsNullOrEmpty())
             {
                 output.User = ObjectMapper.Map<UserLoginInfoDto>(GetCurrentUser());
+                output.User.OrganizationUnitNames = string.Join(",",_userManager.GetOrganizationUnit(uid).Select(u=>u.Name));
             }
             return Task.FromResult(output);
         }
