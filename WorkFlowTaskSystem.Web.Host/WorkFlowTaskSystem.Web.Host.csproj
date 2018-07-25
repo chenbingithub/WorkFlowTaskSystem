@@ -50,6 +50,7 @@
     <Folder Include="wwwroot\images\Avatar\" />
     <Folder Include="wwwroot\images\login\" />
     <Folder Include="wwwroot\images\task\" />
+    <Folder Include="wwwroot\upload\" />
   </ItemGroup>
 
 </Project>

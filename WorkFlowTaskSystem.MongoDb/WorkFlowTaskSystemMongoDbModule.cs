@@ -16,9 +16,9 @@ namespace WorkFlowTaskSystem.MongoDb
     {
         public override void PreInitialize()
         {
-            
+
             //IocManager.Register<IRepository<Form,string>, FormRepository>();
-            //IocManager.Register<IRepository<FormInstance, string>, FormInstanceRepository>();
+            //IocManager.Register<IRepository<DocumentTreeNode, string>, WorkFlowTaskRepositoryBase<DocumentTreeNode, string>>();
             IocManager.Register<IRepository<WorkFlowInstance, string>, WorkFlowInstanceRepository>();
             IocManager.Register<IRepository<WorkFlow, string>, WorkFlowRepository>();
         }

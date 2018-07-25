@@ -8,14 +8,16 @@ namespace WorkFlowTaskSystem.Core
     /// </summary>
    public class IviewTree
     {
+        
         public string Id { get; set; }
-        public string title { get; set; }
-        public bool expand { get; set; }
-        public bool @checked{get; set; }
-        public bool selected { get; set; }
-        public object data { get; set; }
+        public string Title { get; set; }
+        public bool Expand { get; set; }
+        
+        public bool Checked{get; set; }
+        public bool Selected { get; set; }
+        public object Data { get; set; }
 
-        public List<IviewTree> children { get; set; }
+        public List<IviewTree> Children { get; set; }
         /// <summary>
         /// 由线性结构递归生成树形结构
         /// </summary>
@@ -28,10 +30,10 @@ namespace WorkFlowTaskSystem.Core
             List<IviewTree> datatree = null;
             if (string.IsNullOrEmpty(currentId))
             {
-                datatree = all.Where(u => u.ParentId is null|| u.ParentId=="-1"||u.ParentId=="").Select(e => new IviewTree() { title = e.Name, Id = e.Id, data = e }).ToList();
+                datatree = all.Where(u => u.ParentId is null|| u.ParentId=="-1"||u.ParentId=="").Select(e => new IviewTree() { Title = e.Name, Id = e.Id, Data = e }).ToList();
             }
             else {
-                datatree = all.Where(u => u.ParentId == currentId).Select(e => new IviewTree() { title = e.Name, Id = e.Id, data = e }).ToList();
+                datatree = all.Where(u => u.ParentId == currentId).Select(e => new IviewTree() { Title = e.Name, Id = e.Id, Data = e }).ToList();
             }
              
             if (datatree == null || datatree.Count <= 0)
@@ -40,8 +42,8 @@ namespace WorkFlowTaskSystem.Core
             }
             foreach (var dto in datatree)
             {
-                dto.children = new List<IviewTree>();
-                dto.children.AddRange(RecursiveQueries(all, dto.Id));
+                dto.Children = new List<IviewTree>();
+                dto.Children.AddRange(RecursiveQueries(all, dto.Id));
             }
             return datatree;
         }
@@ -58,11 +60,11 @@ namespace WorkFlowTaskSystem.Core
             List<IviewTree> datatree = null;
             if (string.IsNullOrEmpty(currentId))
             {
-                datatree = all.Where(u => u.ParentId is null || u.ParentId == "-1" || u.ParentId == "").Select(e => new IviewTree() { title = e.Name, Id = e.Id, @checked = selectIds.Contains(e.Id) }).ToList();
+                datatree = all.Where(u => u.ParentId is null || u.ParentId == "-1" || u.ParentId == "").Select(e => new IviewTree() { Title = e.Name, Id = e.Id, Checked = selectIds.Contains(e.Id) }).ToList();
             }
             else
             {
-                datatree = all.Where(u => u.ParentId == currentId).Select(e => new IviewTree() { title = e.Name, Id = e.Id, @checked = selectIds.Contains(e.Id) }).ToList();
+                datatree = all.Where(u => u.ParentId == currentId).Select(e => new IviewTree() { Title = e.Name, Id = e.Id, Checked = selectIds.Contains(e.Id) }).ToList();
             }
             
             if (datatree == null || datatree.Count <= 0)
@@ -71,8 +73,8 @@ namespace WorkFlowTaskSystem.Core
             }
             foreach (var dto in datatree)
             {
-                dto.children = new List<IviewTree>();
-                dto.children.AddRange(RecursiveQueries(all, selectIds, dto.Id));
+                dto.Children = new List<IviewTree>();
+                dto.Children.AddRange(RecursiveQueries(all, selectIds, dto.Id));
             }
             return datatree;
         }
@@ -80,13 +82,27 @@ namespace WorkFlowTaskSystem.Core
         public static List<IviewTree> LinearQueries<T>(List<T> all,List<string> selectIds)
             where T : ILinear
         {
-            List<IviewTree> datatree = all.Select(e => new IviewTree() { title = e.Name, Id = e.Id, @checked = selectIds.Contains(e.Id) }).ToList();
+            List<IviewTree> datatree = all.Select(e => new IviewTree() { Title = e.Name, Id = e.Id, Checked = selectIds.Contains(e.Id) }).ToList();
             if (datatree == null || datatree.Count <= 0)
             {
                 return new List<IviewTree>();
             }
             return datatree;
         }
+    }
+    public class AsyncIviewTree
+    {
+
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public bool Expand { get; set; }
+
+        public bool Checked { get; set; }
+        public bool Selected { get; set; }
+        public object Data { get; set; }
+        public bool Loading { get; set; }
+        public List<IviewTree> Children { get; set; }
+    
     }
     /// <summary>
     /// 树形关系

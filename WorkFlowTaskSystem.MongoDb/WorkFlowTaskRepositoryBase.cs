@@ -73,7 +73,25 @@ namespace WorkFlowTaskSystem.MongoDb
             return ApplyFilters(Collection.AsQueryable());
             
         }
-
+        /// <summary>
+        /// 分页
+        /// </summary>
+        /// <param name="skip"></param>
+        /// <param name="limit"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public List<TEntity> GetPage(int skip,int limit,out int count)
+        {
+            var query = MongoDB.Driver.Builders.Query.Empty;
+            return GetPage(query, skip, limit, out count).ToList();
+           
+        }
+        public IQueryable<TEntity> GetPage(IMongoQuery query,int skip, int limit, out int count)
+        {
+            query = ApplySoftDeleteFilter(query);
+            count = (int)Collection.Find(query).Count();
+            return Collection.Find(query).SetSkip(skip).SetLimit(limit).AsQueryable();
+        }
         public override TEntity Insert(TEntity entity)
         {
             Collection.Insert(entity);
@@ -131,6 +149,18 @@ namespace WorkFlowTaskSystem.MongoDb
                 if (UnitOfWorkManager?.Current == null || UnitOfWorkManager.Current.IsFilterEnabled(AbpDataFilters.SoftDelete))
                 {
                     query = query.Where(e => !((ISoftDelete)e).IsDeleted);
+                }
+            }
+
+            return query;
+        }
+        protected IMongoQuery ApplySoftDeleteFilter(IMongoQuery query)
+        {
+            if (typeof(ISoftDelete).GetTypeInfo().IsAssignableFrom(typeof(TEntity)))
+            {
+                if (UnitOfWorkManager?.Current == null || UnitOfWorkManager.Current.IsFilterEnabled(AbpDataFilters.SoftDelete))
+                {
+                    query = MongoDB.Driver.Builders.Query.And(query, MongoDB.Driver.Builders.Query.EQ("IsDeleted", false));
                 }
             }
 
