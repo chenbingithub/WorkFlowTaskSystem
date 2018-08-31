@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /WorkFlowTaskSystem.Web.Host/wwwroot/upload
+/WorkFlowTaskSystem.Web.Host/wwwroot/reports

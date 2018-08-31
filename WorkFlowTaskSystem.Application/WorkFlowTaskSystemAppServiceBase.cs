@@ -10,8 +10,10 @@ using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Domain.Repositories;
 using Abp.ObjectMapping;
+using Aspose.Cells;
 using WorkFlowTaskSystem.Application.Forms.Dto;
 using WorkFlowTaskSystem.Core;
+using WorkFlowTaskSystem.Core.Reports;
 
 namespace WorkFlowTaskSystem.Application
 {
@@ -36,6 +38,17 @@ namespace WorkFlowTaskSystem.Application
         public WorkFlowTaskSystemAppServiceBase(IRepository<TEntity, TPrimaryKey> repository) : base(repository)
         {
             LocalizationSourceName = WorkFlowTaskAbpConsts.LocalizationSourceName;
+        }
+        public string GenerateReport()
+        {
+            string className = typeof(TEntity).Name;
+            string templateName = ReportAppService.WebRootPath+ "/template/" + className + ".xlsx";
+            var data=Repository.GetAll().ToList();
+            var wb=ReportAppService.GenerateReport(new{data= data, Count = data.Count, className }, templateName);
+            string guid = Guid.NewGuid().ToString("N")+".pdf";
+
+            wb.Save(ReportAppService.WebRootPath + "/reports/" + guid, SaveFormat.Pdf);
+            return guid;
         }
         public override async Task<TEntityDto> Update(TUpdateInput input)
         {

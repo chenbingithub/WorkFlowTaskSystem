@@ -17,6 +17,7 @@ using WorkFlowTaskSystem.Application.TreeNodes.Dto;
 using WorkFlowTaskSystem.Controllers;
 using WorkFlowTaskSystem.Core;
 using WorkFlowTaskSystem.Core.Damain.Entities;
+using WorkFlowTaskSystem.Core.Reports;
 using WorkFlowTaskSystem.Web.Host.Models;
 
 namespace WorkFlowTaskSystem.Web.Host.Controllers
@@ -34,10 +35,10 @@ namespace WorkFlowTaskSystem.Web.Host.Controllers
         }
         public IActionResult Index()
         {
-            
-           //var database= new MongoClient("mongodb://localhost:27017/WorkFlowTaskSystemDB")
-           //     .GetServer()
-           //     .GetDatabase("WorkFlowTaskSystemDB");
+            ReportAppService.WebRootPath= _hostingEnvironment.WebRootPath;
+            //var database= new MongoClient("mongodb://localhost:27017/WorkFlowTaskSystemDB")
+            //     .GetServer()
+            //     .GetDatabase("WorkFlowTaskSystemDB");
             //Test dd = new Test();
             //var f = dd.GetType().GetProperties();
             //foreach (System.Reflection.PropertyInfo p in dd.GetType().GetProperties())
@@ -68,10 +69,10 @@ namespace WorkFlowTaskSystem.Web.Host.Controllers
             //        DateOrderby = bson["DateOrderby"].AsInt32,
             //        DataDefine =new DefineType()
             //        {
-                        
+
             //        } ,
             //        Url =new Urls()
-                    
+
             //    });
             //}
             return Redirect("/swagger");
@@ -151,6 +152,31 @@ namespace WorkFlowTaskSystem.Web.Host.Controllers
             }
             return Ok(new { file });
         }
+
+        /// <summary>
+        /// 预览pdf报表
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public IActionResult Preview(string file)
+        {
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            var addrUrl = webRootPath + "/reports/" + file;
+
+            var stream = System.IO.File.OpenRead(addrUrl);
+
+            string fileExt = Path.GetExtension(file);
+
+            //获取文件的ContentType
+
+            var provider = new FileExtensionContentTypeProvider();
+
+            var memi = provider.Mappings[fileExt];
+
+            return File(stream, memi, Path.GetFileName(addrUrl));
+        }
+
+       
 
         public IActionResult About(HttpContext context)
         {
