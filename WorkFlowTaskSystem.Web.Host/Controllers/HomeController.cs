@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
+using Abp.Net.Mail.Smtp;
 using Castle.Components.DictionaryAdapter;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
@@ -27,11 +29,13 @@ namespace WorkFlowTaskSystem.Web.Host.Controllers
         private IPermissionInfoAppService _permissionInfoAppService;
         private IDocumentTreeNodeAppService _documentTreeNodeAppService;
         private IHostingEnvironment _hostingEnvironment;
-        public HomeController(IPermissionInfoAppService permissionInfoAppService, IDocumentTreeNodeAppService documentTreeNodeAppService, IHostingEnvironment hostingEnvironment)
+        private ISmtpEmailSender _emailSender;
+        public HomeController(IPermissionInfoAppService permissionInfoAppService, IDocumentTreeNodeAppService documentTreeNodeAppService, IHostingEnvironment hostingEnvironment, ISmtpEmailSender emailSender)
         {
             _permissionInfoAppService = permissionInfoAppService;
             _documentTreeNodeAppService = documentTreeNodeAppService;
             _hostingEnvironment = hostingEnvironment;
+            _emailSender = emailSender;
         }
         public IActionResult Index()
         {
@@ -77,6 +81,13 @@ namespace WorkFlowTaskSystem.Web.Host.Controllers
             //}
             return Redirect("/swagger");
         }
+
+        public IActionResult testEmails()
+        {
+            _emailSender.Send("binchen@chinergy.com.cn","标题 测试","内容  哈哈哈哈哈，收到了吧！");
+            return Ok();
+        }
+
         [RequestSizeLimit(100_000_000)] //最大100m左右
         //[DisableRequestSizeLimit]  //或者取消大小的限制
         public IActionResult Upload()
