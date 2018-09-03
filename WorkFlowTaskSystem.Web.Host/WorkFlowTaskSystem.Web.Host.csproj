@@ -47,6 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="App_Data\Logs\" />
     <Folder Include="wwwroot\images\Avatar\" />
     <Folder Include="wwwroot\images\login\" />
     <Folder Include="wwwroot\images\task\" />
