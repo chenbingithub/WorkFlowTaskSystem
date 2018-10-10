@@ -26,6 +26,7 @@ namespace WorkFlowTaskSystem.Core.Reports
         private static void ForeachProperties(WorkbookDesigner designer, JObject jObject, string className = "t")
         {
 
+          WorkbookDesigner design=new WorkbookDesigner(new Workbook("/"));
             foreach (var item in jObject)
             {
                 string propertyName = item.Key;
@@ -85,5 +86,10 @@ namespace WorkFlowTaskSystem.Core.Reports
             return result;
 
         }
+
+      public static void test()
+      {
+        Aspose.Cells.Style style=new Style();
+    }
     }
 }
