@@ -8,6 +8,9 @@ import permission from './modules/permission';
 import organization from './modules/organization';
 import session from './modules/session';
 import document from './modules/document';
+import filemanager from './modules/filemanager';
+import cableconstant from './modules/cableconstant';
+import bridgeconstant from './modules/bridgeconstant';
 
 Vue.use(Vuex);
 
@@ -28,7 +31,10 @@ const store = new Vuex.Store({
         permission,
         organization,
         session,
-        document
+        document,
+        filemanager,
+        cableconstant,
+        bridgeconstant
     }
 });
 

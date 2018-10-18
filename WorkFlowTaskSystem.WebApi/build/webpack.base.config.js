@@ -14,7 +14,7 @@ module.exports = {
         'vender-exten': '@/vendors/vendors.exten.js'
     },
     output: {
-      path: path.resolve(__dirname, '../wwwroot/wwwroot')
+        path: path.resolve(__dirname, '../wwwroot/dist')
     },
     module: {
         rules: [

@@ -22,8 +22,9 @@ util.ajax = axios.create({
     baseURL: ajaxUrl,
     timeout: 30000,
     headers: {},
-    withCredentials:true
+    withCredentials:true,
 });
+
 
 
 util.ajax.interceptors.request.use(function (config) {
@@ -70,10 +71,47 @@ util.ajax.interceptors.request.use(function (config) {
         }
     }
     return Promise.reject(error);
-})
-util.ztreeInit=function(str,setting,data){
-     $.fn.zTree.init($("#"+str), setting,data);
-};
+});
+util.ajaxfile = axios.create({
+    baseURL: ajaxUrl,
+    timeout: 30000,
+    headers: {},
+    withCredentials:true,
+    responseType: 'blob'
+});
++util.ajaxfile.interceptors.response.use(function (response) {
+    // Do something with response data
+    return response;
+}, function (error) {
+    // Do something with response error
+    if (!!error.response && !!error.response.data && !!error.response.data.__abp) {
+        abp.ajax.showError(error.response.data.error);
+    } else {
+        if (!error.response) {
+            abp.ajax.showError(abp.ajax.defaultError);
+            return
+        }
+        switch (error.response.status) {
+            case 401:
+                abp.ajax.handleUnAuthorizedRequest(
+                    abp.ajax.showError(abp.ajax.defaultError401),
+                    abp.appPath
+                );
+                break;
+            case 403:
+                abp.ajax.showError(abp.ajax.defaultError403);
+                break;
+            case 404:
+                abp.ajax.showError(abp.ajax.defaultError404);
+                break;
+            default:
+                abp.ajax.showError(abp.ajax.defaultError);
+                break;
+        }
+    }
+    return Promise.reject(error);
+});
+
 
 util.inOf = function (arr, targetArr) {
     let res = true;

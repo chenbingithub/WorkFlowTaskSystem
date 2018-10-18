@@ -4,7 +4,7 @@ const documentFile = {
     namespaced:true,
     state: {
         documentFiles:[],
-        uploadurl:Util.constUrl+"/home/upload"
+        
     },
     mutations: {
         setPageSize(state,size){
@@ -24,12 +24,7 @@ const documentFile = {
             });
         },
         
-        async delete({state},payload){
-            await Util.ajax.delete('/api/services/app/DocumentTreeNode/Delete?Id='+payload.data.id);
-        },
-        async create({state},payload){
-            await Util.ajax.post('/api/services/app/DocumentTreeNode/Create',payload.data);
-        },
+        
         async update({state},payload){
             await Util.ajax.put('/api/services/app/DocumentTreeNode/Update',payload.data);
         },

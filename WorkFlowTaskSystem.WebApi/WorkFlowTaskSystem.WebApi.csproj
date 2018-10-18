@@ -26,8 +26,8 @@
   <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
-  <Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
+  <!--<Target Name="PrecompileScript" BeforeTargets="BeforeBuild">
     <Exec Command="npm install " />
     <Exec Command="npm run build" />
-  </Target>
+  </Target>-->
 </Project>
