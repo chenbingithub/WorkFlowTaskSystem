@@ -73,6 +73,15 @@ namespace WorkFlowTaskSystem.MongoDb
             return ApplyFilters(Collection.AsQueryable());
             
         }
+        public TEntity Get(IMongoQuery query)
+        {
+          return  Collection.FindOne(query);
+        }
+        public List<TEntity> GetList(IMongoQuery query)
+        {
+            return Collection.Find(query).ToList();
+           
+        }
         /// <summary>
         /// 分页
         /// </summary>
@@ -86,6 +95,7 @@ namespace WorkFlowTaskSystem.MongoDb
             return GetPage(query, skip, limit, out count).ToList();
            
         }
+        
         public IQueryable<TEntity> GetPage(IMongoQuery query,int skip, int limit, out int count)
         {
             query = ApplySoftDeleteFilter(query);

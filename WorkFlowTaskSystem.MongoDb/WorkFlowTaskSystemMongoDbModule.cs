@@ -21,7 +21,12 @@ namespace WorkFlowTaskSystem.MongoDb
             //IocManager.Register<IRepository<DocumentTreeNode, string>, WorkFlowTaskRepositoryBase<DocumentTreeNode, string>>();
             IocManager.Register<IRepository<WorkFlowInstance, string>, WorkFlowInstanceRepository>();
             IocManager.Register<IRepository<WorkFlow, string>, WorkFlowRepository>();
-        }
+            IocManager.Register<IRepository<CableLayingDetails, string>, WorkFlowTaskRepositoryBase<CableLayingDetails, string>>();
+            IocManager.Register<IRepository<CableConstant, string>, WorkFlowTaskRepositoryBase<CableConstant, string>>();
+            IocManager.Register<IRepository<BridgeConstant, string>, WorkFlowTaskRepositoryBase<BridgeConstant, string>>(); 
+            IocManager.Register<IRepository<BridgeInstances, string>, WorkFlowTaskRepositoryBase<BridgeInstances, string>>();
+            IocManager.Register<IRepository<CableSummarizedBill, string>, WorkFlowTaskRepositoryBase<CableSummarizedBill, string>>();
+    }
 
         public override void Initialize()
         {

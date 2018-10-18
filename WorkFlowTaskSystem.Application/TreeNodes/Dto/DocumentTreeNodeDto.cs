@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using WorkFlowTaskSystem.Core.Damain.Entities;

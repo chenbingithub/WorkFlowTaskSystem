@@ -1,5 +1,4 @@
-﻿
-using WorkFlowTaskSystem.Application.TreeNodes.Dto;
+﻿using WorkFlowTaskSystem.Application.TreeNodes.Dto;
 
 namespace WorkFlowTaskSystem.Application.TreeNodes
 {
