@@ -38,5 +38,26 @@ namespace WorkFlowTaskSystem.MongoDb
           return _repository.GetList(query);
      
         }
+        public static void RealDelete<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository, TPrimaryKey idKey)
+            where TEntity : class, IEntity<TPrimaryKey>
+        {
+          var _repository = repository as WorkFlowTaskRepositoryBase<TEntity, TPrimaryKey>;
+           _repository.RealDelete(idKey);
+     
+        }
+        public static void RealDeleteAll<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository)
+            where TEntity : class, IEntity<TPrimaryKey>
+        {
+          var _repository = repository as WorkFlowTaskRepositoryBase<TEntity, TPrimaryKey>;
+           _repository.RealDeleteAll();
+     
+        }
+        public static void InsertBatch<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository, IEnumerable<TEntity> list)
+            where TEntity : class, IEntity<TPrimaryKey>
+        {
+          var _repository = repository as WorkFlowTaskRepositoryBase<TEntity, TPrimaryKey>;
+           _repository.InsertBatch(list);
+     
+        }
     }
 }

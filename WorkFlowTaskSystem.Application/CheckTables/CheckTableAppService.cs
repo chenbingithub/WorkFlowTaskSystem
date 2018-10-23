@@ -8,6 +8,7 @@ using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using Abp.Runtime.Caching;
 using Aspose.Cells;
+using Microsoft.AspNetCore.Hosting;
 using WorkFlowTaskSystem.Application.CheckTables.Dto;
 using WorkFlowTaskSystem.Application.Forms.Dto;
 using WorkFlowTaskSystem.Core.Damain.Entities;
@@ -26,14 +27,18 @@ namespace WorkFlowTaskSystem.Application.CheckTables
       private IRepository<BridgeInstances, string> _bridgeInstancesRepository;
       private IRepository<BridgeConstant, string> _bridgeConstantRepository;
       private IRepository<CableConstant, string> _cableConstantRepository;
+      private IRepository<ReportResult, string> _reportResultRepository;
+    private IHostingEnvironment _hostingEnvironment;
 
-    public CheckTableAppService(IRepository<CableLayingDetails, string> cableRepository, IRepository<CableSummarizedBill, string> cableSummarizedBillRepository, IRepository<BridgeInstances, string> bridgeInstancesRepository, IRepository<BridgeConstant, string> bridgeConstantRepository, IRepository<CableConstant, string> cableConstantRepository)
+    public CheckTableAppService(IRepository<CableLayingDetails, string> cableRepository, IRepository<CableSummarizedBill, string> cableSummarizedBillRepository, IRepository<BridgeInstances, string> bridgeInstancesRepository, IRepository<BridgeConstant, string> bridgeConstantRepository, IRepository<CableConstant, string> cableConstantRepository, IHostingEnvironment hostingEnvironment, IRepository<ReportResult, string> reportResultRepository)
     {
       _cableRepository = cableRepository;
       _cableSummarizedBillRepository = cableSummarizedBillRepository;
       _bridgeInstancesRepository = bridgeInstancesRepository;
       _bridgeConstantRepository = bridgeConstantRepository;
       _cableConstantRepository = cableConstantRepository;
+      _hostingEnvironment = hostingEnvironment;
+      _reportResultRepository = reportResultRepository;
     }
 
      
@@ -97,10 +102,19 @@ namespace WorkFlowTaskSystem.Application.CheckTables
     /// <param name="path">文件路径</param>
     public void InsertCableSummarizedBill(string numberNo, string path)
     {
+      var cableConstantall = _cableConstantRepository.GetAll().ToList();
+      var bridgeConstantall = _bridgeConstantRepository.GetAll().ToList();
+
+
       try
       {
+        string file = _hostingEnvironment.WebRootPath + "/upload/"+ numberNo+".xlsx";
         Workbook wb = new Workbook(path);
+        Workbook reportwb = new Workbook();
         var sheet = wb.Worksheets[0];
+        int errorcol = 1;
+        List<CableSummarizedBill> list = new List<CableSummarizedBill>();
+        List<BridgeInstances> instances = new List<BridgeInstances>();
         for (int i = 1; i < sheet.Cells.MaxRow + 1; i++)
         {
           CableSummarizedBillDto entityDto = new CableSummarizedBillDto();
@@ -109,14 +123,41 @@ namespace WorkFlowTaskSystem.Application.CheckTables
           {
             propertys[j].SetValue(entityDto, (sheet.Cells[i, j].Value ?? "").ToString().Trim());
           }
-          CableSummarizedBill entity = new CableSummarizedBill();
+          var entity = new CableSummarizedBill();
           entity.Id = Guid.NewGuid().ToString("N");
           entity.Description = numberNo;
           ObjectMapper.Map(entityDto, entity);
-          _cableSummarizedBillRepository.Insert(entity);
-          //同时把电缆路径拆分，插入桥架实例表中
-          InsertBridgeInstances(numberNo, entity.Q, entity.Z);
+          try
+          {
+            var cable = cableConstantall.FirstOrDefault(u => u.Version == entityDto.U && u.Specification == entityDto.V);
+            entity.WeightLimit = 999;
+            entity.Diameter = 999;
+            if (double.TryParse(cable.WeightLimit, out double weightLimit))
+            {
+              entity.WeightLimit = weightLimit;
+            }
+            if (double.TryParse(cable.Diameter, out double diameter))
+            {
+              entity.Diameter = diameter;
+            }
+            list.Add(entity);
+            InsertBridgeInstances(numberNo, entity.Q, entity.Z, bridgeConstantall, instances);
+            //同时把电缆路径拆分，插入桥架实例表中
+          }
+          catch (Exception e)
+          {
+            reportwb.Worksheets[0].Cells[errorcol, 4].PutValue(entity.A);
+            reportwb.Worksheets[0].Cells[errorcol, 5].PutValue(entity.B);
+            reportwb.Worksheets[0].Cells[errorcol, 6].PutValue(entity.C);
+            reportwb.Worksheets[0].Cells[errorcol, 7].PutValue(entity.Q);
+            reportwb.Worksheets[0].Cells[errorcol, 8].PutValue(entity.Z);
+            errorcol++;
+          }
         }
+        _bridgeInstancesRepository.InsertBatch(instances);
+        _cableSummarizedBillRepository.InsertBatch(list);
+        reportwb.Save(file);
+        _reportResultRepository.Insert(new ReportResult() {Id=Guid.NewGuid().ToString("N"),Name = "生成计算容积率报告成功", Url = numberNo+".xlsx", Description = numberNo });
       }
       catch (Exception e)
       {
@@ -131,17 +172,15 @@ namespace WorkFlowTaskSystem.Application.CheckTables
     /// <param name="numberNo">流水号</param>
     /// <param name="Q">电缆汇总清单Q列,实际为通道类型</param>
     /// <param name="Z">电缆汇总清单Z列,实际为电缆路径</param>
-    private void InsertBridgeInstances(string numberNo, string Q, string Z)
+    private void InsertBridgeInstances(string numberNo, string Q, string Z,List<BridgeConstant> source,List<BridgeInstances> inserts)
     {
       try
       {
         var codes = Z.Split(',');
-        foreach (var code in codes)
+        for (int i = 1; i < codes.Length-1; i++)
         {
-          var query = MongoDB.Driver.Builders.Query<BridgeConstant>.EQ(u => u.Description, numberNo);
-          var query1 = MongoDB.Driver.Builders.Query<BridgeConstant>.EQ(u => u.BridgeCode, code);
-          var query2 = MongoDB.Driver.Builders.Query<BridgeConstant>.EQ(u => u.PassageType, Q);
-          var bridge = _bridgeConstantRepository.Get(MongoDB.Driver.Builders.Query.And(query2, query1));
+          var code = codes[i];
+          var bridge = source.FirstOrDefault(u=>u.BridgeCode==code&&u.PassageType==Q);
           BridgeInstances entity = new BridgeInstances();
           entity.Id = Guid.NewGuid().ToString("N");
           entity.Description = numberNo;
@@ -150,11 +189,12 @@ namespace WorkFlowTaskSystem.Application.CheckTables
           entity.WeightLimit = bridge.WeightLimit;
           entity.SectionalArea = bridge.SectionalArea;
           entity.PlotRatioLimit = bridge.PlotRatioLimit;
-          if (_bridgeInstancesRepository.Get(MongoDB.Driver.Builders.Query.And(query2, query1, query)) == null)
+          if (!inserts.Exists(u=> u.BridgeCode == code && u.PassageType == Q&&u.Description== numberNo))
           {
-            _bridgeInstancesRepository.Insert(entity);
+            inserts.Add(entity);
           }
         }
+       
       }
       catch (Exception e)
       {
@@ -188,12 +228,10 @@ namespace WorkFlowTaskSystem.Application.CheckTables
           var query1 = MongoDB.Driver.Builders.Query<CableSummarizedBill>.EQ(u => u.Q, passageType);
           var query2 = MongoDB.Driver.Builders.Query<CableSummarizedBill>.Matches(u => u.Z, $@"/{bridgeCode}/");
           var clist = _cableSummarizedBillRepository.GetList(MongoDB.Driver.Builders.Query.And(query2, query1, query));
-          var cableConstantall = _cableConstantRepository.GetAll().ToList();
           double sum = 0;
           foreach (var bill in clist)
           {
-            var cable = cableConstantall.Single(u => u.Version == bill.U && u.Specification == bill.V);
-            var diameter = double.Parse(cable.Diameter);
+            var diameter = bill.Diameter;
             sum += diameter * diameter;
           }
           return sum;
@@ -218,12 +256,10 @@ namespace WorkFlowTaskSystem.Application.CheckTables
         var query = MongoDB.Driver.Builders.Query<CableSummarizedBill>.EQ(u => u.Description, numberNo);
         var query2 = MongoDB.Driver.Builders.Query<CableSummarizedBill>.Matches(u => u.Z, $@"/{bridgeCode}/");
         var clist = _cableSummarizedBillRepository.GetList(MongoDB.Driver.Builders.Query.And(query2, query));
-        var cableConstantall = _cableConstantRepository.GetAll().ToList();
         double sum = 0;
         foreach (var bill in clist)
         {
-          var cable = cableConstantall.Single(u => u.Version == bill.U && u.Specification == bill.V);
-          var weightLimit = double.Parse(cable.WeightLimit);
+          var weightLimit = bill.WeightLimit;
           sum += weightLimit * weightLimit;
         }
         return sum;

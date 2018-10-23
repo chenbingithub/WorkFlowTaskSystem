@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Abp.Application.Services.Dto;
 using Abp.Domain.Repositories;
 using Aspose.Cells;
 using Microsoft.AspNetCore.Hosting;
 using WorkFlowTaskSystem.Application.Documents.CableConstants.Dto;
 using WorkFlowTaskSystem.Core.Damain.Entities;
 using WorkFlowTaskSystem.Core.ViewModel;
+using WorkFlowTaskSystem.MongoDb;
 
 namespace WorkFlowTaskSystem.Application.Documents.CableConstants
 {
@@ -47,6 +50,15 @@ namespace WorkFlowTaskSystem.Application.Documents.CableConstants
       }
 
     }
+      public override Task Delete(EntityDto<string> input)
+      {
+        Repository.RealDelete(input.Id);
+        return Task.CompletedTask;
+      }
 
+      public void RealDeleteAll()
+      {
+        Repository.RealDeleteAll();
+      }
   }
 }

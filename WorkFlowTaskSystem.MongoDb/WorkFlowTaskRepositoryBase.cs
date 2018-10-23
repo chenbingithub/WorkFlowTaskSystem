@@ -68,7 +68,16 @@ namespace WorkFlowTaskSystem.MongoDb
             
         }
 
-        public override IQueryable<TEntity> GetAll()
+      public void RealDelete(TPrimaryKey id)
+      {
+        var query = MongoDB.Driver.Builders.Query<TEntity>.EQ(e => e.Id, id);
+        Collection.Remove(query);
+      }
+      public void RealDeleteAll()
+      {
+        Collection.RemoveAll();
+      }
+    public override IQueryable<TEntity> GetAll()
         {
             return ApplyFilters(Collection.AsQueryable());
             
@@ -108,7 +117,12 @@ namespace WorkFlowTaskSystem.MongoDb
             return entity;
         }
 
-        public override TEntity Update(TEntity entity)
+        public void InsertBatch(IEnumerable<TEntity> list)
+        {
+            Collection.InsertBatch(list);
+        }
+
+      public override TEntity Update(TEntity entity)
         {
             if (typeof(IAudited).GetTypeInfo().IsAssignableFrom(typeof(TEntity)))
             {

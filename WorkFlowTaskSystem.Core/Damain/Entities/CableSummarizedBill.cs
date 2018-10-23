@@ -11,6 +11,19 @@ namespace WorkFlowTaskSystem.Core.Damain.Entities
     /// </summary>
     public class CableSummarizedBill:BaseEntity
     {
+      public CableSummarizedBill()
+      {
+        this.WeightLimit = 0;
+        this.Diameter = 0;
+      }
+      /// <summary>
+      /// 外径
+      /// </summary>
+      public double Diameter { get; set; }
+      /// <summary>
+      /// 重量限值
+      /// </summary>
+      public double WeightLimit { get; set; }
       public string A { get; set; }
       public string B { get; set; }
       public string C { get; set; }
@@ -59,5 +72,6 @@ namespace WorkFlowTaskSystem.Core.Damain.Entities
       public string AT { get; set; }
       public string AU { get; set; }
       public string AV { get; set; }
+
   }
 }

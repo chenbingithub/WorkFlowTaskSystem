@@ -27,7 +27,9 @@ const cableconstant = {
             state.cableconstants.push(...rep.data.result.items);
             state.totalCount=rep.data.result.totalCount;
         },
-        
+        async deleteAll({state},payload){
+            await Util.ajax.post('/api/services/app/cableconstant/RealDeleteAll');
+        },
         async delete({state},payload){
             await Util.ajax.delete('/api/services/app/cableconstant/Delete?Id='+payload.data.id);
         },

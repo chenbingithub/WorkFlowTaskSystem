@@ -27,7 +27,9 @@ const bridgeconstant = {
             state.bridgeconstants.push(...rep.data.result.items);
             state.totalCount=rep.data.result.totalCount;
         },
-        
+        async deleteAll({state},payload){
+            await Util.ajax.post('/api/services/app/bridgeconstant/RealDeleteAll');
+        },
         async delete({state},payload){
             await Util.ajax.delete('/api/services/app/bridgeconstant/Delete?Id='+payload.data.id);
         },

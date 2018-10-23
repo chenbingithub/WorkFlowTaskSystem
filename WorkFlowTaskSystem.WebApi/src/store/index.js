@@ -11,6 +11,7 @@ import document from './modules/document';
 import filemanager from './modules/filemanager';
 import cableconstant from './modules/cableconstant';
 import bridgeconstant from './modules/bridgeconstant';
+import reportresult from './modules/reportresult';
 
 Vue.use(Vuex);
 
@@ -34,7 +35,8 @@ const store = new Vuex.Store({
         document,
         filemanager,
         cableconstant,
-        bridgeconstant
+        bridgeconstant,
+        reportresult
     }
 });
 

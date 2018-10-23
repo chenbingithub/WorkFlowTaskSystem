@@ -17,7 +17,8 @@ using WorkFlowTaskSystem.Web.Core.Email;
 
 namespace WorkFlowTaskSystem.Web.Core
 {
-   [DependsOn(typeof(WorkFlowTaskSystemApplicationModule),typeof(AbpRedisCacheModule),typeof(AbpAspNetCoreModule),typeof(WorkFlowTaskSystemMongoDbModule)
+  //,typeof(AbpRedisCacheModule)
+  [DependsOn(typeof(WorkFlowTaskSystemApplicationModule),typeof(AbpAspNetCoreModule),typeof(WorkFlowTaskSystemMongoDbModule)
         #if FEATURE_SIGNALR
         ,typeof(AbpWebSignalRModule)
     #elif FEATURE_SIGNALR_ASPNETCORE
@@ -54,21 +55,21 @@ namespace WorkFlowTaskSystem.Web.Core
 
             
             //设置所有缓存的默认过期时间
-            Configuration.Caching.ConfigureAll(cache =>
-            {
-                cache.DefaultAbsoluteExpireTime=TimeSpan.FromMinutes(2);
-            });
-            //设置某个缓存的默认过期时间 根据 "CacheName" 来区分
-            Configuration.Caching.Configure("CacheName", cache =>
-            {
-                cache.DefaultAbsoluteExpireTime=TimeSpan.FromMinutes(2);
-            });
-            //使用redis数据库缓存
-            Configuration.Caching.UseRedis(option =>
-            {
-                option.ConnectionString = _appConfiguration["Abp:RedisCache:ConnectionStrings"];
-                option.DatabaseId =int.Parse(_appConfiguration["Abp:RedisCache:DatabaseId"]);
-            });
+            //Configuration.Caching.ConfigureAll(cache =>
+            //{
+            //    cache.DefaultAbsoluteExpireTime=TimeSpan.FromMinutes(2);
+            //});
+            ////设置某个缓存的默认过期时间 根据 "CacheName" 来区分
+            //Configuration.Caching.Configure("CacheName", cache =>
+            //{
+            //    cache.DefaultAbsoluteExpireTime=TimeSpan.FromMinutes(2);
+            //});
+            ////使用redis数据库缓存
+            //Configuration.Caching.UseRedis(option =>
+            //{
+            //    option.ConnectionString = _appConfiguration["Abp:RedisCache:ConnectionStrings"];
+            //    option.DatabaseId =int.Parse(_appConfiguration["Abp:RedisCache:DatabaseId"]);
+            //});
             
 
 

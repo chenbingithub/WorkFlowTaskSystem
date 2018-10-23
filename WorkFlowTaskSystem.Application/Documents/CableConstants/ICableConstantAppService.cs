@@ -7,5 +7,6 @@ namespace WorkFlowTaskSystem.Application.Documents.CableConstants
     public interface ICableConstantAppService : IWorkFlowTaskSystemAppServiceBase<CableConstantDto, CableConstantDto>
     {
       void Insert(ConstantView enView);
-    }
+      void RealDeleteAll();
+  }
 }

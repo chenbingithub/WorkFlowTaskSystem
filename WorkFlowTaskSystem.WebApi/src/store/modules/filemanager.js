@@ -17,7 +17,10 @@ const filemanager = {
             return await Util.ajaxfile.post('/FileHelper/Check',payload.data);
         },
         async calculate({state},payload){//计算容积率
-            return await Util.ajaxfile.post('/FileHelper/Calculate',payload.data);
+            return await Util.ajax.post('/FileHelper/Calculate',payload.data);
+        },
+        async calculatedownload({state},payload){//下载
+            return await Util.ajaxfile.post('/FileHelper/DownLoad',payload.data);
         },
         async InsertCableConstant({state},payload){
             return await Util.ajax.post('/FileHelper/InsertCableConstant',payload.data);

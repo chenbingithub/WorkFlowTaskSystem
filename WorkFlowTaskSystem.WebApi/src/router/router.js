@@ -125,7 +125,9 @@ export const appRouter = [
         children: [
             { path: 'check', title: '校验文件', name: 'check', component: () => import('@/views/document/check.vue')},
             { path: 'calculate', title: '计算容积', name: 'calculate', component: () => import('@/views/document/calculate.vue') },
-            { path: 'bridgeconstant', title: '桥架常量', name: 'bridgeconstant', component: () => import('@/views/document/bridgeconstant.vue') },
+            { path: 'reportresult', title: '计算容积报告', name: 'reportresult', component: () => import('@/views/document/reportresult.vue') },
+            { path: 'bridgeconstant', title: '桥架常量', name: 'bridgeconstant', component: () => import('@/views/document/bridgeconstantupload.vue') },
+            { path: 'bridgeconstantmanager', title: '桥架常量管理', name: 'bridgeconstantmanager', component: () => import('@/views/document/bridgeconstant.vue') },
             { path: 'cableconstant', title: '电缆常量', name: 'cableconstant', component: () => import('@/views/document/cableconstantupload.vue') },
             { path: 'cableconstantmanager', title: '电缆常量管理', name: 'cableconstantmanager', component: () => import('@/views/document/cableconstant.vue') },
         ]

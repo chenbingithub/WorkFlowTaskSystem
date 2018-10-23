@@ -74,7 +74,7 @@ util.ajax.interceptors.request.use(function (config) {
 });
 util.ajaxfile = axios.create({
     baseURL: ajaxUrl,
-    timeout: 30000,
+    timeout: 300000,
     headers: {},
     withCredentials:true,
     responseType: 'blob'

@@ -12,7 +12,7 @@
                         </p>
                         <div class="height-492px">
                            <file-upload  :data="uploadList1" @on-uploadlist-change="onResultChange1" :title="title1" :format="['xlsx','jpg','jpeg','png']" ></file-upload>
-                            <file-upload :data="uploadList2" @on-uploadlist-change="onResultChange2" :multiple="true" :title="title2" :size="100" :format="['xlsx']"></file-upload>
+                            <file-upload :data="uploadList2" @on-uploadlist-change="onResultChange2" :multiple="true" :title="title2" :size="100" :format="['xlsx','xls']"></file-upload>
                             <br/>
                             <Button type="primary" :loading="loading" long @click="submit">
                                 <span v-if="!loading">检验</span>

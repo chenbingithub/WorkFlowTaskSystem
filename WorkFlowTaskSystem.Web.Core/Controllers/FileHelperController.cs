@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Aspose.Cells;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +13,10 @@ using Microsoft.AspNetCore.StaticFiles;
 using WorkFlowTaskSystem.Application.CheckTables;
 using WorkFlowTaskSystem.Application.Documents.BridgeConstants;
 using WorkFlowTaskSystem.Application.Documents.CableConstants;
+using WorkFlowTaskSystem.Application.Documents.ReportResults;
+using WorkFlowTaskSystem.Application.Documents.ReportResults.Dto;
 using WorkFlowTaskSystem.Controllers;
+using WorkFlowTaskSystem.Core.Damain.Entities;
 using WorkFlowTaskSystem.Core.ViewModel;
 using WorkFlowTaskSystem.Web.Core.Models;
 
@@ -23,12 +28,14 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
     private ICheckTableAppService _checkTableAppService;
     private ICableConstantAppService _cableConstantAppService;
     private IBridgeConstantAppService _bridgeConstantAppService;
-    public FileHelperController(IHostingEnvironment hostingEnvironment, ICheckTableAppService checkTableAppService, ICableConstantAppService cableConstantAppService, IBridgeConstantAppService bridgeConstantAppService)
+    private IReportResultAppService _reportResultAppService;
+    public FileHelperController(IHostingEnvironment hostingEnvironment, ICheckTableAppService checkTableAppService, ICableConstantAppService cableConstantAppService, IBridgeConstantAppService bridgeConstantAppService, IReportResultAppService reportResultAppService)
     {
       _hostingEnvironment = hostingEnvironment;
       _checkTableAppService = checkTableAppService;
       _cableConstantAppService = cableConstantAppService;
       _bridgeConstantAppService = bridgeConstantAppService;
+      _reportResultAppService = reportResultAppService;
     }
 
     #region 文件上传、下载、删除、预览
@@ -217,16 +224,61 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
     /// <returns></returns>
     public IActionResult Calculate([FromBody]CheckEntityView entity)
     {
+      Task.Run(() =>                                          //异步开始执行
+      {
+        try
+        {
+          var addrUrl = _hostingEnvironment.WebRootPath + "/upload/" + entity.RealityTable;
+          _checkTableAppService.InsertCableSummarizedBill(entity.NumberNo, addrUrl);
+          var list = _checkTableAppService.GetBridgeInstancesListByNumberNo(entity.NumberNo);
+          string file = _hostingEnvironment.WebRootPath + "/upload/" + entity.NumberNo + ".xlsx";
+          Workbook wb = new Workbook(file);
+          int index = 1;
+          foreach (var bridgeInstancese in list)
+          {
+            var area = _checkTableAppService.SummationCableSectionalArea(entity.NumberNo, bridgeInstancese.BridgeCode,
+              bridgeInstancese.PassageType);
+            var arealimit = double.Parse(bridgeInstancese.PlotRatioLimit) * double.Parse(bridgeInstancese.SectionalArea);
+            if (area > arealimit)
+            {
+              wb.Worksheets[0].Cells[index, 1].PutValue(bridgeInstancese.BridgeCode);
+              wb.Worksheets[0].Cells[index, 2].PutValue("电缆外径截面积之和大于桥架截面积");
+              index++;
+            }
+            var weight = _checkTableAppService.SummationCableWeight(entity.NumberNo, bridgeInstancese.BridgeCode);
+            var weightlimit = double.Parse(bridgeInstancese.WeightLimit);
+            if (weight > weightlimit)
+            {
+
+              wb.Worksheets[0].Cells[index, 1].PutValue(bridgeInstancese.BridgeCode);
+              wb.Worksheets[0].Cells[index, 3].PutValue("电缆重量之和大于桥架载重限值");
+              index++;
+            }
+          }
+          
+        }
+        catch (Exception e)
+        {
+          Console.WriteLine(e);
+          _reportResultAppService.Create(new ReportResultDto() { Name = "生成报告失败", Url = entity.NumberNo + ".xlsx", Description = entity.NumberNo });
+        }
+        
+      });
+
+      return Ok(entity.NumberNo);
+    }
+    public IActionResult CalculateReport(string numberNo)
+    {
       try
       {
-        var addrUrl = _hostingEnvironment.WebRootPath + "/upload/" + entity.RealityTable;
-        _checkTableAppService.InsertCableSummarizedBill(entity.NumberNo, addrUrl);
-        var list = _checkTableAppService.GetBridgeInstancesListByNumberNo(entity.NumberNo);
-        Workbook wb = new Workbook();
+
+        var list = _checkTableAppService.GetBridgeInstancesListByNumberNo(numberNo);
+        string file = _hostingEnvironment.WebRootPath + "/upload/" + numberNo + ".xlsx";
+        Workbook wb = new Workbook(file);
         int index = 1;
         foreach (var bridgeInstancese in list)
         {
-          var area = _checkTableAppService.SummationCableSectionalArea(entity.NumberNo, bridgeInstancese.BridgeCode,
+          var area = _checkTableAppService.SummationCableSectionalArea(numberNo, bridgeInstancese.BridgeCode,
             bridgeInstancese.PassageType);
           var arealimit = double.Parse(bridgeInstancese.PlotRatioLimit) * double.Parse(bridgeInstancese.SectionalArea);
           if (area > arealimit)
@@ -235,7 +287,7 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
             wb.Worksheets[0].Cells[index, 2].PutValue("电缆外径截面积之和大于桥架截面积");
             index++;
           }
-          var weight = _checkTableAppService.SummationCableWeight(entity.NumberNo, bridgeInstancese.BridgeCode);
+          var weight = _checkTableAppService.SummationCableWeight(numberNo, bridgeInstancese.BridgeCode);
           var weightlimit = double.Parse(bridgeInstancese.WeightLimit);
           if (weight > weightlimit)
           {
@@ -257,11 +309,10 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
       catch (Exception e)
       {
         Console.WriteLine(e);
-        return StatusCode(500, e.Message);
+        return StatusCode(500);
       }
       
     }
 
-   
   }
 }

@@ -8,17 +8,17 @@
                     <Card>
                         <p slot="title">
                             <Icon type="ios-analytics"></Icon>
-                            计算容积率、载重量
+                            桥架常量表
                         </p>
                         <div class="height-492px">
-                           <file-upload  :data="uploadList1" @on-uploadlist-change="onResultChange1" :title="title1" :format="['xlsx','jpg','jpeg','png']" ></file-upload>
+                           <file-upload  :data="uploadList1" @on-uploadlist-change="onResultChange1" :title="title1" :format="['xlsx','xls']" ></file-upload>
                             
                             <br/>
                             <Button type="primary" :loading="loading" long @click="submit">
-                                <span v-if="!loading">计算</span>
+                                <span v-if="!loading">导入</span>
                                 <span v-else>Loading...</span>
                             </Button>
-                            
+                    
                         </div>
                         
                     </Card>
@@ -36,16 +36,14 @@ export default {
         },
     data () {
         return {
-            title1:"电缆清单汇总表",
+            title1:"桥架常量表",
             uploadList1: [],
-            loading: false,
-            url:""
+            loading: false
         };
     },
     methods: {
        onResultChange1(val){
             this.uploadList1=val;
-
         },
         submit(){
             var number=abp.randomNumber();
@@ -54,28 +52,27 @@ export default {
             if(this.uploadList1.length==1){
                 this.loading=true;
                 this.$store.dispatch({
-                    type:'filemanager/calculate',
+                    type:'bridgeconstant/Insert',
                     data:{
-                        RealityTable:this.uploadList1[0].name,
-                        DesignTables:[],
+                        Path:this.uploadList1[0].name,
                         NumberNo:number
                     }
                 }).then(function (response) {
                     $this.$Modal.success({
                         title: "提示",
-                        content: "可能要等待半小时,到计算容积率报告中查看!"
+                        content: "导入成功"
                     });
                     $this.loading=false;
                 }).catch(function (error) {
                     console.log(error);
                     $this.loading=false;
-                    
                 });
             }else{
                 $this.$Message.warning("请先上传文件")
             } 
-        },
+        }
         
+
 
     },
 };
