@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkFlowTaskSystem.Web.Core
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkFlowTaskSystem.Web.Host", "WorkFlowTaskSystem.Web.Host\WorkFlowTaskSystem.Web.Host.csproj", "{7D10C700-31D9-4A40-A37A-C01D17090D44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkFlowTaskSystem.WebApi", "WorkFlowTaskSystem.WebApi\WorkFlowTaskSystem.WebApi.csproj", "{0B112953-A779-4632-B422-4EEA307D41E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkFlowTaskSystem.WebApi", "WorkFlowTaskSystem.WebApi\WorkFlowTaskSystem.WebApi.csproj", "{0B112953-A779-4632-B422-4EEA307D41E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
