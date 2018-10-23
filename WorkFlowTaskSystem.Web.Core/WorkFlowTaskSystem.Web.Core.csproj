@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="abp.aspnetcore" Version="3.5.0" />
-    <PackageReference Include="Abp.AspNetCore.SignalR" Version="3.5.0-preview3" />
+    <PackageReference Include="Abp.AspNetCore.SignalR" Version="3.9.0" />
     <PackageReference Include="abp.castle.log4net" Version="3.5.0" />
     <PackageReference Include="Abp.MailKit" Version="3.5.0" />
     <PackageReference Include="abp.rediscache" Version="3.5.0" />
