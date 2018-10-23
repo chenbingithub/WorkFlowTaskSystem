@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Abp.Domain.Repositories;
 using Abp.Runtime.Caching;
 using Aspose.Cells;
 using Microsoft.AspNetCore.Hosting;
+using NPOI.SS.UserModel;
 using WorkFlowTaskSystem.Application.CheckTables.Dto;
 using WorkFlowTaskSystem.Application.Forms.Dto;
 using WorkFlowTaskSystem.Core.Damain.Entities;
@@ -51,43 +53,49 @@ namespace WorkFlowTaskSystem.Application.CheckTables
       /// <param name="path">文件路径</param>
       public void InsertCableLayingDetails(string numberNo, string path)
       {
-        Workbook wb = new Workbook(path);
-        var sheet = wb.Worksheets[0];
-        for (int i = 4; i < sheet.Cells.MaxRow + 1;)
-        {
-          CableLayingDetails entity = new CableLayingDetails();
-          entity.CableCode = (sheet.Cells[i, 1].Value ?? "").ToString().Replace(" ", "").Trim();
-          entity.Start.RoomCode = (sheet.Cells[i, 2].Value ?? "").ToString().Trim();
-          entity.Start.SystemName = (sheet.Cells[i, 3].Value ?? "").ToString().Trim();
-          entity.Start.EquitName = (sheet.Cells[i, 4].Value ?? "").ToString().Trim();
-          entity.Start.EquitCode = (sheet.Cells[i, 5].Value ?? "").ToString().Trim();
-          entity.End.RoomCode = (sheet.Cells[i, 6].Value ?? "").ToString().Trim();
-          entity.End.SystemName = (sheet.Cells[i, 7].Value ?? "").ToString().Trim();
-          entity.End.EquitName = (sheet.Cells[i, 8].Value ?? "").ToString().Trim();
-          entity.End.EquitCode = (sheet.Cells[i, 9].Value ?? "").ToString().Trim();
-          entity.SafePassage = (sheet.Cells[i, 10].Value ?? "").ToString().Trim();
-          entity.PressureVesselCode = (sheet.Cells[i, 11].Value ?? "").ToString().Trim();
-          entity.CabinCode = (sheet.Cells[i, 12].Value ?? "").ToString().Trim();
-          entity.PipeCode = (sheet.Cells[i, 13].Value ?? "").ToString().Trim();
-          entity.Version = (sheet.Cells[i, 14].Value ?? "").ToString().Trim();
-          entity.Specification = (sheet.Cells[i, 15].Value ?? "").ToString().Trim();
-          entity.Length = (sheet.Cells[i, 16].Value ?? "").ToString().Trim();
-          entity.PipeSpecification = (sheet.Cells[i, 17].Value ?? "").ToString().Trim();
-          entity.PipeLength = (sheet.Cells[i, 18].Value ?? "").ToString().Trim();
-          entity.Other = (sheet.Cells[i, 19].Value ?? "").ToString().Trim();
-          entity.CablePath = (sheet.Cells[i + 1, 2].Value ?? "").ToString().Trim().Replace("电缆路径：", "");
-          entity.Description = numberNo;
-          entity.Id = Guid.NewGuid().ToString("N");
-          _cableRepository.Insert(entity);
-          i += 2;
-        }
+      //根据指定路径读取文件
+        FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+        //根据文件流创建excel数据结构
+        IWorkbook wb = WorkbookFactory.Create(fs);
+       // Workbook wb = new Workbook(path);
+        var sheet = wb.GetSheetAt(0);
+       
+      for (int i = 4; i < sheet.LastRowNum;)
+      {
+        IRow row = sheet.GetRow(i);
+        CableLayingDetails entity = new CableLayingDetails();
+        entity.CableCode = (row.GetCell(1).StringCellValue ?? "").ToString().Replace(" ", "").Trim();
+        entity.Start.RoomCode = (row.GetCell(2).StringCellValue ?? "").ToString().Trim();
+        entity.Start.SystemName = (row.GetCell(3).StringCellValue ?? "").ToString().Trim();
+        entity.Start.EquitName = (row.GetCell(4).StringCellValue ?? "").ToString().Trim();
+        entity.Start.EquitCode = (row.GetCell(5).StringCellValue ?? "").ToString().Trim();
+        entity.End.RoomCode = (row.GetCell(6).StringCellValue ?? "").ToString().Trim();
+        entity.End.SystemName = (row.GetCell(7).StringCellValue ?? "").ToString().Trim();
+        entity.End.EquitName = (row.GetCell(8).StringCellValue ?? "").ToString().Trim();
+        entity.End.EquitCode = (row.GetCell(9).StringCellValue ?? "").ToString().Trim();
+        entity.SafePassage = (row.GetCell(10).StringCellValue ?? "").ToString().Trim();
+        entity.PressureVesselCode = (row.GetCell(11).StringCellValue ?? "").ToString().Trim();
+        entity.CabinCode = (row.GetCell(12).StringCellValue ?? "").ToString().Trim();
+        entity.PipeCode = (row.GetCell(13).StringCellValue ?? "").ToString().Trim();
+        entity.Version = (row.GetCell(14).StringCellValue ?? "").ToString().Trim();
+        entity.Specification = (row.GetCell(15).StringCellValue ?? "").ToString().Trim();
+        entity.Length = (row.GetCell(16).StringCellValue ?? "").ToString().Trim();
+        entity.PipeSpecification = (row.GetCell(17).StringCellValue ?? "").ToString().Trim();
+        entity.PipeLength = (row.GetCell(18).StringCellValue ?? "").ToString().Trim();
+        entity.Other = (row.GetCell(19).StringCellValue ?? "").ToString().Trim();
+        entity.CablePath = (sheet.GetRow(i+1).GetCell(2).StringCellValue??"").ToString().Trim().Replace("电缆路径：", "");
+        entity.Description = numberNo;
+        entity.Id = Guid.NewGuid().ToString("N");
+        _cableRepository.Insert(entity);
+        i += 2;
       }
-      /// <summary>
-      /// 获取电缆设计清单
-      /// </summary>
-      /// <param name="numberNo">流水号</param>
-      /// <returns></returns>
-      public List<CableLayingDetails> GetCableLayingDetailsListByNumberNo(string numberNo)
+    }
+    /// <summary>
+    /// 获取电缆设计清单
+    /// </summary>
+    /// <param name="numberNo">流水号</param>
+    /// <returns></returns>
+    public List<CableLayingDetails> GetCableLayingDetailsListByNumberNo(string numberNo)
       {
         var query = MongoDB.Driver.Builders.Query<CableLayingDetails>.EQ(u => u.Description, numberNo);
         return _cableRepository.GetList(query);
