@@ -9,54 +9,7 @@ import 'iview/dist/styles/iview.css';
 import VueI18n from 'vue-i18n';
 import util from './libs/util';
 import AppConsts from './libs/appconst';
-// import  'jquery';
-// import  'ztree';
-// import  'ztree/css/metroStyle/metroStyle.css';
 
-/*Vue.use(VueI18n);
-Vue.use(iView);
-Vue.prototype.L = function (text, ...args) {
-        
-        if (!args || !args.length) {
-            return text;
-        }
-        args.unshift(localizedText);
-        return abp.utils.formatString.apply(this, args)
-    };
- Vue.filter('l', function (value) {
-        if (!value) return ''
-        return value;
-    });
-new Vue({
-    el: '#app',
-    router: router,
-    store: store,
-    render: h => h(App),
-    data: {
-        currentPageName: ''
-    },
-    mounted () {
-        this.currentPageName = this.$route.name;
-        // 显示打开的页面的列表
-        this.$store.commit('setOpenedList');
-        this.$store.commit('initCachepage');
-        // 权限菜单过滤相关
-        this.$store.commit('updateMenulist');
-        // iview-admin检查更新
-        util.checkUpdate(this);
-    },
-    created () {
-        let tagsList = [];
-        appRouter.map((item) => {
-            if (item.children.length <= 1) {
-                tagsList.push(item.children[0]);
-            } else {
-                tagsList.push(...item.children);
-            }
-        });
-        this.$store.commit('setTagsList', tagsList);
-    }
-});*/
 util.ajax.get('/MyAbpUserConfiguration/GetAll').then(result => {
     Vue.use(VueI18n);
     Vue.use(iView);
@@ -178,13 +131,16 @@ util.ajax.get('/MyAbpUserConfiguration/GetAll').then(result => {
                 })
             };
             abp.randomNumber=()=>{//根据当前时间和随机数生成流水号
-                let now = new Date()
-                let month = now.getMonth() + 1
-                let day = now.getDate()
-                let hour = now.getHours()
-                let minutes = now.getMinutes()
-                let seconds = now.getSeconds()
-                return now.getFullYear().toString() + month.toString() + day + hour + minutes + seconds + (Math.round(Math.random() * 89 + 100)).toString()
+                let now = new Date();
+                let month = abp.dataleftComplete(now.getMonth() + 1);
+                let day = abp.dataleftComplete(now.getDate());
+                let hour = abp.dataleftComplete(now.getHours());
+                let minutes = abp.dataleftComplete(now.getMinutes());
+                let seconds = abp.dataleftComplete(now.getSeconds());
+                return now.getFullYear().toString() + month.toString() + day + hour + minutes + seconds + (Math.round(Math.random() * 999 + 1000)).toString();
+            };
+            abp.dataleftComplete=(val)=>{
+                return parseInt(val)<10?"0"+val:val;
             };
             abp.downloadfile=(data,filename)=>{
                 if (!data) {

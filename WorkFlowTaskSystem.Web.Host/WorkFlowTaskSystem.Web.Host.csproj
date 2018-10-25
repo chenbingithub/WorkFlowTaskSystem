@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="aspose.cells" Version="18.10.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
   </ItemGroup>
@@ -51,7 +52,6 @@
     <Folder Include="wwwroot\images\Avatar\" />
     <Folder Include="wwwroot\images\login\" />
     <Folder Include="wwwroot\images\task\" />
-    <Folder Include="wwwroot\upload\" />
     <Folder Include="wwwroot\reports\" />
   </ItemGroup>
 

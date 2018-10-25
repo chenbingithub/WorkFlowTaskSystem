@@ -21,9 +21,11 @@
                                             :format="defaultformat"
                                             :on-format-error="handleFormatError2"
                                             :on-exceeded-size="handleMaxSize"
+                                            :on-error="handleError"
                                             :before-upload="handleBeforeUpload2"
                                             :multiple="multiple"
                                             type="drag"
+                                            :data="other"
                                             :action="uploadUrl"
                                             style="display: inline-block;width:58px;">
                                             <div style="width: 58px;height:58px;line-height: 58px;">
@@ -79,13 +81,23 @@ export default {
         size:{ 
             type: Number,
             default: 1,
+        },
+        methods:{
+            type: String,
+            default: 'upload',
+        },
+        randomnumber:{
+            type: String,
+            default: 'string',
         }
+        
     },
     data () {
         return {
             defaultList: this.data,
             defaultformat:this.format,
             imgurl: '',
+            other:{methods:this.methods,randomnumber:this.randomnumber},
             visible: false,
             uploadUrl:this.$store.state.filemanager.uploadUrl,
             downloadUrl:this.$store.state.filemanager.downloadUrl,
@@ -112,6 +124,7 @@ export default {
             });
         },
         handleSuccess (evnet, file) {
+            console.log(file.name);
             this.$Notice.success({
                 title: '文件上传成功',
                 desc: '文件 ' + file.name + ' 上传成功。'
@@ -120,7 +133,8 @@ export default {
         handleError (event, file) {
             this.$Notice.error({
                 title: '文件上传成功',
-                desc: '文件 ' + file.name + ' 上传失败。'
+                desc: '文件 ' + file.result.name + ' 上传失败。',
+                duration:0,
             });
         },
         handleView (url) {
@@ -168,10 +182,15 @@ export default {
     mounted () {
         this.uploadList = this.$refs.upload.fileList;
     },
+
     watch: {
         uploadList(val){
             this.$emit("on-uploadlist-change",val);//组件内对uploadlist变更后向外部发送事件通知
+        },
+        randomnumber(val){
+            this.other.randomnumber=val;
         }
+
     }
 };
 </script>

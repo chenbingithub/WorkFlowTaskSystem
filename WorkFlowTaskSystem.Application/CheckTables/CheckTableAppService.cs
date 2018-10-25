@@ -10,7 +10,9 @@ using Abp.Domain.Repositories;
 using Abp.Runtime.Caching;
 using Aspose.Cells;
 using Microsoft.AspNetCore.Hosting;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using WorkFlowTaskSystem.Application.CheckTables.Dto;
 using WorkFlowTaskSystem.Application.Forms.Dto;
 using WorkFlowTaskSystem.Core.Damain.Entities;
@@ -53,42 +55,101 @@ namespace WorkFlowTaskSystem.Application.CheckTables
       /// <param name="path">文件路径</param>
       public void InsertCableLayingDetails(string numberNo, string path)
       {
-      //根据指定路径读取文件
-        FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-        //根据文件流创建excel数据结构
-        IWorkbook wb = WorkbookFactory.Create(fs);
-       // Workbook wb = new Workbook(path);
-        var sheet = wb.GetSheetAt(0);
-       
-      for (int i = 4; i < sheet.LastRowNum;)
-      {
-        IRow row = sheet.GetRow(i);
-        CableLayingDetails entity = new CableLayingDetails();
-        entity.CableCode = (row.GetCell(1).StringCellValue ?? "").ToString().Replace(" ", "").Trim();
-        entity.Start.RoomCode = (row.GetCell(2).StringCellValue ?? "").ToString().Trim();
-        entity.Start.SystemName = (row.GetCell(3).StringCellValue ?? "").ToString().Trim();
-        entity.Start.EquitName = (row.GetCell(4).StringCellValue ?? "").ToString().Trim();
-        entity.Start.EquitCode = (row.GetCell(5).StringCellValue ?? "").ToString().Trim();
-        entity.End.RoomCode = (row.GetCell(6).StringCellValue ?? "").ToString().Trim();
-        entity.End.SystemName = (row.GetCell(7).StringCellValue ?? "").ToString().Trim();
-        entity.End.EquitName = (row.GetCell(8).StringCellValue ?? "").ToString().Trim();
-        entity.End.EquitCode = (row.GetCell(9).StringCellValue ?? "").ToString().Trim();
-        entity.SafePassage = (row.GetCell(10).StringCellValue ?? "").ToString().Trim();
-        entity.PressureVesselCode = (row.GetCell(11).StringCellValue ?? "").ToString().Trim();
-        entity.CabinCode = (row.GetCell(12).StringCellValue ?? "").ToString().Trim();
-        entity.PipeCode = (row.GetCell(13).StringCellValue ?? "").ToString().Trim();
-        entity.Version = (row.GetCell(14).StringCellValue ?? "").ToString().Trim();
-        entity.Specification = (row.GetCell(15).StringCellValue ?? "").ToString().Trim();
-        entity.Length = (row.GetCell(16).StringCellValue ?? "").ToString().Trim();
-        entity.PipeSpecification = (row.GetCell(17).StringCellValue ?? "").ToString().Trim();
-        entity.PipeLength = (row.GetCell(18).StringCellValue ?? "").ToString().Trim();
-        entity.Other = (row.GetCell(19).StringCellValue ?? "").ToString().Trim();
-        entity.CablePath = (sheet.GetRow(i+1).GetCell(2).StringCellValue??"").ToString().Trim().Replace("电缆路径：", "");
-        entity.Description = numberNo;
-        entity.Id = Guid.NewGuid().ToString("N");
-        _cableRepository.Insert(entity);
-        i += 2;
-      }
+            int error = 0;
+            string  col = "";
+            try {
+                //根据指定路径读取文件
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
+                    IWorkbook wb;
+                    if (path.IndexOf(".xlsx") > 0)
+                    {//2007版本
+                        wb = new XSSFWorkbook(fs);
+                    }
+                    else if (path.IndexOf(".xls") > 0)
+                    {//2003版本
+                        wb = new HSSFWorkbook(fs);
+                    }
+                    else {
+                        //根据文件流创建excel数据结构
+                         wb = WorkbookFactory.Create(fs);
+                    }
+                    
+                    // Workbook wb = new Workbook(path);
+                    var sheet = wb.GetSheetAt(0);
+                    int firstRow = 4;
+                    for (int i = 4; i < sheet.LastRowNum; i++)
+                    {
+                        var v = sheet.GetRow(i);
+                        if (sheet.GetRow(i).GetCell(0).ToString() == "1")
+                        {
+                            firstRow = i;
+                            break;
+                        }
+                    }
+
+                    for (int i = firstRow; i < sheet.LastRowNum;)
+                    {
+                        error = i + 1 ;
+                        
+                        IRow row = sheet.GetRow(i);
+                        
+                        CableLayingDetails entity = new CableLayingDetails();
+                        col = "B";
+                        entity.CableCode = (row.GetCell(1)).ToString().Replace(" ", "").Trim();
+                        col = "C";
+                        entity.Start.RoomCode = (row.GetCell(2)).ToString().Trim();
+                        col ="D";
+                        entity.Start.SystemName = (row.GetCell(3)).ToString().Trim();
+                        col = "E";
+                        entity.Start.EquitName = (row.GetCell(4)).ToString().Trim();
+                        col = "F";
+                        entity.Start.EquitCode = (row.GetCell(5)).ToString().Trim();
+                        col = "G";
+                        entity.End.RoomCode = (row.GetCell(6)).ToString().Trim();
+                        col = "H";
+                        entity.End.SystemName = (row.GetCell(7)).ToString().Trim();
+                        col = "I";
+                        entity.End.EquitName = (row.GetCell(8)).ToString().Trim();
+                        col = "J";
+                        entity.End.EquitCode = (row.GetCell(9)).ToString().Trim();
+                        col = "K";
+                        entity.SafePassage = (row.GetCell(10)).ToString().Trim();
+                        col = "L";
+                        entity.PressureVesselCode = (row.GetCell(11)).ToString().Trim();
+                        col = "M";
+                        entity.CabinCode = (row.GetCell(12)).ToString().Trim();
+                        col = "N";
+                        entity.PipeCode = (row.GetCell(13)).ToString().Trim();
+                        col = "O";
+                        entity.Version = (row.GetCell(14)).ToString().Trim();
+                        col = "P";
+                        entity.Specification = (row.GetCell(15)).ToString().Trim();
+                        col = "Q";
+                        entity.Length = (row.GetCell(16)).ToString().Trim();
+                        col = "R";
+                        entity.PipeSpecification = (row.GetCell(17)).ToString().Trim();
+                        col = "S";
+                        entity.PipeLength = (row.GetCell(18)).ToString().Trim();
+                        col = "T";
+                        entity.Other = (row.GetCell(19)).ToString().Trim();
+                        col = "C";
+                        error++;
+                        entity.CablePath = (sheet.GetRow(i + 1).GetCell(2)).ToString().Trim().Replace("电缆路径：", "");
+                        entity.Description = numberNo;
+                        entity.Id = Guid.NewGuid().ToString("N");
+                        _cableRepository.Insert(entity);
+                        i += 2;
+                    }
+                }
+
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                Logger.Debug(path + "  " +"第 " + error + " 行");
+                throw new Exception(" 第 "+error+" 行 第 "+col +" 列");
+            }
+           
+        
     }
     /// <summary>
     /// 获取电缆设计清单
@@ -121,7 +182,6 @@ namespace WorkFlowTaskSystem.Application.CheckTables
         Workbook reportwb = new Workbook();
         var sheet = wb.Worksheets[0];
         int errorcol = 1;
-        List<CableSummarizedBill> list = new List<CableSummarizedBill>();
         List<BridgeInstances> instances = new List<BridgeInstances>();
         for (int i = 1; i < sheet.Cells.MaxRow + 1; i++)
         {
@@ -137,7 +197,8 @@ namespace WorkFlowTaskSystem.Application.CheckTables
           ObjectMapper.Map(entityDto, entity);
           try
           {
-            var cable = cableConstantall.FirstOrDefault(u => u.Version == entityDto.U && u.Specification == entityDto.V);
+                        
+            var cable = cableConstantall.FirstOrDefault(u => u.Version == entityDto.U && u.Specification.Replace("×", "x") == entityDto.V.Replace("×", "x"));
             entity.WeightLimit = 999;
             entity.Diameter = 999;
             if (double.TryParse(cable.WeightLimit, out double weightLimit))
@@ -148,8 +209,8 @@ namespace WorkFlowTaskSystem.Application.CheckTables
             {
               entity.Diameter = diameter;
             }
-            list.Add(entity);
-            InsertBridgeInstances(numberNo, entity.Q, entity.Z, bridgeConstantall, instances);
+             _cableSummarizedBillRepository.Insert(entity);
+            //InsertBridgeInstances(numberNo, entity.Q, entity.Z, bridgeConstantall, instances);
             //同时把电缆路径拆分，插入桥架实例表中
           }
           catch (Exception e)
@@ -163,7 +224,6 @@ namespace WorkFlowTaskSystem.Application.CheckTables
           }
         }
         _bridgeInstancesRepository.InsertBatch(instances);
-        _cableSummarizedBillRepository.InsertBatch(list);
         reportwb.Save(file);
         _reportResultRepository.Insert(new ReportResult() {Id=Guid.NewGuid().ToString("N"),Name = "生成计算容积率报告成功", Url = numberNo+".xlsx", Description = numberNo });
       }

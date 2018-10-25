@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Aspose.Cells;
+using Castle.Core.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -22,13 +23,13 @@ using WorkFlowTaskSystem.Web.Core.Models;
 
 namespace WorkFlowTaskSystem.Web.Core.Controllers
 {
-   public class FileHelperController: WorkFlowTaskSystemControllerBase
-  {
-    private IHostingEnvironment _hostingEnvironment;
-    private ICheckTableAppService _checkTableAppService;
-    private ICableConstantAppService _cableConstantAppService;
-    private IBridgeConstantAppService _bridgeConstantAppService;
-    private IReportResultAppService _reportResultAppService;
+    public class FileHelperController : WorkFlowTaskSystemControllerBase
+    {
+        private IHostingEnvironment _hostingEnvironment;
+        private ICheckTableAppService _checkTableAppService;
+        private ICableConstantAppService _cableConstantAppService;
+        private IBridgeConstantAppService _bridgeConstantAppService;
+        private IReportResultAppService _reportResultAppService;
     public FileHelperController(IHostingEnvironment hostingEnvironment, ICheckTableAppService checkTableAppService, ICableConstantAppService cableConstantAppService, IBridgeConstantAppService bridgeConstantAppService, IReportResultAppService reportResultAppService)
     {
       _hostingEnvironment = hostingEnvironment;
@@ -41,7 +42,7 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
     #region 文件上传、下载、删除、预览
     //[RequestSizeLimit(100_000_000)] //最大100m左右
     [DisableRequestSizeLimit]  //或者取消大小的限制
-    public IActionResult Upload()
+    public IActionResult Upload(string methods, string randomnumber)
     {
       var files = Request.Form.Files;
 
@@ -51,19 +52,17 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
 
       string contentRootPath = _hostingEnvironment.ContentRootPath;
       List<string> filenames = new List<string>();
+      string filename = "";
       foreach (var formFile in files)
 
       {
 
         if (formFile.Length > 0)
-
         {
+          filename = formFile.FileName;
           string fileExt = Path.GetExtension(formFile.FileName); //文件扩展名，不含“.”
-
           long fileSize = formFile.Length; //获得文件大小，以字节为单位
-
           string newFileName = System.Guid.NewGuid().ToString() + fileExt; //随机生成新的文件名
-
           var filePath = webRootPath + "/upload/";
           if (!Directory.Exists(filePath))
           {
@@ -76,12 +75,24 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
           }
           filenames.Add(newFileName);
         }
-
       }
+            if (methods == "Cable") {
+                try
+                {
+                    _checkTableAppService.InsertCableLayingDetails(randomnumber, webRootPath + "/upload/"+ filenames[0]);
+                    return Ok(new { filenames, count = files.Count, size });
+                }
+                catch (Exception e) {
+
+                    return StatusCode(500, new { name = filename+e.Message });
+                } 
+            }
+            else {
+                return Ok(new { filenames, count = files.Count, size });
+            }
 
 
-
-      return Ok(new { filenames, count = files.Count, size });
+      
     }
     public IActionResult DownLoad(string file)
 
@@ -149,11 +160,13 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
       {
         string webRootPath = _hostingEnvironment.WebRootPath;
         //第一步把设计敷设表的数据导入数据库
-        foreach (var designTable in entity.DesignTables)
-        {
-          var addrUrl = webRootPath + "/upload/" + designTable;
-          _checkTableAppService.InsertCableLayingDetails(entity.NumberNo, addrUrl);
-        }
+        //foreach (var designTable in entity.DesignTables)
+        //{
+        //  var addrUrl = webRootPath + "/upload/" + designTable;
+        //            Logger.Debug(addrUrl);
+        //            _checkTableAppService.InsertCableLayingDetails(entity.NumberNo, addrUrl);
+                    
+        //}
         var designlist = _checkTableAppService.GetCableLayingDetailsListByNumberNo(entity.NumberNo);
         List<string> list = new List<string>();
         Workbook wb = new Workbook(webRootPath + "/upload/" + entity.RealityTable);
