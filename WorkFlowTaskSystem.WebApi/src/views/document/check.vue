@@ -5,14 +5,22 @@
         <div class="margin-top-10">
             
            <div class="padding-left-10">
+
                     <Card>
+                        <div>
+                            
+                            <Button slot="append" type="primary"  :disabled="disabledbtn" @click="refresh">重新获取</Button>
+                            <p>流水号：{{randomnumber}}</p>
+                        </div>
+                           
                         <p slot="title">
                             <Icon type="ios-analytics"></Icon>
                             校验敷设表
                         </p>
                         <div class="height-492px">
                            <file-upload  :data="uploadList1" @on-uploadlist-change="onResultChange1" :title="title1" :format="['xlsx','jpg','jpeg','png']" ></file-upload>
-                            <file-upload :data="uploadList2" @on-uploadlist-change="onResultChange2" :multiple="true" :title="title2" :size="1000" :format="['xlsx','xls']"></file-upload>
+
+                            <file-upload :data="uploadList2" @on-uploadlist-change="onResultChange2" :multiple="true" :title="title2" :size="1000" methods="Cable" :randomnumber="randomnumber" :format="['xlsx','xls']" ></file-upload>
                             <br/>
                             <Button type="primary" :loading="loading" long @click="submit">
                                 <span v-if="!loading">检验</span>
@@ -40,11 +48,15 @@ export default {
             uploadList1: [],
             title2:"设计敷设表",
             uploadList2: [],
-           
+            randomnumber:abp.randomNumber(),
+            disabledbtn:false,
             loading: false
         };
     },
     methods: {
+        refresh(){
+            this.randomnumber=abp.randomNumber();
+        },
        onResultChange1(val){
             this.uploadList1=val;
         },
@@ -52,7 +64,7 @@ export default {
             this.uploadList2=val;
         },
         submit(){
-            var number=abp.randomNumber();
+            var number=this.randomnumber;
             var pc=[];    
             this.uploadList2.forEach(function(value,index,arr){
                  pc.push(value.name);
@@ -81,8 +93,25 @@ export default {
         }
 
     },
-   computed:{
-       
+   watch:{
+       uploadList1(){
+            let flag1=this.uploadList1.length>0;
+            let flag2=this.uploadList2.length>0;
+            if(flag1||flag2){
+                this.disabledbtn=true;
+            }else{
+                this.disabledbtn=false;
+            }
+       },
+       uploadList2(){
+            let flag1=this.uploadList1.length>0;
+            let flag2=this.uploadList2.length>0;
+            if(flag1||flag2){
+                this.disabledbtn=true;
+            }else{
+                this.disabledbtn=false;
+            }
+       }
         
     },
 };
