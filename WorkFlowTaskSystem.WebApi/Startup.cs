@@ -60,7 +60,7 @@ namespace WorkFlowTaskSystem.WebApi
           options.DefaultFileNames.Clear();
           options.DefaultFileNames.Add("index.html");
           app.UseDefaultFiles(options);
-
+            app.UseAuthentication();
           app.UseStaticFiles();
           app.UseHttpsRedirection();
             app.UseMvc(routes =>

@@ -66,7 +66,7 @@ export const otherRouter = {
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
-    {
+    /*{
         path: '/baseInfo',
         icon: 'key',
         name: 'baseInfo',
@@ -115,7 +115,7 @@ export const appRouter = [
               
 
         ]
-    },
+    },*/
     {
         path: '/mytask',
         icon: 'lock-combination',
@@ -123,16 +123,20 @@ export const appRouter = [
         name: 'mytask',
         component: Main,
         children: [
-            { path: 'check', title: '校验文件', name: 'check', component: () => import('@/views/document/check.vue')},
-            { path: 'calculate', title: '计算容积', name: 'calculate', component: () => import('@/views/document/calculate.vue') },
-            { path: 'reportresult', title: '计算容积报告', name: 'reportresult', component: () => import('@/views/document/reportresult.vue') },
-            { path: 'bridgeconstant', title: '桥架常量', name: 'bridgeconstant', component: () => import('@/views/document/bridgeconstantupload.vue') },
-            { path: 'bridgeconstantmanager', title: '桥架常量管理', name: 'bridgeconstantmanager', component: () => import('@/views/document/bridgeconstant.vue') },
-            { path: 'cableconstant', title: '电缆常量', name: 'cableconstant', component: () => import('@/views/document/cableconstantupload.vue') },
-            { path: 'cableconstantmanager', title: '电缆常量管理', name: 'cableconstantmanager', component: () => import('@/views/document/cableconstant.vue') },
+            { path: 'check', title: '校验文件',  icon: 'compose', name: 'check', component: () => import('@/views/document/check.vue')},
+            { path: 'transferformat', title: '转换格式',  icon: 'compose', name: 'transferformat', component: () => import('@/views/document/transferformat.vue')},
+            { path: 'transferformat1', title: '汇总清单',  icon: 'compose', name: 'transferformat1', component: () => import('@/views/document/transferformat1.vue')},
+            { path: 'calculate', title: '计算容积', icon: 'compose', name: 'calculate', component: () => import('@/views/document/calculate.vue') },
+            { path: 'reportresult', title: '计算容积报告', icon: 'compose', name: 'reportresult', component: () => import('@/views/document/reportresult.vue') },
+            { path: 'bridgeconstant', title: '桥架常量', icon: 'compose', name: 'bridgeconstant', component: () => import('@/views/document/bridgeconstantupload.vue') },
+            { path: 'bridgeconstantmanager', title: '桥架常量管理', icon: 'compose', name: 'bridgeconstantmanager', component: () => import('@/views/document/bridgeconstant.vue') },
+            { path: 'cableconstant', title: '电缆常量',  icon: 'compose',name: 'cableconstant', component: () => import('@/views/document/cableconstantupload.vue') },
+            { path: 'cableconstantmanager', title: '电缆常量管理', icon: 'compose', name: 'cableconstantmanager', component: () => import('@/views/document/cableconstant.vue') },
+            { path: 'weightconstantmanager', title: '重量限值管理', icon: 'compose', name: 'weightconstantmanager', component: () => import('@/views/document/weightconstant.vue') },
+            { path: 'plotratiomanager', title: '容积率管理', icon: 'compose', name: 'plotratiomanager', component: () => import('@/views/document/plotratio.vue') },
         ]
     },
-    {
+   /* {
         path: '/international',
         icon: 'earth',
         title: {i18n: 'international'},
@@ -254,7 +258,7 @@ export const appRouter = [
         children: [
             { path: 'index', title: '错误页面', name: 'errorpage_index', component: () => import('@/views/error-page/error-page.vue') }
         ]
-    }
+    }*/
 ];
 
 // 所有上面定义的路由都要写在下面的routers里

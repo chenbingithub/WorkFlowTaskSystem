@@ -10,6 +10,7 @@ namespace WorkFlowTaskSystem.Core.Damain.Entities
     /// </summary>
      public class CableConstant : BaseEntity
     {
+        public string Number { get; set; }
       /// <summary>
       /// 型号
       /// </summary>

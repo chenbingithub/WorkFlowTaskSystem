@@ -14,15 +14,18 @@ const cableconstant = {
         },
         setCurrentPage(state,page){
             state.currentPage=page;
-        }
+        },setSeachKey(state,seachKey){
+            state.seachKey=seachKey;
+        },
     },
     actions:{
         async getAll({state},payload){
             let page={
                 maxResultCount:state.pageSize,
-                skipCount:(state.currentPage-1)*state.pageSize
+                skipCount:(state.currentPage-1)*state.pageSize,
+                seachKey:state.seachKey,
             }
-            let rep= await Util.ajax.get('/api/services/app/cableconstant/GetAll',{params:page});
+            let rep= await Util.ajax.get('/api/services/app/cableconstant/GetAllOrSeach',{params:page});
             state.cableconstants=[];
             state.cableconstants.push(...rep.data.result.items);
             state.totalCount=rep.data.result.totalCount;

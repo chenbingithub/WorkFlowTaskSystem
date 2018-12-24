@@ -44,10 +44,8 @@ const reportresult = {
         },
          async download({state},payload){//下载
             return await Util.ajaxfile.post('/FileHelper/DownLoad?file='+payload.data.file);
-        },
-         async reportdownload({state},payload){//下载
-            return await Util.ajaxfile.post('/FileHelper/CalculateReport?numberNo='+payload.data.numberNo);
-        },
+        }
+         
     }
 };
 

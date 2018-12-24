@@ -13,6 +13,12 @@ const filemanager = {
     },
     actions:{
         
+        async transferformat({state},payload){//校验文件
+            return await Util.ajaxfile.post('/FileHelper/TransferFormat',payload.data);
+        },
+        async transferformat1({state},payload){//校验文件
+            return await Util.ajaxfile.post('/FileHelper/TransferFormat1',payload.data);
+        },
         async check({state},payload){//校验文件
             return await Util.ajaxfile.post('/FileHelper/Check',payload.data);
         },
@@ -30,6 +36,9 @@ const filemanager = {
         },
         async deleteFile({state},payload){
             await Util.ajax.delete(state.deleteUrl+payload.data);
+        },
+        async downloadFile({state},payload){
+           return await Util.ajaxfile.post(state.downloadUrl+payload.data);
         },
         
     }

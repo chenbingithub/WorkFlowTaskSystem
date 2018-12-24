@@ -59,6 +59,34 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
             };
            
         }
+        public AuthenticateResultModel AuthenticateWindows() {
+            try {
+                var name = HttpContext.User.Claims.FirstOrDefault(p => p.Type == ClaimTypes.Name);
+                var username = name.Value.Split('\\')[1];
+                var user = _userManager.GetAll().ToList().FirstOrDefault(u => u.UserName.ToUpper() == username.ToUpper());
+                //设置session
+                HttpContext.Session.SetString(WorkFlowTaskAbpConsts.UserId, user?.Id);
+                HttpContext.Response.Cookies.Append(WorkFlowTaskAbpConsts.CookiesUserId, GetEncrpyedAccessToken(user?.Id ?? ""));
+                return new AuthenticateResultModel
+                {
+                    AccessToken = user.UserName,
+                    EncryptedAccessToken = GetEncrpyedAccessToken(""),
+                    ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds,
+                    UserId = user.Id
+                };
+            }
+            catch (Exception e) {
+                
+                return new AuthenticateResultModel
+                {
+                    AccessToken = "",
+                    EncryptedAccessToken = GetEncrpyedAccessToken(""),
+                    ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds,
+                    UserId =""
+                };
+            }
+            
+        }
         private LoginResult<User> GetLoginResult(string usernameOrEmailAddress, string password)
         {
             var loginResult = _loginManager.Login(usernameOrEmailAddress, password);

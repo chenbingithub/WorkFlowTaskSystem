@@ -27,4 +27,8 @@
     <PackageReference Include="DotNetCore.NPOI" Version="1.2.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Configuration\" />
+  </ItemGroup>
+
 </Project>

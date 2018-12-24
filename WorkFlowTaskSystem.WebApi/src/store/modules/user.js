@@ -52,8 +52,10 @@ const user = {
     },
     actions:{
         async login({state},payload){
-            let rep=await Util.ajax.post("/api/TokenAuth/Authenticate",payload.data);
-            
+            let rep=await Util.ajax.post("/api/TokenAuth/Authenticate",payload.data);  
+        },
+        async loginWindow({state},payload){
+            return await Util.ajax.post("/api/TokenAuth/AuthenticateWindows"); 
         },
         async changepwd({state},payload){
             let rep=await Util.ajax.post("/api/TokenAuth/changepwd",payload.data);

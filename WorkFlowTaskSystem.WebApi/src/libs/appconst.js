@@ -3,7 +3,7 @@ const AppConsts = {
         defaultAdminUserName: 'admin'
     },
     localization: {
-        defaultLocalizationSourceName: 'VueABP'
+        defaultLocalizationSourceName: 'WorkFlowTaskSystem'
     },
     authorization: {
         encrptedAuthTokenName: 'enc_auth_token'

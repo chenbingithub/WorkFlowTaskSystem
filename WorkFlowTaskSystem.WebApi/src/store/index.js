@@ -12,6 +12,8 @@ import filemanager from './modules/filemanager';
 import cableconstant from './modules/cableconstant';
 import bridgeconstant from './modules/bridgeconstant';
 import reportresult from './modules/reportresult';
+import weightconstant from './modules/weightconstant';
+import plotratio from './modules/plotratio';
 
 Vue.use(Vuex);
 
@@ -36,7 +38,9 @@ const store = new Vuex.Store({
         filemanager,
         cableconstant,
         bridgeconstant,
-        reportresult
+        reportresult,
+        weightconstant,
+        plotratio
     }
 });
 

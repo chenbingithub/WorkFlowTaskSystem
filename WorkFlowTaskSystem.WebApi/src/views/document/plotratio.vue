@@ -14,58 +14,41 @@
                     <DropdownItem name='DeleteAll' v-if="persBtn.create" >{{'删除所有' | l}}</DropdownItem>
                 </DropdownMenu>
             </Dropdown>
-            <Input v-model="seachKey" @on-enter="seachKeyChange" >
-                <span slot="prepend">电缆型号:</span>
-                <Button slot="append" type="info"  @click="seachKeyChange">搜索</Button>
-            </Input>
-            <Table  :columns="columns"  border :data="cableconstants"></Table>
+            
+            <Table  :columns="columns"  border :data="plotratios"></Table>
             <Page :total="totalCount" class="margin-top-10" @on-change="pageChange" @on-page-size-change="pagesizeChange" :page-size="pageSize" :current="currentPage" show-sizer show-elevator show-total ></Page>
         </Card>
-        <Modal v-model="showModal" :title="L('添加')" @on-ok="save"  :okText="L('save')" :cancelText="L('cancel')">
+        <Modal v-model="showModal" :title="L('添加')" @on-ok="save" :okText="L('save')" :cancelText="L('cancel')">
             <div>
-                       <Form ref="newcableconstantForm" label-position="top" :rules="cableconstantRule" :model="editcableconstant">
+                    <Form ref="newplotratioForm" :label-width="100" :rules="newplotratioRule" :model="editplotratio">
                             
-                            <FormItem :label="L('电缆型号')" prop="version">
-                                <Input v-model="editcableconstant.version" :maxlength="32" :minlength="2"></Input>
+                             <FormItem :label="L('通道类型')" prop="passageType" >
+                                <Input v-model="editplotratio.passageType"  ></Input>
                             </FormItem>
-                            <FormItem :label="L('电缆规格')" prop="specification">
-                                <Input v-model="editcableconstant.specification" :maxlength="32" :minlength="2"></Input>
-                            </FormItem>
-                            <FormItem :label="L('外径(mm)')" prop="diameter" >
-                                <Input v-model="editcableconstant.diameter" number ></Input>
-                            </FormItem>
-                            <FormItem :label="L('重量(kg/m)')" prop="weightLimit" >
-                                <Input v-model="editcableconstant.weightLimit"  number ></Input>
-                            </FormItem>
-                            
-                                              
-                        </Form>
-                            
+                            <FormItem :label="L('容积率')" prop="plotRatioLimit" >
+                                <Input v-model="editplotratio.plotRatioLimit" number ></Input>
+                            </FormItem>  
+                           
+                                                          
+                </Form>                        
             </div>
             <div slot="footer">
                 <Button @click="cancel">{{'取消'|l}}</Button>
                 <Button @click="save" type="primary">{{'确定'|l}}</Button>
             </div>
         </Modal>
-        <Modal v-model="showEditModal" :title="L('编辑')" @on-ok="save"  :okText="L('save')" :cancelText="L('cancel')">
+        <Modal v-model="showEditModal" :title="L('编辑')" @on-ok="save" :okText="L('save')" :cancelText="L('cancel')">
             <div>
-                <Form ref="cableconstantForm" label-position="top" :rules="cableconstantRule" :model="editcableconstant">
+                <Form ref="plotratioForm" :label-width="100" :rules="plotratioRule" :model="editplotratio">
+                            <FormItem :label="L('通道类型')" prop="passageType" >
+                                <Input v-model="editplotratio.passageType"  ></Input>
+                            </FormItem>
+                            <FormItem :label="L('容积率')" prop="plotRatioLimit" >
+                                <Input v-model="editplotratio.plotRatioLimit" number ></Input>
+                            </FormItem>  
                             
-                            <FormItem :label="L('电缆型号')" prop="version">
-                                <Input v-model="editcableconstant.version" :maxlength="32" :minlength="2"></Input>
-                            </FormItem>
-                            <FormItem :label="L('电缆规格')" prop="specification">
-                                <Input v-model="editcableconstant.specification" :maxlength="32" :minlength="2"></Input>
-                            </FormItem>
-                            <FormItem :label="L('外径(mm)')" prop="diameter" >
-                                <Input v-model="editcableconstant.diameter" number ></Input>
-                            </FormItem>
-                            <FormItem :label="L('重量(kg/m)')" prop="weightLimit" >
-                                <Input v-model="editcableconstant.weightLimit"  number ></Input>
-                            </FormItem>
-                            
-                                              
-                        </Form>
+                                           
+                </Form>
             </div>
             <div slot="footer">
                 <Button @click="cancel">{{'取消'|l}}</Button>
@@ -78,12 +61,12 @@
 export default {
     methods:{
         create(){
-            this.editcableconstant={};  
-            this.editcableconstant.description=abp.randomNumber();
+            this.editplotratio={};  
+            this.editplotratio.description=abp.randomNumber();
             this.showModal=true;
         },
         cancel(){
-            if(!!this.editcableconstant.id){
+            if(!!this.editplotratio.id){
                 this.showEditModal=false;
                 this.getpage();
             }else{
@@ -92,12 +75,12 @@ export default {
             }
         },
         async save(){
-            if(!!this.editcableconstant.id){
-                this.$refs.cableconstantForm.validate(async (val)=>{
+            if(!!this.editplotratio.id){
+                this.$refs.plotratioForm.validate(async (val)=>{
                     if(val){
                         await this.$store.dispatch({
-                            type:'cableconstant/update',
-                            data:this.editcableconstant
+                            type:'plotratio/update',
+                            data:this.editplotratio
                         })
                         this.showEditModal=false;
                         this.$Message.success('保存成功！');
@@ -106,11 +89,11 @@ export default {
                 })
                 
             }else{
-                this.$refs.newcableconstantForm.validate(async (val)=>{
+                this.$refs.newplotratioForm.validate(async (val)=>{
                     if(val){
                         await this.$store.dispatch({
-                            type:'cableconstant/create',
-                            data:this.editcableconstant
+                            type:'plotratio/create',
+                            data:this.editplotratio
                         })
                         this.showModal=false;
                         this.$Message.success('添加成功！');
@@ -121,17 +104,16 @@ export default {
             
         },
         pageChange(page){
-            this.$store.commit('cableconstant/setCurrentPage',page);
+            this.$store.commit('plotratio/setCurrentPage',page);
             this.getpage();
         },
         pagesizeChange(pagesize){
-            this.$store.commit('cableconstant/setPageSize',pagesize);
+            this.$store.commit('plotratio/setPageSize',pagesize);
             this.getpage();
         },
         async getpage(){
-            this.$store.commit('cableconstant/setSeachKey',this.seachKey);
             await this.$store.dispatch({
-                type:'cableconstant/getAll'
+                type:'plotratio/getAll'
             })
         },
         seachKeyChange(){
@@ -147,10 +129,11 @@ export default {
             }else if(name==='Refresh'){
                 this.getpage();
                 this.$Message.success('刷新成功！');
+
             }else if(name=='DeleteAll'){
                 var $this=this;
                 this.$store.dispatch({
-                    type:'cableconstant/deleteAll'
+                    type:'plotratio/deleteAll'
                 }).then(function (response) {
                     $this.getpage();
                     $this.$Message.success('刷新成功！');
@@ -158,32 +141,31 @@ export default {
                     console.log(error);
                     
                 });
+                
             }
         }
     },
     data(){
+        
         return{
-            editcableconstant:{},
+            editplotratio:{},
              persBtn:{
-                create:true,//abp.auth.isGranted('Pages.cableconstants.Create'),
-                update:true,//abp.auth.isGranted('Pages.cableconstants.Update'),
-                delete:true,//abp.auth.isGranted('Pages.cableconstants.Delete'),
+                create:true,//abp.auth.isGranted('Pages.plotratios.Create'),
+                update:true,//abp.auth.isGranted('Pages.plotratios.Update'),
+                delete:true,//abp.auth.isGranted('Pages.plotratios.Delete'),
             },
             showModal:false,
             showEditModal:false,
             selectedData:[],
             seachKey:"",
-            newcableconstantRule:{
-                version:[{required:true,message:'version is required',trigger: 'blur'}],
-                specification:[{required:true,message:'specification is required',trigger: 'blur'}],
-                diameter:[{validator:abp.validateInteger,trigger: 'blur'}],
-                weightLimit:[{validator:abp.validateInteger,trigger: 'blur'}],
+            newplotratioRule:{
+                passageType:[{required:true,message:'passageType is required',trigger: 'blur'}],
+                plotRatioLimit:[{validator:abp.validateNumber,trigger: 'blur'}],
+                
             },            
-            cableconstantRule:{
-                version:[{required:true,message:'version is required',trigger: 'blur'}],
-                specification:[{required:true,message:'specification is required',trigger: 'blur'}],
-                diameter:[{validator:abp.validateInteger,trigger: 'blur'}],
-                weightLimit:[{validator:abp.validateInteger,trigger: 'blur'}],
+            plotratioRule:{
+               passageType:[{required:true,message:'passageType is required',trigger: 'blur'}],
+                plotRatioLimit:[{validator:abp.validateNumber,trigger: 'blur'}],
             },
             columns:[
             
@@ -192,19 +174,14 @@ export default {
                         type: 'index',
                         width: 61,
                         align: 'center'
-                    },
-            {
-                title:this.L('电缆型号'),
-                key:'version'
+                    }
+            ,{
+                title:this.L('通道类型'),
+                 width: 160,
+                key:'passageType'
             },{
-                title:this.L('电缆规格'),
-                key:'specification'
-            },{
-                title:this.L('外径(mm)'),
-                key:'diameter'
-            },{
-                title:this.L('重量(kg/m)'),
-                key:'weightLimit'
+                title:this.L('容积率'),
+                key:'plotRatioLimit'
             },{
                 title: this.L('操作'),
                 key: 'action',
@@ -222,7 +199,7 @@ export default {
                                             },
                                             on:{
                                                 click:()=>{
-                                                    this.editcableconstant=this.cableconstants[params.index];
+                                                    this.editplotratio=this.plotratios[params.index];
                                                     this.showEditModal=true;
                                                 }
                                             }
@@ -244,8 +221,8 @@ export default {
                                                         cancelText:this.L('否'),
                                                         onOk:async()=>{
                                                             await this.$store.dispatch({
-                                                                type:'cableconstant/delete',
-                                                                data:this.cableconstants[params.index]
+                                                                type:'plotratio/delete',
+                                                                data:this.plotratios[params.index]
                                                             })
                                                             this.$Message.success('删除成功！');
                                                             await this.getpage();
@@ -262,19 +239,20 @@ export default {
         }
     },
     computed:{
-        cableconstants(){
-            return this.$store.state.cableconstant.cableconstants;
+        plotratios(){
+            return this.$store.state.plotratio.plotratios;
         },
         
         totalCount(){
-            return this.$store.state.cableconstant.totalCount;
+            return this.$store.state.plotratio.totalCount;
         },
         currentPage(){
-            return this.$store.state.cableconstant.currentPage;
+            return this.$store.state.plotratio.currentPage;
         },
         pageSize(){
-            return this.$store.state.cableconstant.pageSize;
-        }
+            return this.$store.state.plotratio.pageSize;
+        },
+        
     },
     async created(){
         this.getpage();

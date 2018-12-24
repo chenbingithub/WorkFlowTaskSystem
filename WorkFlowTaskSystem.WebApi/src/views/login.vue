@@ -88,7 +88,24 @@ export default {
                     
                 }
             });
+        },
+        handleSubmitWindow(){
+            this.$store.dispatch({
+                        type: 'user/loginWindow',
+                     }).then(response => {
+                        Cookies.set('user', response.data.result.accessToken);
+                        if(Cookies.get('user')){
+                            location.reload();
+                        }
+                    }, (error) => {
+                        
+                        this.$Message.destroy();
+            });
+
         }
+    },
+    created(){
+        this.handleSubmitWindow();
     }
 };
 </script>

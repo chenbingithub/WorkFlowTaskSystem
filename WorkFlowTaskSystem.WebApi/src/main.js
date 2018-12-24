@@ -155,6 +155,39 @@ util.ajax.get('/MyAbpUserConfiguration/GetAll').then(result => {
                 document.body.appendChild(link)
                 link.click()
             };
+            abp.validateInteger=(rule,value,callback)=>{
+            if(!value){
+                return callback(new Error('必填项'));
+            }
+            setTimeout(()=>{
+                if(!Number.isInteger(value)){
+                    if(!(/^[0-9]+$/).test(value)){
+                        callback(new Error('请输入整数'));
+                    }else{
+                        callback();
+                    }
+                }else{
+                    callback();
+                }
+            },100)
+            
+            }
+            abp.validateNumber=(rule,value,callback)=>{
+            if(!value){
+                return callback(new Error('必填项'));
+            }
+            setTimeout(()=>{
+                if(!Number.isInteger(value)){
+                    if(!(/^\d+(\.\d+)?$/).test(value)){
+                        callback(new Error('请输入数字'));
+                    }else{
+                        callback();
+                    }
+                }else{
+                    callback();
+                }
+            },100)
+        }
         }
     });
 })

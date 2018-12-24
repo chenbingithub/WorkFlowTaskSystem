@@ -130,20 +130,7 @@ export default {
                     
                 });
         },
-        reportdownload(url){
-
-             this.$store.dispatch({
-                    type:'reportresult/reportdownload',
-                    data:{
-                        numberNo:url
-                    }
-                }).then(function (response) {
-                    abp.downloadfile(response.data,url+'.xlsx');
-                }).catch(function (error) {
-                    console.log(error);
-                    
-                });
-        },
+        
         handleClickActionsDropdown(name){
             if(name==='Create'){
                 this.create();
@@ -216,21 +203,7 @@ export default {
                                             }
                                         },this.L('下载'));
                                 btns.push(d);
-                                var d1=h('Button',{
-                                            props:{
-                                                type:'primary',
-                                                size:'small'
-                                            },
-                                            style:{
-                                                marginRight:'5px'
-                                            },
-                                            on:{
-                                                click:()=>{
-                                                    this.reportdownload(this.reportresults[params.index].description);
-                                                }
-                                            }
-                                        },this.L('重新生成'));
-                                btns.push(d1);
+                                
                      return h('div',btns);  
                 }
             }]

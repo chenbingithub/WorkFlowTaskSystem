@@ -27,26 +27,29 @@
                                             type="drag"
                                             :data="other"
                                             :action="uploadUrl"
-                                            style="display: inline-block;width:58px;">
-                                            <div style="width: 58px;height:58px;line-height: 58px;">
+                                            style="display: inline-block;width:78px;">
+                                            <div style="width:78px;height:78px;line-height: 78px;">
                                                 <Icon type="camera" size="20"></Icon>
                                             </div>
                                         </Upload>
-                                        <Modal title="查看图片" v-model="visible">
+                                        <Modal :title="realname" v-model="visible">
                                         <img :src="imgurl" v-if="visible" style="width: 100%">
                                         </Modal>
                                     </Card>
                                 </Col>
                                 <Col span="20" class="padding-left-10">
-                                    <Card style="min-height:100px">
-                                        <div class="height-260px">
+                                    <Card style="min-height:120px">
+                                        <div class="height-280px">
 
                                             <div class="admin-upload-list " v-for="item in uploadList" :key="item.url">
                                                 <template v-if="item.status === 'finished'">
                                                     <img :src="item.url">
                                                     <div class="admin-upload-list-cover">
-                                                        <Icon type="ios-eye-outline" @click.native="handleView(item.url)"></Icon>
+                                                        <Icon type="ios-eye-outline" @click.native="handleView(item.url,item.realname)"></Icon>
+                                                        <Icon type="ios-download-outline" @click.native="handleDownload(item)"></Icon>
                                                         <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
+                                                        
+                                                        
                                                     </div>
                                                 </template>
                                                 <template v-else>
@@ -97,6 +100,7 @@ export default {
             defaultList: this.data,
             defaultformat:this.format,
             imgurl: '',
+            realname:'',
             other:{methods:this.methods,randomnumber:this.randomnumber},
             visible: false,
             uploadUrl:this.$store.state.filemanager.uploadUrl,
@@ -137,8 +141,9 @@ export default {
                 duration:0,
             });
         },
-        handleView (url) {
+        handleView (url,realname) {
             this.imgurl = url;
+            this.realname=realname;
             this.visible = true;
         },
         handleRemove (file) {
@@ -150,11 +155,24 @@ export default {
                             data:file.name
                         })
         },
+        handleDownload (file) {
+            this.$store.dispatch({
+                    type:'filemanager/downloadFile',
+                    data:file.name
+                }).then(function (response) {
+                    console.log(response);
+                    abp.downloadfile(response.data,file.realname);
+                }).catch(function (error) {
+                    console.log(error);
+                    
+                });
+        },
         handleSuccess2 (res, file) {
             // 因为上传过程为实例，这里模拟添加 url
             //file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
             file.url=this.downloadUrl+"a7aca5a0-0543-46d8-9860-ef8799a9bf1b.jpg";
             file.name = res.result.filenames[0];
+            file.realname = res.result.realnames[0];
         },
         handleFormatError2 (file) {
             var f=this.format.join(',');
@@ -187,6 +205,7 @@ export default {
         uploadList(val){
             this.$emit("on-uploadlist-change",val);//组件内对uploadlist变更后向外部发送事件通知
         },
+        
         randomnumber(val){
             this.other.randomnumber=val;
         }

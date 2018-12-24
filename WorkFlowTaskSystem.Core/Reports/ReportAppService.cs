@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using Aspose.Cells;
 using Newtonsoft.Json.Linq;
 
@@ -86,8 +88,39 @@ namespace WorkFlowTaskSystem.Core.Reports
             return result;
 
         }
+        public static DataTable ToDataTable<T>(List<T> source)
+        {
+            DataTable result = new DataTable("dt");
+            if (source != null && source.Count > 0)
+            {
+                var list = source;
+                PropertyInfo[] propertys = list[0].GetType().GetProperties();
+                foreach (PropertyInfo pi in propertys)
+                {
+                    if (pi.PropertyType == typeof(string))
+                    {
+                        result.Columns.Add(pi.Name, pi.PropertyType);
+                    }
+                    
+                    
+                }
 
-      public static void test()
+                for (int i = 0; i < list.Count; i++)
+                {
+                    ArrayList tempList = new ArrayList();
+                    foreach (PropertyInfo pi in propertys)
+                    {
+                        object obj = pi.GetValue(list[i], null);
+                        tempList.Add(obj);
+                    }
+                    object[] array = tempList.ToArray();
+                    result.LoadDataRow(array, true);
+                }
+            }
+            return result;
+
+        }
+        public static void test()
       {
         Aspose.Cells.Style style=new Style();
     }

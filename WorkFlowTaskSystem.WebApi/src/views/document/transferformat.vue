@@ -22,16 +22,15 @@
                             校验敷设表
                         </p>
                         <div class="height-492px">
-                           <file-upload  :data="uploadList1" @on-uploadlist-change="onResultChange1" :title="title1" :format="['xlsx','jpg','jpeg','png']" ></file-upload>
-
+                           
                             <file-upload :data="uploadList2" @on-uploadlist-change="onResultChange2" :multiple="true" :title="title2" :size="1000" methods="Cable" :randomnumber="randomnumber" :format="['xlsx','xls']" ></file-upload>
                             <br/>
                             
                             <Button type="primary" :loading="loading" long  @click="submit">
-                                <span v-if="!loading">检验</span>
+                                <span v-if="!loading">转换格式</span>
                                 <span v-else>Loading...</span>
                             </Button>
-                    
+                            
                         </div>
                         
                     </Card>
@@ -49,8 +48,7 @@ export default {
         },
     data () {
         return {
-            title1:"现场实际敷设表",
-            uploadList1: [],
+            
             title2:"设计敷设表",
             uploadList2: [],
             randomnumber:abp.randomNumber(),
@@ -65,9 +63,7 @@ export default {
         deletedata(){
             location.reload();
         },
-       onResultChange1(val){
-            this.uploadList1=val;
-        },
+      
         onResultChange2(val){
             this.uploadList2=val;
         },
@@ -78,12 +74,40 @@ export default {
                  pc.push(value.name);
             });
             var $this=this; 
-            if(this.uploadList1.length==1&&this.uploadList2.length>0){
+            if(this.uploadList2.length>0){
                 this.loading=true;
                 this.$store.dispatch({
-                    type:'filemanager/check',
+                    type:'filemanager/transferformat',
                     data:{
-                        RealityTable:this.uploadList1[0].name,
+                        RealityTable:"",
+                        DesignTables:pc,
+                        NumberNo:number
+                    }
+                }).then(function (response) {
+                    abp.downloadfile(response.data,number+'.xlsx');
+                    $this.loading=false;
+                }).catch(function (error) {
+                    console.log(error);
+                    $this.loading=false;
+                    
+                });
+            }else{
+                $this.$Message.warning("请先上传文件")
+            } 
+        },
+        submit1(){
+            var number=this.randomnumber;
+            var pc=[];    
+            this.uploadList2.forEach(function(value,index,arr){
+                 pc.push(value.name);
+            });
+            var $this=this; 
+            if(this.uploadList2.length>0){
+                this.loading=true;
+                this.$store.dispatch({
+                    type:'filemanager/transferformat1',
+                    data:{
+                        RealityTable:"",
                         DesignTables:pc,
                         NumberNo:number
                     }
@@ -102,19 +126,10 @@ export default {
 
     },
    watch:{
-       uploadList1(){
-            let flag1=this.uploadList1.length>0;
-            let flag2=this.uploadList2.length>0;
-            if(flag1||flag2){
-                this.disabledbtn=true;
-            }else{
-                this.disabledbtn=false;
-            }
-       },
+       
        uploadList2(){
-            let flag1=this.uploadList1.length>0;
             let flag2=this.uploadList2.length>0;
-            if(flag1||flag2){
+            if(flag2){
                 this.disabledbtn=true;
             }else{
                 this.disabledbtn=false;

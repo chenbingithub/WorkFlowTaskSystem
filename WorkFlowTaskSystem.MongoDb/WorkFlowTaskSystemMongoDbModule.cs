@@ -27,7 +27,9 @@ namespace WorkFlowTaskSystem.MongoDb
             IocManager.Register<IRepository<BridgeInstances, string>, WorkFlowTaskRepositoryBase<BridgeInstances, string>>();
             IocManager.Register<IRepository<CableSummarizedBill, string>, WorkFlowTaskRepositoryBase<CableSummarizedBill, string>>();
             IocManager.Register<IRepository<ReportResult, string>, WorkFlowTaskRepositoryBase<ReportResult, string>>();
-    }
+            IocManager.Register<IRepository<WeightConstant, string>, WorkFlowTaskRepositoryBase<WeightConstant, string>>();
+            IocManager.Register<IRepository<PlotRatio, string>, WorkFlowTaskRepositoryBase<PlotRatio, string>>();
+        }
 
         public override void Initialize()
         {

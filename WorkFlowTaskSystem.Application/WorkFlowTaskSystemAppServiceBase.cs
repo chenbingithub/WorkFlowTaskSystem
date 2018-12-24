@@ -64,7 +64,7 @@ namespace WorkFlowTaskSystem.Application
             if (sortInput != null)
             {
                 if (typeof(IAudited).GetTypeInfo().IsAssignableFrom(typeof(TEntity))) {
-                    (input as ISortedResultRequest).Sorting = "CreationTime DESC";
+                    (input as ISortedResultRequest).Sorting = "CreationTime ASC";
                 }
                     
             }

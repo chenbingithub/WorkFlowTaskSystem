@@ -7,6 +7,7 @@ const bridgeconstant = {
         totalCount:0,
         pageSize:10,
         currentPage:1,
+        seachKey:"",
     },
     mutations: {
         setPageSize(state,size){
@@ -14,15 +15,19 @@ const bridgeconstant = {
         },
         setCurrentPage(state,page){
             state.currentPage=page;
-        }
+        },
+        setSeachKey(state,seachKey){
+            state.seachKey=seachKey;
+        },
     },
     actions:{
         async getAll({state},payload){
             let page={
                 maxResultCount:state.pageSize,
-                skipCount:(state.currentPage-1)*state.pageSize
+                skipCount:(state.currentPage-1)*state.pageSize,
+                seachKey:state.seachKey,
             }
-            let rep= await Util.ajax.get('/api/services/app/bridgeconstant/GetAll',{params:page});
+            let rep= await Util.ajax.get('/api/services/app/bridgeconstant/GetAllOrSeach',{params:page});
             state.bridgeconstants=[];
             state.bridgeconstants.push(...rep.data.result.items);
             state.totalCount=rep.data.result.totalCount;

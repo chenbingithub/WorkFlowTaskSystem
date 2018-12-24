@@ -14,58 +14,41 @@
                     <DropdownItem name='DeleteAll' v-if="persBtn.create" >{{'删除所有' | l}}</DropdownItem>
                 </DropdownMenu>
             </Dropdown>
-            <Input v-model="seachKey" @on-enter="seachKeyChange" >
-                <span slot="prepend">电缆型号:</span>
-                <Button slot="append" type="info"  @click="seachKeyChange">搜索</Button>
-            </Input>
-            <Table  :columns="columns"  border :data="cableconstants"></Table>
+            
+            <Table  :columns="columns"  border :data="weightconstants"></Table>
             <Page :total="totalCount" class="margin-top-10" @on-change="pageChange" @on-page-size-change="pagesizeChange" :page-size="pageSize" :current="currentPage" show-sizer show-elevator show-total ></Page>
         </Card>
-        <Modal v-model="showModal" :title="L('添加')" @on-ok="save"  :okText="L('save')" :cancelText="L('cancel')">
+        <Modal v-model="showModal" :title="L('添加')" @on-ok="save" :okText="L('save')" :cancelText="L('cancel')">
             <div>
-                       <Form ref="newcableconstantForm" label-position="top" :rules="cableconstantRule" :model="editcableconstant">
+                    <Form ref="newweightconstantForm" :label-width="100" :rules="newweightconstantRule" :model="editweightconstant">
                             
-                            <FormItem :label="L('电缆型号')" prop="version">
-                                <Input v-model="editcableconstant.version" :maxlength="32" :minlength="2"></Input>
+                             <FormItem :label="L('宽度之和')" prop="weightDecimal" >
+                                <Input v-model="editweightconstant.weightDecimal" number ></Input>
                             </FormItem>
-                            <FormItem :label="L('电缆规格')" prop="specification">
-                                <Input v-model="editcableconstant.specification" :maxlength="32" :minlength="2"></Input>
-                            </FormItem>
-                            <FormItem :label="L('外径(mm)')" prop="diameter" >
-                                <Input v-model="editcableconstant.diameter" number ></Input>
-                            </FormItem>
-                            <FormItem :label="L('重量(kg/m)')" prop="weightLimit" >
-                                <Input v-model="editcableconstant.weightLimit"  number ></Input>
-                            </FormItem>
-                            
-                                              
-                        </Form>
-                            
+                            <FormItem :label="L('重量限值')" prop="weightLimit" >
+                                <Input v-model="editweightconstant.weightLimit" number ></Input>
+                            </FormItem>  
+                           
+                                                          
+                </Form>                        
             </div>
             <div slot="footer">
                 <Button @click="cancel">{{'取消'|l}}</Button>
                 <Button @click="save" type="primary">{{'确定'|l}}</Button>
             </div>
         </Modal>
-        <Modal v-model="showEditModal" :title="L('编辑')" @on-ok="save"  :okText="L('save')" :cancelText="L('cancel')">
+        <Modal v-model="showEditModal" :title="L('编辑')" @on-ok="save" :okText="L('save')" :cancelText="L('cancel')">
             <div>
-                <Form ref="cableconstantForm" label-position="top" :rules="cableconstantRule" :model="editcableconstant">
+                <Form ref="weightconstantForm" :label-width="100" :rules="weightconstantRule" :model="editweightconstant">
+                            <FormItem :label="L('宽度之和')" prop="weightDecimal" >
+                                <Input v-model="editweightconstant.weightDecimal" number ></Input>
+                            </FormItem>
+                            <FormItem :label="L('重量限值')" prop="weightLimit" >
+                                <Input v-model="editweightconstant.weightLimit" number ></Input>
+                            </FormItem>  
                             
-                            <FormItem :label="L('电缆型号')" prop="version">
-                                <Input v-model="editcableconstant.version" :maxlength="32" :minlength="2"></Input>
-                            </FormItem>
-                            <FormItem :label="L('电缆规格')" prop="specification">
-                                <Input v-model="editcableconstant.specification" :maxlength="32" :minlength="2"></Input>
-                            </FormItem>
-                            <FormItem :label="L('外径(mm)')" prop="diameter" >
-                                <Input v-model="editcableconstant.diameter" number ></Input>
-                            </FormItem>
-                            <FormItem :label="L('重量(kg/m)')" prop="weightLimit" >
-                                <Input v-model="editcableconstant.weightLimit"  number ></Input>
-                            </FormItem>
-                            
-                                              
-                        </Form>
+                                           
+                </Form>
             </div>
             <div slot="footer">
                 <Button @click="cancel">{{'取消'|l}}</Button>
@@ -78,12 +61,12 @@
 export default {
     methods:{
         create(){
-            this.editcableconstant={};  
-            this.editcableconstant.description=abp.randomNumber();
+            this.editweightconstant={};  
+            this.editweightconstant.description=abp.randomNumber();
             this.showModal=true;
         },
         cancel(){
-            if(!!this.editcableconstant.id){
+            if(!!this.editweightconstant.id){
                 this.showEditModal=false;
                 this.getpage();
             }else{
@@ -92,12 +75,12 @@ export default {
             }
         },
         async save(){
-            if(!!this.editcableconstant.id){
-                this.$refs.cableconstantForm.validate(async (val)=>{
+            if(!!this.editweightconstant.id){
+                this.$refs.weightconstantForm.validate(async (val)=>{
                     if(val){
                         await this.$store.dispatch({
-                            type:'cableconstant/update',
-                            data:this.editcableconstant
+                            type:'weightconstant/update',
+                            data:this.editweightconstant
                         })
                         this.showEditModal=false;
                         this.$Message.success('保存成功！');
@@ -106,11 +89,11 @@ export default {
                 })
                 
             }else{
-                this.$refs.newcableconstantForm.validate(async (val)=>{
+                this.$refs.newweightconstantForm.validate(async (val)=>{
                     if(val){
                         await this.$store.dispatch({
-                            type:'cableconstant/create',
-                            data:this.editcableconstant
+                            type:'weightconstant/create',
+                            data:this.editweightconstant
                         })
                         this.showModal=false;
                         this.$Message.success('添加成功！');
@@ -121,17 +104,16 @@ export default {
             
         },
         pageChange(page){
-            this.$store.commit('cableconstant/setCurrentPage',page);
+            this.$store.commit('weightconstant/setCurrentPage',page);
             this.getpage();
         },
         pagesizeChange(pagesize){
-            this.$store.commit('cableconstant/setPageSize',pagesize);
+            this.$store.commit('weightconstant/setPageSize',pagesize);
             this.getpage();
         },
         async getpage(){
-            this.$store.commit('cableconstant/setSeachKey',this.seachKey);
             await this.$store.dispatch({
-                type:'cableconstant/getAll'
+                type:'weightconstant/getAll'
             })
         },
         seachKeyChange(){
@@ -147,10 +129,11 @@ export default {
             }else if(name==='Refresh'){
                 this.getpage();
                 this.$Message.success('刷新成功！');
+
             }else if(name=='DeleteAll'){
                 var $this=this;
                 this.$store.dispatch({
-                    type:'cableconstant/deleteAll'
+                    type:'weightconstant/deleteAll'
                 }).then(function (response) {
                     $this.getpage();
                     $this.$Message.success('刷新成功！');
@@ -158,31 +141,30 @@ export default {
                     console.log(error);
                     
                 });
+                
             }
         }
     },
     data(){
+        
         return{
-            editcableconstant:{},
+            editweightconstant:{},
              persBtn:{
-                create:true,//abp.auth.isGranted('Pages.cableconstants.Create'),
-                update:true,//abp.auth.isGranted('Pages.cableconstants.Update'),
-                delete:true,//abp.auth.isGranted('Pages.cableconstants.Delete'),
+                create:true,//abp.auth.isGranted('Pages.weightconstants.Create'),
+                update:true,//abp.auth.isGranted('Pages.weightconstants.Update'),
+                delete:true,//abp.auth.isGranted('Pages.weightconstants.Delete'),
             },
             showModal:false,
             showEditModal:false,
             selectedData:[],
             seachKey:"",
-            newcableconstantRule:{
-                version:[{required:true,message:'version is required',trigger: 'blur'}],
-                specification:[{required:true,message:'specification is required',trigger: 'blur'}],
-                diameter:[{validator:abp.validateInteger,trigger: 'blur'}],
+            newweightconstantRule:{
+                weightDecimal:[{validator:abp.validateInteger,trigger: 'blur'}],
                 weightLimit:[{validator:abp.validateInteger,trigger: 'blur'}],
+                
             },            
-            cableconstantRule:{
-                version:[{required:true,message:'version is required',trigger: 'blur'}],
-                specification:[{required:true,message:'specification is required',trigger: 'blur'}],
-                diameter:[{validator:abp.validateInteger,trigger: 'blur'}],
+            weightconstantRule:{
+               weightDecimal:[{validator:abp.validateInteger,trigger: 'blur'}],
                 weightLimit:[{validator:abp.validateInteger,trigger: 'blur'}],
             },
             columns:[
@@ -192,18 +174,13 @@ export default {
                         type: 'index',
                         width: 61,
                         align: 'center'
-                    },
-            {
-                title:this.L('电缆型号'),
-                key:'version'
+                    }
+            ,{
+                title:this.L('宽度之和'),
+                 width: 160,
+                key:'weightDecimal'
             },{
-                title:this.L('电缆规格'),
-                key:'specification'
-            },{
-                title:this.L('外径(mm)'),
-                key:'diameter'
-            },{
-                title:this.L('重量(kg/m)'),
+                title:this.L('重量限值'),
                 key:'weightLimit'
             },{
                 title: this.L('操作'),
@@ -222,7 +199,7 @@ export default {
                                             },
                                             on:{
                                                 click:()=>{
-                                                    this.editcableconstant=this.cableconstants[params.index];
+                                                    this.editweightconstant=this.weightconstants[params.index];
                                                     this.showEditModal=true;
                                                 }
                                             }
@@ -244,8 +221,8 @@ export default {
                                                         cancelText:this.L('否'),
                                                         onOk:async()=>{
                                                             await this.$store.dispatch({
-                                                                type:'cableconstant/delete',
-                                                                data:this.cableconstants[params.index]
+                                                                type:'weightconstant/delete',
+                                                                data:this.weightconstants[params.index]
                                                             })
                                                             this.$Message.success('删除成功！');
                                                             await this.getpage();
@@ -262,19 +239,20 @@ export default {
         }
     },
     computed:{
-        cableconstants(){
-            return this.$store.state.cableconstant.cableconstants;
+        weightconstants(){
+            return this.$store.state.weightconstant.weightconstants;
         },
         
         totalCount(){
-            return this.$store.state.cableconstant.totalCount;
+            return this.$store.state.weightconstant.totalCount;
         },
         currentPage(){
-            return this.$store.state.cableconstant.currentPage;
+            return this.$store.state.weightconstant.currentPage;
         },
         pageSize(){
-            return this.$store.state.cableconstant.pageSize;
-        }
+            return this.$store.state.weightconstant.pageSize;
+        },
+        
     },
     async created(){
         this.getpage();

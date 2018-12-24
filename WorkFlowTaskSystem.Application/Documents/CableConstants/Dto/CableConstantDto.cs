@@ -1,5 +1,6 @@
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
+using System;
 using WorkFlowTaskSystem.Core.Damain.Entities;
 
 namespace WorkFlowTaskSystem.Application.Documents.CableConstants.Dto
@@ -7,6 +8,10 @@ namespace WorkFlowTaskSystem.Application.Documents.CableConstants.Dto
     [AutoMap(typeof(CableConstant))]
     public class CableConstantDto : EntityDto<string>
     {
+        public CableConstantDto()
+        {
+            Id = Guid.NewGuid().ToString("N");
+        }
     /// <summary>
       /// ÐÍºÅ
       /// </summary>
