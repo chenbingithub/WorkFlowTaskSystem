@@ -135,7 +135,7 @@ export default {
             })
         },
         seachKeyChange(){
-            
+            this.$store.commit('cableconstant/setCurrentPage',1);
             this.getpage();
         },
         onselectionchange(row){

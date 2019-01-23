@@ -114,13 +114,36 @@ namespace WorkFlowTaskSystem.Application.Documents.BridgeConstants
                 if (eq.Count() >0) {
                     sum += eq.Sum(u => u.Weight);
                 }
-                var c= constlist.FirstOrDefault(u => u.WeightDecimal == sum);
+                var c= constlist.Where(u => u.WeightDecimal == sum).ToList();
                 if (c == null)
                 {
                     meassages.Add(string.Format("桥架编号：{0} 重量限值：{1}  不在规定范围", item.Key, sum));
                 }
+                else if (c.Count == 1)
+                {
+                    weightLimit = c[0].WeightLimit;
+                }
                 else {
-                    weightLimit = c.WeightLimit;
+
+                    var pts = item.Select(u => u.PassageType.ToLower()).ToList();
+                    var arr = "NP,MP,NI".ToLower().Split(',').ToList();
+                    var except = pts.Exists(u => arr.Contains(u));
+                    var c1 = c.FirstOrDefault(u => u.PassageTypeName == "非安全级");
+                    var c2 = c.FirstOrDefault(u => !(u.PassageTypeName == "非安全级"));
+                    if (except)
+                    {
+                        if (c1 != null)
+                        {
+                            weightLimit = c1.WeightLimit;
+                        }
+                    }
+                    else
+                    {
+                        if (c2 != null)
+                        {
+                            weightLimit = c2.WeightLimit;
+                        }
+                    }
                 }
                 
                 foreach (var t in item)
@@ -180,7 +203,7 @@ namespace WorkFlowTaskSystem.Application.Documents.BridgeConstants
                     .Where(u => u.BridgeCode.Contains(seachKey) || u.Version.Contains(seachKey) ||
                                 u.Types.Contains(seachKey) || u.Series.Contains(seachKey));
                 var totalCount = result.Count();
-                var query = result.PageBy(input);
+                var query = result.PageBy(input).ToList();
                 var data = new PagedResultDto<BridgeConstantDto>(
                     totalCount,
                     query.AsEnumerable().Select(MapToEntityDto).ToList()
@@ -237,14 +260,37 @@ namespace WorkFlowTaskSystem.Application.Documents.BridgeConstants
                 }
             }
             string weightLimit = "0";
-            var c = _weightConstantRepository.GetAll().FirstOrDefault(u => u.WeightDecimal == sum);
+            var c = _weightConstantRepository.GetAll().Where(u => u.WeightDecimal == sum).ToList();
             if (c == null)
             {
                 throw new UserFriendlyException("修改失败", string.Format("桥架编号：{0} 重量限值：{1}  不在规定范围", input.BridgeCode, sum));
             }
+            else if (c.Count == 1)
+            {
+                weightLimit = c[0].WeightLimit;
+            }
             else
             {
-                weightLimit = c.WeightLimit;
+
+                var pts = list.Select(u => u.PassageType.ToLower()).ToList();
+                var arr = "NP,MP,NI".ToLower().Split(',').ToList();
+                var except = pts.Exists(u => arr.Contains(u));
+                var c1 = c.FirstOrDefault(u =>u.PassageTypeName=="非安全级");
+                var c2 = c.FirstOrDefault(u => !(u.PassageTypeName == "非安全级"));
+                if (except)
+                {
+                    if (c1!=null) {
+                        weightLimit = c1.WeightLimit;
+                    }
+                }
+                else {
+                    if (c2 != null)
+                    {
+                        weightLimit = c2.WeightLimit;
+                    }
+                }
+                
+               
             }
             //switch (sum)
             //{

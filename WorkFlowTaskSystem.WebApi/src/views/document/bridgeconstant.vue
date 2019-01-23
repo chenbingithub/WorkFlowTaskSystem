@@ -175,7 +175,7 @@ export default {
             })
         },
         seachKeyChange(){
-            
+             this.$store.commit('bridgeconstant/setCurrentPage',1);
             this.getpage();
         },
         onselectionchange(row){

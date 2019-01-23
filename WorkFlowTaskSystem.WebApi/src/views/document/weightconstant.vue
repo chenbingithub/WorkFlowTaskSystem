@@ -21,11 +21,19 @@
         <Modal v-model="showModal" :title="L('添加')" @on-ok="save" :okText="L('save')" :cancelText="L('cancel')">
             <div>
                     <Form ref="newweightconstantForm" :label-width="100" :rules="newweightconstantRule" :model="editweightconstant">
-                            
-                             <FormItem :label="L('宽度之和')" prop="weightDecimal" >
+                            <FormItem :label="L('安全级')" prop="passageTypes" required >
+                                 <Select v-model="editweightconstant.passageTypes" @on-change="SelectChange" 
+                                 label-in-value style="width:200px">
+                                <Option v-for="item in passTypeKeys" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                            </FormItem>
+                            <FormItem :label="L('通道类型组')" prop="passageTypes" >
+                                <Input v-model="editweightconstant.passageTypes" disabled ></Input>
+                            </FormItem>
+                             <FormItem :label="L('宽度之和')" prop="weightDecimal" required >
                                 <Input v-model="editweightconstant.weightDecimal" number ></Input>
                             </FormItem>
-                            <FormItem :label="L('重量限值')" prop="weightLimit" >
+                            <FormItem :label="L('重量限值')" prop="weightLimit"  required>
                                 <Input v-model="editweightconstant.weightLimit" number ></Input>
                             </FormItem>  
                            
@@ -40,10 +48,19 @@
         <Modal v-model="showEditModal" :title="L('编辑')" @on-ok="save" :okText="L('save')" :cancelText="L('cancel')">
             <div>
                 <Form ref="weightconstantForm" :label-width="100" :rules="weightconstantRule" :model="editweightconstant">
-                            <FormItem :label="L('宽度之和')" prop="weightDecimal" >
+                            <FormItem :label="L('安全级')" prop="passageTypeName" required >
+                                 <Select v-model="editweightconstant.passageTypes" @on-change="SelectChange" 
+                                 label-in-value style="width:200px">
+                                <Option v-for="item in passTypeKeys" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                            </FormItem>
+                            <FormItem :label="L('通道类型组')" prop="passageTypes" >
+                                <Input v-model="editweightconstant.passageTypes" disabled ></Input>
+                            </FormItem>
+                            <FormItem :label="L('宽度之和')" prop="weightDecimal" required>
                                 <Input v-model="editweightconstant.weightDecimal" number ></Input>
                             </FormItem>
-                            <FormItem :label="L('重量限值')" prop="weightLimit" >
+                            <FormItem :label="L('重量限值')" prop="weightLimit" required>
                                 <Input v-model="editweightconstant.weightLimit" number ></Input>
                             </FormItem>  
                             
@@ -103,6 +120,9 @@ export default {
             }
             
         },
+        SelectChange(option){
+            this.editweightconstant.passageTypeName=option.label; 
+        },
         pageChange(page){
             this.$store.commit('weightconstant/setCurrentPage',page);
             this.getpage();
@@ -117,7 +137,7 @@ export default {
             })
         },
         seachKeyChange(){
-            
+            this.$store.commit('weightconstant/setCurrentPage',1);
             this.getpage();
         },
         onselectionchange(row){
@@ -154,16 +174,19 @@ export default {
                 update:true,//abp.auth.isGranted('Pages.weightconstants.Update'),
                 delete:true,//abp.auth.isGranted('Pages.weightconstants.Delete'),
             },
+            passTypeKeys:[{label:"安全级",value:"AP,BP,CP,DP,AI,BI,CI,DI"},{label:"非安全级",value:"NP,MP,NI"}],
             showModal:false,
             showEditModal:false,
             selectedData:[],
             seachKey:"",
             newweightconstantRule:{
+            passageTypes:[{required:true,message:'必填项',trigger: 'blur'}],
                 weightDecimal:[{validator:abp.validateInteger,trigger: 'blur'}],
                 weightLimit:[{validator:abp.validateInteger,trigger: 'blur'}],
                 
             },            
             weightconstantRule:{
+            passageTypes:[{required:true,message:'必填项',trigger: 'blur'}],
                weightDecimal:[{validator:abp.validateInteger,trigger: 'blur'}],
                 weightLimit:[{validator:abp.validateInteger,trigger: 'blur'}],
             },
@@ -176,6 +199,14 @@ export default {
                         align: 'center'
                     }
             ,{
+                title:this.L('安全级'),
+                 width: 160,
+                key:'passageTypeName'
+            },{
+                title:this.L('通道类型组'),
+                width: 200,
+                key:'passageTypes'
+            },{
                 title:this.L('宽度之和'),
                  width: 160,
                 key:'weightDecimal'

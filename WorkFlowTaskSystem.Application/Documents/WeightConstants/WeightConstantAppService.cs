@@ -45,7 +45,7 @@ namespace WorkFlowTaskSystem.Application.Documents.WeightConstants
         public override Task<WeightConstantDto> Create(WeightConstantDto input)
         {
 
-            var data = Repository.GetAll().Where(u => u.WeightDecimal == input.WeightDecimal).ToList();
+            var data = Repository.GetAll().Where(u => u.WeightDecimal == input.WeightDecimal&&u.PassageTypeName==input.PassageTypeName).ToList();
             if (data.Count()>0) {
                 throw new UserFriendlyException("添加失败", "重量限制：" + input.WeightDecimal + " 已存在");
             }
@@ -53,12 +53,30 @@ namespace WorkFlowTaskSystem.Application.Documents.WeightConstants
             foreach (var item in list.GroupBy(u => u.BridgeCode))
             {
                 decimal sum = item.Sum(u => u.Weight);
-                if (input.WeightDecimal == sum)
+                var pts = item.Select(u => u.PassageType.ToLower()).ToList();
+                var arr = "NP,MP,NI".ToLower().Split(',').ToList();
+                var except = pts.Exists(u => arr.Contains(u));
+                if (input.WeightDecimal == sum && input.PassageTypeName == "非安全级")
                 {
-                    foreach (var a in item)
+                    if (except)
                     {
-                        a.WeightLimit = input.WeightLimit;
-                        _bridgeConstantrepository.Update(a);
+                        foreach (var a in item)
+                        {
+                            a.WeightLimit = input.WeightLimit;
+                            _bridgeConstantrepository.Update(a);
+                        }
+                    }
+                }
+                else
+                {
+
+                    if (!except)
+                    {
+                        foreach (var a in item)
+                        {
+                            a.WeightLimit = input.WeightLimit;
+                            _bridgeConstantrepository.Update(a);
+                        }
                     }
                 }
             }
@@ -67,7 +85,7 @@ namespace WorkFlowTaskSystem.Application.Documents.WeightConstants
        
         public override Task<WeightConstantDto> Update(WeightConstantDto input)
         {
-            var data = Repository.GetAll().Where(u => u.WeightDecimal == input.WeightDecimal && u.Id!=input.Id).ToList();
+            var data = Repository.GetAll().Where(u => u.WeightDecimal == input.WeightDecimal && u.PassageTypeName == input.PassageTypeName && u.Id!=input.Id).ToList();
             if (data.Count() > 0)
             {
                 throw new UserFriendlyException("修改失败", "重量限制：" + input.WeightDecimal +  " 已存在");
@@ -76,12 +94,32 @@ namespace WorkFlowTaskSystem.Application.Documents.WeightConstants
             foreach (var item in list.GroupBy(u => u.BridgeCode))
             {
                 decimal sum = item.Sum(u => u.Weight);
-                if (input.WeightDecimal == sum) {
-                    foreach (var a in item) {
-                        a.WeightLimit = input.WeightLimit;
-                        _bridgeConstantrepository.Update(a);
+                var pts = item.Select(u => u.PassageType.ToLower()).ToList();
+                var arr = "NP,MP,NI".ToLower().Split(',').ToList();
+                var except = pts.Exists(u => arr.Contains(u));
+                if (input.WeightDecimal == sum && input.PassageTypeName == "非安全级")
+                {
+                    if (except)
+                    {
+                        foreach (var a in item)
+                        {
+                            a.WeightLimit = input.WeightLimit;
+                            _bridgeConstantrepository.Update(a);
+                        }
                     }
                 }
+                else {
+                    
+                    if (!except)
+                    {
+                        foreach (var a in item)
+                        {
+                            a.WeightLimit = input.WeightLimit;
+                            _bridgeConstantrepository.Update(a);
+                        }
+                    }
+                }
+                
             }
             
             return base.Update(input);

@@ -7,6 +7,11 @@ namespace WorkFlowTaskSystem.Core.Damain.Entities
 {
     public class WeightConstant : BaseEntity
     {
+        /// <summary>
+        /// 通道类型
+        /// </summary>
+        public string PassageTypes { get; set; }
+        public string PassageTypeName { get; set; }
         public decimal WeightDecimal { get; set; }
         /// <summary>
         /// 重量限值

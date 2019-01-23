@@ -117,7 +117,7 @@ export default {
             })
         },
         seachKeyChange(){
-            
+            this.$store.commit('plotratio/setCurrentPage',1);
             this.getpage();
         },
         onselectionchange(row){
