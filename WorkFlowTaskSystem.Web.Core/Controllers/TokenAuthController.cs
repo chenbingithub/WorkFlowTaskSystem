@@ -59,6 +59,7 @@ namespace WorkFlowTaskSystem.Web.Core.Controllers
             };
            
         }
+        [HttpPost]
         public AuthenticateResultModel AuthenticateWindows() {
             try {
                 var name = HttpContext.User.Claims.FirstOrDefault(p => p.Type == ClaimTypes.Name);
