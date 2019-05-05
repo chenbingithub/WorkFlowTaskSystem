@@ -3,6 +3,9 @@ using System.Reflection;
 using Abp.AspNetCore;
 using Abp.AspNetCore.Configuration;
 using Abp.Configuration.Startup;
+using Abp.Hangfire;
+using Abp.Hangfire.Configuration;
+using Abp.MailKit;
 using Abp.Modules;
 using Abp.Net.Mail.Smtp;
 using Abp.Reflection.Extensions;
@@ -18,12 +21,12 @@ using WorkFlowTaskSystem.Web.Core.Email;
 namespace WorkFlowTaskSystem.Web.Core
 {
   //,typeof(AbpRedisCacheModule)
-  [DependsOn(typeof(WorkFlowTaskSystemApplicationModule),typeof(AbpAspNetCoreModule),typeof(WorkFlowTaskSystemMongoDbModule)
-        #if FEATURE_SIGNALR
+  [DependsOn(typeof(WorkFlowTaskSystemApplicationModule),typeof(AbpAspNetCoreModule),typeof(WorkFlowTaskSystemMongoDbModule), typeof(AbpRedisCacheModule), typeof(AbpHangfireAspNetCoreModule), typeof(AbpMailKitModule)
+#if FEATURE_SIGNALR
         ,typeof(AbpWebSignalRModule)
-    #elif FEATURE_SIGNALR_ASPNETCORE
+#elif FEATURE_SIGNALR_ASPNETCORE
         ,typeof(AbpAspNetCoreSignalRModule)
-    #endif
+#endif
         )]
     public class WorkFlowTaskSystemWebCoreModule:AbpModule
     {
@@ -40,11 +43,12 @@ namespace WorkFlowTaskSystem.Web.Core
         public override void PreInitialize()
         {
             IocManager.Register<ISmtpEmailSenderConfiguration, WorkFlowSmtpEmailSenderConfiguration>();
+            //Configuration.ReplaceService<IMailKitSmtpBuilder, MyMailKitSmtpBuilder>();
             Configuration.Modules.AbpAspNetCore()
                 .CreateControllersForAppServices(
                     typeof(WorkFlowTaskSystemApplicationModule).GetAssembly()
                 );
-
+            Configuration.BackgroundJobs.UseHangfire();
             //配置跨域
 
             //GlobalConfiguration.Configuration.EnableCors(new System.Web.Http.Cors.EnableCorsAttribute("*", "*", "*"));
@@ -53,24 +57,24 @@ namespace WorkFlowTaskSystem.Web.Core
 
             //GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
 
-            
-            //设置所有缓存的默认过期时间
+
+            ////设置所有缓存的默认过期时间
             //Configuration.Caching.ConfigureAll(cache =>
             //{
-            //    cache.DefaultAbsoluteExpireTime=TimeSpan.FromMinutes(2);
+            //    cache.DefaultAbsoluteExpireTime = TimeSpan.FromMinutes(2);
             //});
             ////设置某个缓存的默认过期时间 根据 "CacheName" 来区分
             //Configuration.Caching.Configure("CacheName", cache =>
             //{
-            //    cache.DefaultAbsoluteExpireTime=TimeSpan.FromMinutes(2);
+            //    cache.DefaultAbsoluteExpireTime = TimeSpan.FromMinutes(2);
             //});
-            ////使用redis数据库缓存
-            //Configuration.Caching.UseRedis(option =>
-            //{
-            //    option.ConnectionString = _appConfiguration["Abp:RedisCache:ConnectionStrings"];
-            //    option.DatabaseId =int.Parse(_appConfiguration["Abp:RedisCache:DatabaseId"]);
-            //});
-            
+            //使用redis数据库缓存
+            Configuration.Caching.UseRedis(option =>
+            {
+                option.ConnectionString = _appConfiguration["Abp:RedisCache:ConnectionStrings"];
+                option.DatabaseId = int.Parse(_appConfiguration["Abp:RedisCache:DatabaseId"]);
+            });
+
 
 
         }

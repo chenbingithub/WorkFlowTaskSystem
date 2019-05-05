@@ -4,6 +4,8 @@ using Abp.AspNetCore;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Extensions;
 using Castle.Facilities.Logging;
+using Hangfire;
+using Hangfire.Redis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -77,7 +79,11 @@ namespace WorkFlowTaskSystem.Web.Host
                 // Assign scope requirements to operations based on AuthorizeAttribute
                 //options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
-
+            services.AddHangfire(config =>
+                {
+                    //config.UseRedisStorage("127.0.0.1:6379");
+                    config.UseRedisStorage(_appConfiguration["Abp:RedisCache:ConnectionStrings"]);
+                });
             return services.AddAbp<WorkFlowTaskSystemWebModule>(
                 // Configure Log4Net logging
                 options => options.IocManager.IocContainer.AddFacility<LoggingFacility>(
@@ -107,7 +113,9 @@ namespace WorkFlowTaskSystem.Web.Host
             app.UseStaticFiles();
             app.UseAbpRequestLocalization();
             //app.UseAuthentication();
-
+            //使用hangfire
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
             //app.UseAbpRequestLocalization();
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();

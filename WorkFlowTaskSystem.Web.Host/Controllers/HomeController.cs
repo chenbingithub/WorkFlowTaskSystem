@@ -84,7 +84,7 @@ namespace WorkFlowTaskSystem.Web.Host.Controllers
 
         public IActionResult testEmails()
         {
-            _emailSender.Send("binchen@chinergy.com.cn","标题 测试","内容  哈哈哈哈哈，收到了吧！");
+            _emailSender.Send("1028374217@qq.com","标题 测试","内容  哈哈哈哈哈，收到了吧！");
             return Ok();
         }
 
