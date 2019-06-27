@@ -4,8 +4,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.BackgroundJobs;
+using Abp.Events.Bus;
 using Abp.Runtime.Session;
 using WorkFlowTaskSystem.Application.EmailJobs.Dto;
+using WorkFlowTaskSystem.Core.Events;
 using WorkFlowTaskSystem.Core.Jobs;
 
 namespace WorkFlowTaskSystem.Application.EmailJobs
@@ -13,10 +15,11 @@ namespace WorkFlowTaskSystem.Application.EmailJobs
     public class EmailAppService : ApplicationService
     {
         private readonly IBackgroundJobManager _backgroundJobManager;
-
-        public EmailAppService(IBackgroundJobManager backgroundJobManager)
+        private IEventBus _eventBus;
+        public EmailAppService(IBackgroundJobManager backgroundJobManager, IEventBus eventBus)
         {
             _backgroundJobManager = backgroundJobManager;
+            _eventBus = eventBus;
         }
 
         public async Task SendEmail(SendEmailInput input)
@@ -37,6 +40,13 @@ namespace WorkFlowTaskSystem.Application.EmailJobs
         {
             await SendEmail(new SendEmailInput()
                 {Subject = subject, Body = body, TargetUserId = "hqchenbin@hytch.com"});
+        }
+
+        public async Task TestEmailEvent(string subject = "测试", string body = "这是一个测试!!")
+        {
+           await _eventBus.TriggerAsync(new SendEmailEventData
+                {Subject = subject, Body = body, TargetUserId = "hqchenbin@hytch.com"});
+
         }
     }
 }
