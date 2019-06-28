@@ -12,7 +12,7 @@ using WorkFlowTaskSystem.Core.Jobs;
 
 namespace WorkFlowTaskSystem.Application.EmailJobs
 {
-    public class EmailAppService : ApplicationService
+    public class EmailAppService : ApplicationService, IEmailAppService
     {
         private readonly IBackgroundJobManager _backgroundJobManager;
         private IEventBus _eventBus;
