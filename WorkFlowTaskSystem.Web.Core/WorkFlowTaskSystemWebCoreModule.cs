@@ -83,7 +83,7 @@ namespace WorkFlowTaskSystem.Web.Core
         {
             //mongodb数据库连接地址
             Configuration.Modules.AbpMongoDb().ConnectionString = _appConfiguration.GetConnectionString(WorkFlowTaskAbpConsts.ConnectionStringName );
-            Configuration.Modules.AbpMongoDb().DatatabaseName = _appConfiguration.GetConnectionString(WorkFlowTaskAbpConsts.DatatabaseName);
+            Configuration.Modules.AbpMongoDb().DatabaseName = _appConfiguration.GetConnectionString(WorkFlowTaskAbpConsts.DatatabaseName);
 
             //把当前程序集的特定类或接口注册到依赖容器中
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());

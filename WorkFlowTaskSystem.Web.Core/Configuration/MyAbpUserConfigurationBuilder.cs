@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Abp.Dependency;
 using WorkFlowTaskSystem.Application;
 using WorkFlowTaskSystem.Core.Damain.Services.Basics;
 
@@ -26,12 +27,19 @@ namespace WorkFlowTaskSystem.Web.Core.Configuration
         private ISession Session => _httpContextAccessor.HttpContext.Session;
         private UserManager _userManager;
         private PermissionInfoManager _permissionInfoManager;
-        public MyAbpUserConfigurationBuilder(IHttpContextAccessor httpContextAccessor, UserManager userManager, PermissionInfoManager permissionInfoManager,IMultiTenancyConfig multiTenancyConfig, ILanguageManager languageManager, ILocalizationManager localizationManager, IFeatureManager featureManager, IFeatureChecker featureChecker, IPermissionManager permissionManager, IUserNavigationManager userNavigationManager, ISettingDefinitionManager settingDefinitionManager, ISettingManager settingManager, IAbpAntiForgeryConfiguration abpAntiForgeryConfiguration, IAbpSession abpSession, IPermissionChecker permissionChecker) : base(multiTenancyConfig, languageManager, localizationManager, featureManager, featureChecker, permissionManager, userNavigationManager, settingDefinitionManager, settingManager, abpAntiForgeryConfiguration, abpSession, permissionChecker)
+        public MyAbpUserConfigurationBuilder(IMultiTenancyConfig multiTenancyConfig, ILanguageManager languageManager, ILocalizationManager localizationManager, IFeatureManager featureManager, IFeatureChecker featureChecker, IPermissionManager permissionManager, IUserNavigationManager userNavigationManager, ISettingDefinitionManager settingDefinitionManager, ISettingManager settingManager, IAbpAntiForgeryConfiguration abpAntiForgeryConfiguration, IAbpSession abpSession, IPermissionChecker permissionChecker, IIocResolver iocResolver, IAbpStartupConfiguration startupConfiguration, IHttpContextAccessor httpContextAccessor, UserManager userManager, PermissionInfoManager permissionInfoManager) : base(multiTenancyConfig, languageManager, localizationManager, featureManager, featureChecker, permissionManager, userNavigationManager, settingDefinitionManager, settingManager, abpAntiForgeryConfiguration, abpSession, permissionChecker, iocResolver, startupConfiguration)
         {
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
             _permissionInfoManager = permissionInfoManager;
         }
+        //public MyAbpUserConfigurationBuilder(IHttpContextAccessor httpContextAccessor, UserManager userManager, PermissionInfoManager permissionInfoManager,IMultiTenancyConfig multiTenancyConfig, ILanguageManager languageManager, ILocalizationManager localizationManager, IFeatureManager featureManager, IFeatureChecker featureChecker, IPermissionManager permissionManager, IUserNavigationManager userNavigationManager, ISettingDefinitionManager settingDefinitionManager, ISettingManager settingManager, IAbpAntiForgeryConfiguration abpAntiForgeryConfiguration, IAbpSession abpSession, IPermissionChecker permissionChecker) 
+        //    : base(multiTenancyConfig, languageManager, localizationManager, featureManager, featureChecker, permissionManager, userNavigationManager, settingDefinitionManager, settingManager, abpAntiForgeryConfiguration, abpSession, permissionChecker)
+        //{
+        //    _httpContextAccessor = httpContextAccessor;
+        //    _userManager = userManager;
+        //    _permissionInfoManager = permissionInfoManager;
+        //}
         protected override Task<AbpUserAuthConfigDto> GetUserAuthConfig()
         {
             var config = new AbpUserAuthConfigDto();
@@ -53,5 +61,7 @@ namespace WorkFlowTaskSystem.Web.Core.Configuration
 
             return Task.FromResult(config);
         }
+
+       
     }
 }

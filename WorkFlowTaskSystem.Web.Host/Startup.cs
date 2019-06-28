@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Abp.AspNetCore;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Extensions;
 using Castle.Facilities.Logging;
 using Hangfire;
-using Hangfire.Redis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -122,9 +122,11 @@ namespace WorkFlowTaskSystem.Web.Host
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
             app.UseSwaggerUI(options =>
             {
-                options.InjectOnCompleteJavaScript("/swagger/ui/abp.js");
-                options.InjectOnCompleteJavaScript("/swagger/ui/on-complete.js");
+                //options.InjectOnCompleteJavaScript("/swagger/ui/abp.js");
+                //options.InjectOnCompleteJavaScript("/swagger/ui/on-complete.js");
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "WorkFlowService API V1");
+                options.IndexStream = () => Assembly.GetExecutingAssembly()
+                    .GetManifestResourceStream("WorkFlowTaskSystem.Web.Host.wwwroot.swagger.ui.index.html");
             }); // URL: /swagger
 #if FEATURE_SIGNALR
             // Integrate with OWIN
