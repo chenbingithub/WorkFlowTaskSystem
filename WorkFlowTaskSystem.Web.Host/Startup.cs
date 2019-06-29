@@ -2,24 +2,23 @@
 using System.Linq;
 using System.Reflection;
 using Abp.AspNetCore;
+using Abp.AspNetCore.Configuration;
+using Abp.AspNetCore.Mvc.Extensions;
+using Abp.AspNetCore.OData.Configuration;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Extensions;
 using Castle.Facilities.Logging;
 using Hangfire;
+using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNet.OData.Formatter;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
+using WorkFlowTaskSystem.Core.Damain.Entities;
 using WorkFlowTaskSystem.Web.Core.Configuration;
-#if FEATURE_SIGNALR
-using Microsoft.AspNet.SignalR;
-using Microsoft.Owin.Cors;
-using Owin;
-using Abp.Owin;
-using WorkFlowTaskSystem.Owin;
-#elif FEATURE_SIGNALR_ASPNETCORE
-using Abp.AspNetCore.SignalR.Hubs;
-#endif
+
 
 namespace WorkFlowTaskSystem.Web.Host
 {
@@ -39,9 +38,22 @@ namespace WorkFlowTaskSystem.Web.Host
         {
             services.AddMvc();
             services.AddSession();
-#if FEATURE_SIGNALR_ASPNETCORE
-                        services.AddSignalR();
-#endif
+            services.AddOData();
+
+            // Workaround: https://github.com/OData/WebApi/issues/1177
+            services.AddMvcCore(options =>
+            {
+                foreach (var outputFormatter in options.OutputFormatters.OfType<ODataOutputFormatter>().Where(_ => _.SupportedMediaTypes.Count == 0))
+                {
+                    outputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
+                }
+
+                foreach (var inputFormatter in options.InputFormatters.OfType<ODataInputFormatter>().Where(_ => _.SupportedMediaTypes.Count == 0))
+                {
+                    inputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
+                }
+            });
+
             // Configure CORS for angular2 UI
             services.AddCors(
                 options => options.AddPolicy(
@@ -76,8 +88,6 @@ namespace WorkFlowTaskSystem.Web.Host
                     In = "header",
                     Type = "apiKey"
                 });
-                // Assign scope requirements to operations based on AuthorizeAttribute
-                //options.OperationFilter<SecurityRequirementsOperationFilter>();
             });
             services.AddHangfire(config =>
                 {
@@ -110,13 +120,19 @@ namespace WorkFlowTaskSystem.Web.Host
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; });
             //设置跨域处理的 代理
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
+
+            app.UseOData(builder =>
+            {
+                builder.EntitySet<WeightConstant>("Products").EntityType.Expand().Filter().OrderBy().Page().Select();
+            });
+
             app.UseStaticFiles();
             app.UseAbpRequestLocalization();
             //app.UseAuthentication();
             //使用hangfire
             app.UseHangfireServer();
             app.UseHangfireDashboard();
-            //app.UseAbpRequestLocalization();
+
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
@@ -128,15 +144,7 @@ namespace WorkFlowTaskSystem.Web.Host
                 options.IndexStream = () => Assembly.GetExecutingAssembly()
                     .GetManifestResourceStream("WorkFlowTaskSystem.Web.Host.wwwroot.swagger.ui.index.html");
             }); // URL: /swagger
-#if FEATURE_SIGNALR
-            // Integrate with OWIN
-            app.UseAppBuilder(ConfigureOwinServices);
-#elif FEATURE_SIGNALR_ASPNETCORE
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<AbpCommonHub>("/signalr");
-            });
-#endif
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -145,6 +153,8 @@ namespace WorkFlowTaskSystem.Web.Host
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                app.ApplicationServices.GetRequiredService<IAbpAspNetCoreConfiguration>().RouteConfiguration.ConfigureAll(routes);
+                routes.MapODataServiceRoute(app);
             });
         }
     }

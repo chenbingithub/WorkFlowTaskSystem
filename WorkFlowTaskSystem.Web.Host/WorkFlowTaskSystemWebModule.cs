@@ -6,13 +6,14 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Reflection;
 using System.Text;
+using Abp.AspNetCore.OData;
 using WorkFlowTaskSystem.Authentication.JwtBearer;
 using WorkFlowTaskSystem.Web.Core;
 using WorkFlowTaskSystem.Web.Core.Configuration;
 
 namespace WorkFlowTaskSystem.Web.Host
 {
-    [DependsOn(typeof(WorkFlowTaskSystemWebCoreModule))]
+    [DependsOn(typeof(WorkFlowTaskSystemWebCoreModule), typeof(AbpAspNetCoreODataModule))]
     public class WorkFlowTaskSystemWebModule: AbpModule
     {
         private readonly IConfigurationRoot _appConfiguration;

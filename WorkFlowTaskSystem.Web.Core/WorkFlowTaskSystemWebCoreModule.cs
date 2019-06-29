@@ -22,11 +22,7 @@ namespace WorkFlowTaskSystem.Web.Core
 {
   //,typeof(AbpRedisCacheModule)
   [DependsOn(typeof(WorkFlowTaskSystemApplicationModule),typeof(AbpAspNetCoreModule),typeof(WorkFlowTaskSystemMongoDbModule), typeof(AbpRedisCacheModule), typeof(AbpHangfireAspNetCoreModule), typeof(AbpMailKitModule)
-#if FEATURE_SIGNALR
-        ,typeof(AbpWebSignalRModule)
-#elif FEATURE_SIGNALR_ASPNETCORE
-        ,typeof(AbpAspNetCoreSignalRModule)
-#endif
+
         )]
     public class WorkFlowTaskSystemWebCoreModule:AbpModule
     {
