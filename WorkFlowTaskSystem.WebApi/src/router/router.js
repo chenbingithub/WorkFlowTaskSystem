@@ -66,7 +66,7 @@ export const otherRouter = {
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 export const appRouter = [
-    /*{
+    {
         path: '/baseInfo',
         icon: 'key',
         name: 'baseInfo',
@@ -115,7 +115,7 @@ export const appRouter = [
               
 
         ]
-    },*/
+    },
     {
         path: '/mytask',
         icon: 'lock-combination',
