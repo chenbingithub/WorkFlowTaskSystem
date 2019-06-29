@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WorkFlowTaskSystem.Application.Basics.PermissionInfos.Dto;
 using WorkFlowTaskSystem.Core;
+using WorkFlowTaskSystem.Core.Damain.Entities.Basics;
 
 namespace WorkFlowTaskSystem.Application.Basics.PermissionInfos
 {
@@ -10,5 +11,6 @@ namespace WorkFlowTaskSystem.Application.Basics.PermissionInfos
     {
         Task<List<IviewTree>> GetPermissionByParentId(string parentId);
         Task<List<IviewTree>> GetAllTree();
+        PermissionInfo GetPermission(string code);
     }
 }

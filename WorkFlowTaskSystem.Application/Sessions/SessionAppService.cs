@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Auditing;
@@ -11,6 +12,7 @@ using WorkFlowTaskSystem.Application.SignalR;
 using WorkFlowTaskSystem.Core;
 using WorkFlowTaskSystem.Core.Damain.Entities.Basics;
 using WorkFlowTaskSystem.Core.Damain.Services.Basics;
+using WorkFlowTaskSystem.Core.Session;
 
 namespace WorkFlowTaskSystem.Application.Sessions
 {
@@ -42,11 +44,13 @@ namespace WorkFlowTaskSystem.Application.Sessions
                     }
                 }
             };
-
-            var uid=Session.GetUserId();
+            _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(WorkFlowTaskAbpConsts.CookiesUserId,
+                out var cookiesId);
+            var uid=Session.GetUserId()?? Session.SetUserId(cookiesId);
             if (!uid.IsNullOrEmpty())
             {
                 output.User = ObjectMapper.Map<UserLoginInfoDto>(GetCurrentUser());
+                output.User.OrganizationUnitNames = string.Join(",",_userManager.GetOrganizationUnit(uid).Select(u=>u.Name));
             }
             return Task.FromResult(output);
         }

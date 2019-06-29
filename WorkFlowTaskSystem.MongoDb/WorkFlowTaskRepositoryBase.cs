@@ -29,10 +29,10 @@ namespace WorkFlowTaskSystem.MongoDb
                 query = global::MongoDB.Driver.Builders.Query.And(query, query1);
             }
             var entity = Collection.FindOne(query);
-            if (entity == null)
-            {
-                throw new EntityNotFoundException("There is no such an entity with given primary key. Entity type: " + typeof(TEntity).FullName + ", primary key: " + id);
-            }
+            //if (entity == null)
+            //{
+            //    throw new EntityNotFoundException("There is no such an entity with given primary key. Entity type: " + typeof(TEntity).FullName + ", primary key: " + id);
+            //}
 
             return entity;
         }
@@ -68,19 +68,61 @@ namespace WorkFlowTaskSystem.MongoDb
             
         }
 
-        public override IQueryable<TEntity> GetAll()
+      public void RealDelete(TPrimaryKey id)
+      {
+        var query = MongoDB.Driver.Builders.Query<TEntity>.EQ(e => e.Id, id);
+        Collection.Remove(query);
+      }
+      public void RealDeleteAll()
+      {
+        Collection.RemoveAll();
+      }
+    public override IQueryable<TEntity> GetAll()
         {
             return ApplyFilters(Collection.AsQueryable());
             
         }
-
+        public TEntity Get(IMongoQuery query)
+        {
+          return  Collection.FindOne(query);
+        }
+        public List<TEntity> GetList(IMongoQuery query)
+        {
+            return Collection.Find(query).ToList();
+           
+        }
+        /// <summary>
+        /// 分页
+        /// </summary>
+        /// <param name="skip"></param>
+        /// <param name="limit"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public List<TEntity> GetPage(int skip,int limit,out int count)
+        {
+            var query = MongoDB.Driver.Builders.Query.Empty;
+            return GetPage(query, skip, limit, out count).ToList();
+           
+        }
+        
+        public IQueryable<TEntity> GetPage(IMongoQuery query,int skip, int limit, out int count)
+        {
+            query = ApplySoftDeleteFilter(query);
+            count = (int)Collection.Find(query).Count();
+            return Collection.Find(query).SetSkip(skip).SetLimit(limit).AsQueryable();
+        }
         public override TEntity Insert(TEntity entity)
         {
             Collection.Insert(entity);
             return entity;
         }
 
-        public override TEntity Update(TEntity entity)
+        public void InsertBatch(IEnumerable<TEntity> list)
+        {
+            Collection.InsertBatch(list);
+        }
+
+      public override TEntity Update(TEntity entity)
         {
             if (typeof(IAudited).GetTypeInfo().IsAssignableFrom(typeof(TEntity)))
             {
@@ -131,6 +173,18 @@ namespace WorkFlowTaskSystem.MongoDb
                 if (UnitOfWorkManager?.Current == null || UnitOfWorkManager.Current.IsFilterEnabled(AbpDataFilters.SoftDelete))
                 {
                     query = query.Where(e => !((ISoftDelete)e).IsDeleted);
+                }
+            }
+
+            return query;
+        }
+        protected IMongoQuery ApplySoftDeleteFilter(IMongoQuery query)
+        {
+            if (typeof(ISoftDelete).GetTypeInfo().IsAssignableFrom(typeof(TEntity)))
+            {
+                if (UnitOfWorkManager?.Current == null || UnitOfWorkManager.Current.IsFilterEnabled(AbpDataFilters.SoftDelete))
+                {
+                    query = MongoDB.Driver.Builders.Query.And(query, MongoDB.Driver.Builders.Query.EQ("IsDeleted", false));
                 }
             }
 

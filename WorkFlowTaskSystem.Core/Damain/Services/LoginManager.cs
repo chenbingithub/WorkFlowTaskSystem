@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Abp.Domain.Services;
 using Abp.Extensions;
 using Abp.Runtime.Security;
+using Abp.Runtime.Session;
 using Abp.Timing;
 using WorkFlowTaskSystem.Core.Authorization;
 using WorkFlowTaskSystem.Core.Damain.Entities.Basics;
@@ -19,11 +20,13 @@ namespace WorkFlowTaskSystem.Core.Damain.Services
     {
         private IUserRepository _userRepository;
         private UserManager _userManager;
+        protected IPrincipalAccessor PrincipalAccessor { get; }
 
-        public LoginManager(IUserRepository userRepository, UserManager userManager)
+        public LoginManager(IUserRepository userRepository, UserManager userManager, IPrincipalAccessor principalAccessor)
         {
             _userRepository = userRepository;
             _userManager = userManager;
+            PrincipalAccessor = principalAccessor;
         }
 
         public LoginResult<User> Login(string usernameOrEmailAddress,string password)
@@ -48,7 +51,7 @@ namespace WorkFlowTaskSystem.Core.Damain.Services
 
             //TryLoginFromExternalAuthenticationSources method may create the user, that's why we are calling it before AbpStore.FindByNameOrEmailAsync
 
-            var user = _userRepository.GetAll().FirstOrDefault(u => (u.UserName == userNameOrEmailAddress || u.EmailAddress == userNameOrEmailAddress));
+            var user = _userRepository.GetAll().ToList().FirstOrDefault(u => (userNameOrEmailAddress.Equals(u.UserName,StringComparison.OrdinalIgnoreCase) || userNameOrEmailAddress.Equals(u.EmailAddress,StringComparison.OrdinalIgnoreCase)));
             if (user == null)
             {
                 return new LoginResult<User>(AbpLoginResultType.InvalidUserNameOrEmailAddress);
@@ -86,12 +89,12 @@ namespace WorkFlowTaskSystem.Core.Damain.Services
 
             _userRepository.Update(user);
 
-            var pers = _userManager.GetAllPermissions(user.Id).Select(u => new Claim("pers", u.Code)).ToList();
+            var principal = PrincipalAccessor.Principal;
+            ((ClaimsIdentity)principal.Identity).AddClaims(new[] {new Claim(ClaimTypes.NameIdentifier, user.Id) ,new Claim(ClaimTypes.Name, user.UserName)});
 
-            var principal = new ClaimsIdentity(pers);
             return new LoginResult<User>(
                 user,
-                principal
+               principal.Identity as ClaimsIdentity
             );
         }
 

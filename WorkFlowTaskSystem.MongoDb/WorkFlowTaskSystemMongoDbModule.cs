@@ -16,11 +16,19 @@ namespace WorkFlowTaskSystem.MongoDb
     {
         public override void PreInitialize()
         {
-            
+
             //IocManager.Register<IRepository<Form,string>, FormRepository>();
-            //IocManager.Register<IRepository<FormInstance, string>, FormInstanceRepository>();
+            //IocManager.Register<IRepository<DocumentTreeNode, string>, WorkFlowTaskRepositoryBase<DocumentTreeNode, string>>();
             IocManager.Register<IRepository<WorkFlowInstance, string>, WorkFlowInstanceRepository>();
             IocManager.Register<IRepository<WorkFlow, string>, WorkFlowRepository>();
+            IocManager.Register<IRepository<CableLayingDetails, string>, WorkFlowTaskRepositoryBase<CableLayingDetails, string>>();
+            IocManager.Register<IRepository<CableConstant, string>, WorkFlowTaskRepositoryBase<CableConstant, string>>();
+            IocManager.Register<IRepository<BridgeConstant, string>, WorkFlowTaskRepositoryBase<BridgeConstant, string>>(); 
+            IocManager.Register<IRepository<BridgeInstances, string>, WorkFlowTaskRepositoryBase<BridgeInstances, string>>();
+            IocManager.Register<IRepository<CableSummarizedBill, string>, WorkFlowTaskRepositoryBase<CableSummarizedBill, string>>();
+            IocManager.Register<IRepository<ReportResult, string>, WorkFlowTaskRepositoryBase<ReportResult, string>>();
+            IocManager.Register<IRepository<WeightConstant, string>, WorkFlowTaskRepositoryBase<WeightConstant, string>>();
+            IocManager.Register<IRepository<PlotRatio, string>, WorkFlowTaskRepositoryBase<PlotRatio, string>>();
         }
 
         public override void Initialize()

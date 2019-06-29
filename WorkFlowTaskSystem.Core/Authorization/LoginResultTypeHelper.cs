@@ -12,6 +12,7 @@ namespace WorkFlowTaskSystem.Core.Authorization
             LocalizationSourceName = WorkFlowTaskAbpConsts.LocalizationSourceName;
         }
 
+       
         public Exception CreateExceptionForFailedLoginAttempt(AbpLoginResultType result, string usernameOrEmailAddress, string tenancyName="")
         {
             switch (result)
@@ -19,22 +20,21 @@ namespace WorkFlowTaskSystem.Core.Authorization
                 case AbpLoginResultType.Success:
                     return new Exception("Don't call this method with a success result!");
                 case AbpLoginResultType.InvalidUserNameOrEmailAddress:
-                    return new UserFriendlyException("登陆失败", "用户名或密码错误");
                 case AbpLoginResultType.InvalidPassword:
-                    return new UserFriendlyException(L("登陆失败"), L("用户名或密码错误"));
+                    return new UserFriendlyException(L("LoginFailed"), L("InvalidUserNameOrPassword"));
                 case AbpLoginResultType.InvalidTenancyName:
-                    return new UserFriendlyException(L("登陆失败"), L("ThereIsNoTenantDefinedWithName{0}", tenancyName));
+                    return new UserFriendlyException(L("LoginFailed"), L("ThereIsNoTenantDefinedWithName{0}", tenancyName));
                 case AbpLoginResultType.TenantIsNotActive:
-                    return new UserFriendlyException(L("登陆失败"), L("TenantIsNotActive", tenancyName));
+                    return new UserFriendlyException(L("LoginFailed"), L("TenantIsNotActive", tenancyName));
                 case AbpLoginResultType.UserIsNotActive:
-                    return new UserFriendlyException(L("登陆失败"), L("该用户未启用不允许登陆", usernameOrEmailAddress));
+                    return new UserFriendlyException(L("LoginFailed"), L("UserIsNotActiveAndCanNotLogin", usernameOrEmailAddress));
                 case AbpLoginResultType.UserEmailIsNotConfirmed:
-                    return new UserFriendlyException(L("登陆失败"), L("UserEmailIsNotConfirmedAndCanNotLogin"));
+                    return new UserFriendlyException(L("LoginFailed"), L("UserEmailIsNotConfirmedAndCanNotLogin"));
                 case AbpLoginResultType.LockedOut:
-                    return new UserFriendlyException(L("登陆失败"), L("UserLockedOutMessage"));
+                    return new UserFriendlyException(L("LoginFailed"), L("UserLockedOutMessage"));
                 default: // Can not fall to default actually. But other result types can be added in the future and we may forget to handle it
                     Logger.Warn("Unhandled login fail reason: " + result);
-                    return new UserFriendlyException(L("登陆失败"));
+                    return new UserFriendlyException(L("LoginFailed"));
             }
         }
 
@@ -57,7 +57,7 @@ namespace WorkFlowTaskSystem.Core.Authorization
                     return L("UserEmailIsNotConfirmedAndCanNotLogin");
                 default: // Can not fall to default actually. But other result types can be added in the future and we may forget to handle it
                     Logger.Warn("Unhandled login fail reason: " + result);
-                    return L("登陆失败");
+                    return L("LoginFailed");
             }
         }
     }
