@@ -130,7 +130,10 @@ namespace WorkFlowTaskSystem.Web.Host
             app.UseAbpRequestLocalization();
             //app.UseAuthentication();
             //使用hangfire
-            app.UseHangfireServer();
+            app.UseHangfireServer(new BackgroundJobServerOptions()
+            {
+                Queues = new string[] { "default", "api", "job", "log", "email" }
+            });
             app.UseHangfireDashboard();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
