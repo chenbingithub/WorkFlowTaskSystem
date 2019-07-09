@@ -35,7 +35,17 @@ namespace WorkFlowTaskSystem.Application.EmailJobs
 
 
         }
-
+        public async Task TimingEmail(string subject = "定时邮件", string body = "这是一个定时邮件!!")
+        {
+    
+            await _backgroundJobManager.EnqueueAsync<SimpleSendEmailJob, SimpleSendEmailJobArgs>(
+                new SimpleSendEmailJobArgs
+                {
+                    Subject = subject,
+                    Body = body,
+                    TargetUserId = "hqchenbin@hytch.com"
+                },delay:DateTime.Now.AddMinutes(1).TimeOfDay);
+        }
         public async Task TestEmail(string subject="测试", string body="这是一个测试!!")
         {
             await SendEmail(new SendEmailInput()
