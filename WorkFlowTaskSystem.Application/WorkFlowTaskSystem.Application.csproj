@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\WorkFlowTaskSystem.Core\WorkFlowTaskSystem.Core.csproj" />
     <ProjectReference Include="..\WorkFlowTaskSystem.MongoDb\WorkFlowTaskSystem.MongoDb.csproj" />
+    <ProjectReference Include="..\WorkFlowTaskSystem.RabbitMqPublisher\WorkFlowTaskSystem.RabbitMqPublisher.csproj" />
   </ItemGroup>
 
 </Project>

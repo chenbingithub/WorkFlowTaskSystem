@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.BackgroundJobs;
 using Abp.Events.Bus;
+using Abp.MqMessages;
 using Abp.Runtime.Session;
 using WorkFlowTaskSystem.Application.EmailJobs.Dto;
 using WorkFlowTaskSystem.Core.Events;
 using WorkFlowTaskSystem.Core.Jobs;
+using WorkFlowTaskSystem.MqMessage;
 
 namespace WorkFlowTaskSystem.Application.EmailJobs
 {
@@ -16,10 +18,12 @@ namespace WorkFlowTaskSystem.Application.EmailJobs
     {
         private readonly IBackgroundJobManager _backgroundJobManager;
         private IEventBus _eventBus;
-        public EmailAppService(IBackgroundJobManager backgroundJobManager, IEventBus eventBus)
+        private readonly IMqMessagePublisher _publisher;
+        public EmailAppService(IBackgroundJobManager backgroundJobManager, IEventBus eventBus, IMqMessagePublisher publisher)
         {
             _backgroundJobManager = backgroundJobManager;
             _eventBus = eventBus;
+            _publisher = publisher;
         }
 
         public async Task SendEmail(SendEmailInput input)
@@ -56,6 +60,21 @@ namespace WorkFlowTaskSystem.Application.EmailJobs
         {
            await _eventBus.TriggerAsync(new SendEmailEventData
                 {Subject = subject, Body = body, TargetUserId = "hqchenbin@hytch.com"});
+
+        }
+        public async Task TestRabbitMq()
+        {
+            await _publisher.PublishAsync(new TestMessage
+            {
+                Value = "TestWork from DotNetCoreHost:BlaBlaBlaBlaBlaBla",
+                Time = DateTime.Now
+            });
+
+        }
+        public async Task TestEmailRabbitMq(string subject = "测试", string body = "这是一个测试!!")
+        {
+            await _publisher.PublishAsync(new EmailMessage
+            { Subject = subject, Body = body, TargetUserId = "hqchenbin@hytch.com" });
 
         }
     }

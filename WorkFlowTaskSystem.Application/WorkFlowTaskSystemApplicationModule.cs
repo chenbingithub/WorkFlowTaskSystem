@@ -7,10 +7,11 @@ using Abp.Reflection.Extensions;
 using WorkFlowTaskSystem.Application.Basics.Roles;
 using WorkFlowTaskSystem.Application.Forms;
 using WorkFlowTaskSystem.Core;
+using WorkFlowTaskSystem.RabbitMqPublisher;
 
 namespace WorkFlowTaskSystem.Application
 {
-    [DependsOn(typeof(AbpAutoMapperModule), typeof(WorkFlowTaskSystemCoreModule))]
+    [DependsOn(typeof(AbpAutoMapperModule), typeof(WorkFlowTaskSystemCoreModule), typeof(WorkFlowTaskSystemRabbitMqPublisherModule))]
     public class WorkFlowTaskSystemApplicationModule:AbpModule
     {
         public override void PreInitialize()

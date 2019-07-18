@@ -81,6 +81,7 @@ namespace WorkFlowTaskSystem.Web.Host.Controllers
             //    });
             //}
             return Redirect("/swagger");
+            //return View();
         }
 
         public IActionResult testEmails()
