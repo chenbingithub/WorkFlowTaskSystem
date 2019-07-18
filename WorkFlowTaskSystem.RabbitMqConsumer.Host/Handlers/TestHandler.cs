@@ -21,6 +21,7 @@ namespace WorkFlowTaskSystem.RabbitMqConsumer.Host.Handlers
             var msg = $"{Logger.GetType()}:{message.Value},{message.Time}";
             Logger.Debug(msg);
             //await Publisher.PublishAsync(msg);//send it again!
+            await Task.Run(()=> { });
         }
     }
 }
