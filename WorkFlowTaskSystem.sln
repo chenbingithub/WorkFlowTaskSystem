@@ -31,11 +31,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Web.Core", "4.Web.Core", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6.RabbitMq", "6.RabbitMq", "{572990D2-8911-4AE9-8044-0FB52638049A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkFlowTaskSystem.RabbitMqConsumer.Host", "WorkFlowTaskSystem.RabbitMqConsumer.Host\WorkFlowTaskSystem.RabbitMqConsumer.Host.csproj", "{B68DA3B7-B7B8-471B-9F3D-1834F6E46C45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkFlowTaskSystem.RabbitMqConsumer.Host", "WorkFlowTaskSystem.RabbitMqConsumer.Host\WorkFlowTaskSystem.RabbitMqConsumer.Host.csproj", "{B68DA3B7-B7B8-471B-9F3D-1834F6E46C45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkFlowTaskSystem.MqMessage", "WorkFlowTaskSystem.MqMessage\WorkFlowTaskSystem.MqMessage.csproj", "{906571FF-D977-40DF-8178-9328C4F9B9D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkFlowTaskSystem.MqMessage", "WorkFlowTaskSystem.MqMessage\WorkFlowTaskSystem.MqMessage.csproj", "{906571FF-D977-40DF-8178-9328C4F9B9D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkFlowTaskSystem.RabbitMqPublisher", "WorkFlowTaskSystem.RabbitMqPublisher\WorkFlowTaskSystem.RabbitMqPublisher.csproj", "{D85FC7F1-6897-4241-B689-00AC30269CC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkFlowTaskSystem.RabbitMqPublisher", "WorkFlowTaskSystem.RabbitMqPublisher\WorkFlowTaskSystem.RabbitMqPublisher.csproj", "{D85FC7F1-6897-4241-B689-00AC30269CC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCoreConsumerHost", "DotNetCoreConsumerHost\DotNetCoreConsumerHost.csproj", "{877C0888-82E3-4805-9CFD-3520620EFD5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,10 @@ Global
 		{D85FC7F1-6897-4241-B689-00AC30269CC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D85FC7F1-6897-4241-B689-00AC30269CC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D85FC7F1-6897-4241-B689-00AC30269CC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{877C0888-82E3-4805-9CFD-3520620EFD5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{877C0888-82E3-4805-9CFD-3520620EFD5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{877C0888-82E3-4805-9CFD-3520620EFD5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{877C0888-82E3-4805-9CFD-3520620EFD5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{B68DA3B7-B7B8-471B-9F3D-1834F6E46C45} = {572990D2-8911-4AE9-8044-0FB52638049A}
 		{906571FF-D977-40DF-8178-9328C4F9B9D4} = {572990D2-8911-4AE9-8044-0FB52638049A}
 		{D85FC7F1-6897-4241-B689-00AC30269CC6} = {572990D2-8911-4AE9-8044-0FB52638049A}
+		{877C0888-82E3-4805-9CFD-3520620EFD5B} = {572990D2-8911-4AE9-8044-0FB52638049A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E63A2F1-FBAA-484D-95C4-698FBA99EE7A}

@@ -77,5 +77,12 @@ namespace WorkFlowTaskSystem.Application.EmailJobs
             { Subject = subject, Body = body, TargetUserId = "hqchenbin@hytch.com" });
 
         }
+
+        public async Task TelPhoneCodeRabbitMq(string subject = "18903907942", string body = "495132")
+        {
+            await _publisher.PublishAsync(new PhoneVerificationCodeMessage
+            { TelPhone = subject, Code = body});
+
+        }
     }
 }
