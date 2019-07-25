@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using Abp.AspNetCore;
 using Abp.AspNetCore.Configuration;
 using Abp.Configuration.Startup;
+using Abp.Extensions;
 using Abp.Hangfire;
 using Abp.Hangfire.Configuration;
 using Abp.MailKit;
@@ -14,6 +16,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using WorkFlowTaskSystem.Application;
 using WorkFlowTaskSystem.Core;
+using WorkFlowTaskSystem.ElasticSearch;
+using WorkFlowTaskSystem.ElasticSearch.Configuration;
+using WorkFlowTaskSystem.ElasticSearch.Configuration.Startup;
 using WorkFlowTaskSystem.MongoDb;
 using WorkFlowTaskSystem.Web.Core.Configuration;
 using WorkFlowTaskSystem.Web.Core.Email;
@@ -21,7 +26,7 @@ using WorkFlowTaskSystem.Web.Core.Email;
 namespace WorkFlowTaskSystem.Web.Core
 {
   //,typeof(AbpRedisCacheModule)
-  [DependsOn(typeof(WorkFlowTaskSystemApplicationModule),typeof(AbpAspNetCoreModule),typeof(WorkFlowTaskSystemMongoDbModule), typeof(AbpRedisCacheModule), typeof(AbpHangfireAspNetCoreModule), typeof(AbpMailKitModule)
+  [DependsOn(typeof(WorkFlowTaskSystemApplicationModule),typeof(AbpAspNetCoreModule),typeof(WorkFlowTaskSystemMongoDbModule), typeof(AbpRedisCacheModule), typeof(AbpHangfireAspNetCoreModule), typeof(AbpMailKitModule), typeof(AbpElasticModue)
 
         )]
     public class WorkFlowTaskSystemWebCoreModule:AbpModule
@@ -80,6 +85,7 @@ namespace WorkFlowTaskSystem.Web.Core
             //mongodb数据库连接地址
             Configuration.Modules.AbpMongoDb().ConnectionString = _appConfiguration.GetConnectionString(WorkFlowTaskAbpConsts.ConnectionStringName );
             Configuration.Modules.AbpMongoDb().DatabaseName = _appConfiguration.GetConnectionString(WorkFlowTaskAbpConsts.DatatabaseName);
+            Configuration.Modules.ElasticSearch().ConnectionString =_appConfiguration[WorkFlowTaskAbpConsts.B2bElasticSearch];
 
             //把当前程序集的特定类或接口注册到依赖容器中
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());

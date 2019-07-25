@@ -20,6 +20,10 @@ namespace WorkFlowTaskSystem.Core
         /// </summary>
         public const string DatatabaseName = "database";
         /// <summary>
+        /// 搜索引擎配置key
+        /// </summary>
+        public const string B2bElasticSearch = "B2bElasticSearch";
+        /// <summary>
         /// 加密key
         /// </summary>
         public const string DefaultPassPhrase = "workflowtoken";

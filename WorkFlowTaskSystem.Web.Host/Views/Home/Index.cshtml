@@ -3,9 +3,10 @@
 }
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-    <form action="http://localhost:20541/Api/Travel/Reserve/Upload" method="post" enctype="multipart/form-data" >
+    <form action="http://localhost:8608/TravelAgency/V1/File/Upload" method="post" enctype="multipart/form-data">
+        <input type="text" name="PicCategory" value="14" />
         <input type="file" name="files" />
         <input type="submit" value="提交" />
-</form>
+    </form>
 </div>
 
