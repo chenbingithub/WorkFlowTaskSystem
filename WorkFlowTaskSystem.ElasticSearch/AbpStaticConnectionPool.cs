@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Elasticsearch.Net;
-using WorkFlowTaskSystem.ElasticSearch.Configuration;
+using Abp.ElasticSearch.Configuration;
 
-namespace WorkFlowTaskSystem.ElasticSearch
+namespace Abp.ElasticSearch
 {
    public class AbpConnectionPool: StaticConnectionPool, IAbpConnectionPool
     {

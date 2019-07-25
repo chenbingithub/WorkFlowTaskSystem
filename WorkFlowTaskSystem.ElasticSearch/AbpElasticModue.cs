@@ -6,9 +6,9 @@ using Abp;
 using Abp.Modules;
 using Elasticsearch.Net;
 using Nest;
-using WorkFlowTaskSystem.ElasticSearch.Configuration;
+using Abp.ElasticSearch.Configuration;
 
-namespace WorkFlowTaskSystem.ElasticSearch
+namespace Abp.ElasticSearch
 {
     [DependsOn(typeof(AbpKernelModule))]
     public  class AbpElasticModue : AbpModule

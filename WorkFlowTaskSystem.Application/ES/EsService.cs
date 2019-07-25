@@ -8,7 +8,7 @@ using Abp.Application.Services;
 using Nest;
 using WorkFlowTaskSystem.Application.EmailJobs.Dto;
 using WorkFlowTaskSystem.Application.ES.Dto;
-using WorkFlowTaskSystem.ElasticSearch;
+using Abp.ElasticSearch;
 
 namespace WorkFlowTaskSystem.Application.ES
 {

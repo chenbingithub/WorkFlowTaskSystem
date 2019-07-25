@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Abp.Configuration.Startup;
 
-namespace WorkFlowTaskSystem.ElasticSearch.Configuration.Startup
+namespace Abp.ElasticSearch.Configuration.Startup
 {
    public static class ElasticConfigurationExtensions
     {

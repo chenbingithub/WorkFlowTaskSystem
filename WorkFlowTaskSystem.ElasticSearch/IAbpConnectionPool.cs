@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Elasticsearch.Net;
 
-namespace WorkFlowTaskSystem.ElasticSearch
+namespace Abp.ElasticSearch
 {
    public interface IAbpConnectionPool: IConnectionPool
     {

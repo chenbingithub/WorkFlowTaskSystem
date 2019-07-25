@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WorkFlowTaskSystem.ElasticSearch.Configuration
+namespace Abp.ElasticSearch.Configuration
 {
    public interface IAbpElasticModuleConfiguration
     {

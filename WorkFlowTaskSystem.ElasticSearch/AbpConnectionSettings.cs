@@ -4,7 +4,7 @@ using System.Text;
 using Elasticsearch.Net;
 using Nest;
 
-namespace WorkFlowTaskSystem.ElasticSearch
+namespace Abp.ElasticSearch
 {
    public class AbpConnectionSettings: ConnectionSettings, IAbpConnectionSettings
     {
