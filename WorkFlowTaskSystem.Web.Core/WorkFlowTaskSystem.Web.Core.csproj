@@ -10,11 +10,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="abp.aspnetcore" Version="4.6.0" />
-    <PackageReference Include="abp.castle.log4net" Version="4.6.0" />
-    <PackageReference Include="Abp.HangFire.AspNetCore" Version="4.6.0" />
-    <PackageReference Include="Abp.MailKit" Version="4.6.0" />
-    <PackageReference Include="abp.rediscache" Version="4.6.0" />
+    <PackageReference Include="abp.aspnetcore" Version="4.9.0" />
+    <PackageReference Include="abp.castle.log4net" Version="4.9.0" />
+    <PackageReference Include="Abp.HangFire.AspNetCore" Version="4.9.0" />
+    <PackageReference Include="Abp.MailKit" Version="4.9.0" />
+    <PackageReference Include="abp.rediscache" Version="4.9.0" />
     <PackageReference Include="Hangfire.Redis.StackExchange" Version="1.8.0" />
     <PackageReference Include="microsoft.aspnetcore.authentication.jwtbearer" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.4" />

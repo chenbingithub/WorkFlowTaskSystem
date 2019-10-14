@@ -10,8 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp.AspNetCore.OData" Version="4.6.0" />
-    <PackageReference Include="aspose.cells" Version="19.6.0" />
+    <PackageReference Include="Abp.AspNetCore.OData" Version="4.9.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
   </ItemGroup>

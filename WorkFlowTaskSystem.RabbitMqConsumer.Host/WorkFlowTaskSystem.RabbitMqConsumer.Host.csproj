@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="4.6.0" />
-    <PackageReference Include="Abp.MailKit" Version="4.6.0" />
+    <PackageReference Include="Abp" Version="4.9.0" />
+    <PackageReference Include="Abp.MailKit" Version="4.9.0" />
     <PackageReference Include="Abplus.MqMessages.RebusRabbitMqConsumer" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />

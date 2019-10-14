@@ -21,16 +21,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Abp" Version="4.6.0" />
-    <PackageReference Include="Abp.AspNetCore" Version="4.6.0" />
-    <PackageReference Include="Abp.HangFire.AspNetCore" Version="4.6.0" />
+    <PackageReference Include="Abp" Version="4.9.0" />
+    <PackageReference Include="Abp.AspNetCore" Version="4.9.0" />
+    <PackageReference Include="Abp.HangFire.AspNetCore" Version="4.9.0" />
     <PackageReference Include="App.Metrics.AspNetCore.Endpoints" Version="3.1.0" />
     <PackageReference Include="App.Metrics.AspNetCore.Reporting" Version="3.1.0" />
     <PackageReference Include="App.Metrics.AspNetCore.Tracking" Version="3.1.0" />
     <PackageReference Include="App.Metrics.Reporting.InfluxDB" Version="3.1.0" />
-    <PackageReference Include="Aspose.Cells" Version="19.6.0" />
+    <PackageReference Include="Aspose.Cells" Version="19.9.0" />
     <PackageReference Include="CHSPinYinConv" Version="1.0.0" />
-    <PackageReference Include="DotNetCore.NPOI" Version="1.2.1" />
+    <PackageReference Include="DotNetCore.NPOI" Version="1.2.2" />
     <PackageReference Include="Ocelot" Version="13.5.2" />
   </ItemGroup>
 
