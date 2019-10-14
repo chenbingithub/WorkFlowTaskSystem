@@ -6,7 +6,6 @@ namespace WorkFlowTaskSystem.Application.EmailJobs.Dto
 {
     public class SendEmailInput
     {
-        public string SenderUserId { get; set; }
 
         public string TargetUserId { get; set; }
 

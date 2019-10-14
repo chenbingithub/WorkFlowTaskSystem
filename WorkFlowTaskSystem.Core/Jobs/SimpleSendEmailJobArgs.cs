@@ -7,10 +7,7 @@ namespace WorkFlowTaskSystem.Core.Jobs
     [Serializable]
     public class SimpleSendEmailJobArgs
     {
-        /// <summary>
-        /// 发送者
-        /// </summary>
-        public string SenderUserId { get; set; }
+        
         /// <summary>
         /// 接收者
         /// </summary>

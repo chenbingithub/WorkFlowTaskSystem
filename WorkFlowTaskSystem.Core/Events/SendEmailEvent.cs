@@ -25,7 +25,6 @@ namespace WorkFlowTaskSystem.Core.Events
                 {
                     Subject = eventData.Subject,
                     Body = eventData.Body,
-                    SenderUserId = eventData.SenderUserId,
                     TargetUserId = eventData.TargetUserId
                 });
         }

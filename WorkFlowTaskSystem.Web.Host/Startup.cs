@@ -7,6 +7,7 @@ using Abp.AspNetCore.Mvc.Extensions;
 using Abp.AspNetCore.OData.Configuration;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Extensions;
+using App.Metrics;
 using Castle.Facilities.Logging;
 using Hangfire;
 using Microsoft.AspNet.OData.Extensions;
@@ -16,6 +17,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
 using WorkFlowTaskSystem.Core.Damain.Entities;
 using WorkFlowTaskSystem.Web.Core.Configuration;
 
@@ -53,7 +56,42 @@ namespace WorkFlowTaskSystem.Web.Host
                     inputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
                 }
             });
+            #region App Metrics
+            // AppMetrics
+            bool isOpenMetrics = Convert.ToBoolean(_appConfiguration["AppMetrics:IsOpen"]);
+            if (isOpenMetrics)
+            {
+                string database = _appConfiguration["AppMetrics:DatabaseName"];
+                string connStr = _appConfiguration["AppMetrics:ConnectionString"];
+                string app = _appConfiguration["AppMetrics:App"];
+                string env = _appConfiguration["AppMetrics:Env"];
+                string username = _appConfiguration["AppMetrics:UserName"];
+                string password = _appConfiguration["AppMetrics:Password"];
 
+                var uri = new Uri(connStr);
+                var metrics = AppMetrics.CreateDefaultBuilder().Configuration.Configure(options =>
+                {
+                    options.AddAppTag(app);
+                    options.AddEnvTag(env);
+                }).Report.ToInfluxDb(options =>
+                {
+                    options.InfluxDb.BaseUri = uri;
+                    options.InfluxDb.Database = database;
+                    options.InfluxDb.UserName = username;
+                    options.InfluxDb.Password = password;
+                    options.HttpPolicy.BackoffPeriod = TimeSpan.FromSeconds(30);
+                    options.HttpPolicy.FailuresBeforeBackoff = 5;
+                    options.HttpPolicy.Timeout = TimeSpan.FromSeconds(10);
+                    options.FlushInterval = TimeSpan.FromSeconds(5);
+                }).Build();
+                //services.AddMetricsReportScheduler();
+                services.AddMetrics(metrics);
+                services.AddMetricsTrackingMiddleware();
+                services.AddMetricsEndpoints();
+            }
+
+            services.AddOcelot();
+            #endregion
             // Configure CORS for angular2 UI
             services.AddCors(
                 options => options.AddPolicy(
@@ -136,6 +174,14 @@ namespace WorkFlowTaskSystem.Web.Host
             });
             app.UseHangfireDashboard();
 
+            // AppMetrics
+            bool isOpenMetrics = Convert.ToBoolean(_appConfiguration["AppMetrics:IsOpen"]);
+            if (isOpenMetrics)
+            {
+                app.UseMetricsAllEndpoints();
+                app.UseMetricsAllMiddleware();
+            }
+
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
@@ -159,6 +205,8 @@ namespace WorkFlowTaskSystem.Web.Host
                 app.ApplicationServices.GetRequiredService<IAbpAspNetCoreConfiguration>().RouteConfiguration.ConfigureAll(routes);
                 routes.MapODataServiceRoute(app);
             });
+            // Ocelot
+            app.UseOcelot().Wait();
         }
     }
 }

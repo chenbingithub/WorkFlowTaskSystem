@@ -33,7 +33,6 @@ namespace WorkFlowTaskSystem.Application.EmailJobs
                 {
                     Subject = input.Subject,
                     Body = input.Body,
-                    SenderUserId = input.SenderUserId,
                     TargetUserId = input.TargetUserId
                 });
 

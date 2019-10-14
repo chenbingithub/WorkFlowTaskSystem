@@ -37,7 +37,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkFlowTaskSystem.MqMessag
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkFlowTaskSystem.RabbitMqPublisher", "WorkFlowTaskSystem.RabbitMqPublisher\WorkFlowTaskSystem.RabbitMqPublisher.csproj", "{D85FC7F1-6897-4241-B689-00AC30269CC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCoreConsumerHost", "DotNetCoreConsumerHost\DotNetCoreConsumerHost.csproj", "{877C0888-82E3-4805-9CFD-3520620EFD5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCoreConsumerHost", "DotNetCoreConsumerHost\DotNetCoreConsumerHost.csproj", "{877C0888-82E3-4805-9CFD-3520620EFD5B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7.HangFire", "7.HangFire", "{1AD45220-4343-4AA2-8BC0-32F9F3A6A238}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HangFireServerNode", "HangFireServerNode\HangFireServerNode.csproj", "{98671212-EA0D-4EC2-B33E-1A81C045765C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiClient.Core", "WebApiClient.Core\WebApiClient.Core.csproj", "{CECDF8C4-70ED-4C12-8247-9411579ABFDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +95,14 @@ Global
 		{877C0888-82E3-4805-9CFD-3520620EFD5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{877C0888-82E3-4805-9CFD-3520620EFD5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{877C0888-82E3-4805-9CFD-3520620EFD5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98671212-EA0D-4EC2-B33E-1A81C045765C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98671212-EA0D-4EC2-B33E-1A81C045765C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98671212-EA0D-4EC2-B33E-1A81C045765C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98671212-EA0D-4EC2-B33E-1A81C045765C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CECDF8C4-70ED-4C12-8247-9411579ABFDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CECDF8C4-70ED-4C12-8247-9411579ABFDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CECDF8C4-70ED-4C12-8247-9411579ABFDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CECDF8C4-70ED-4C12-8247-9411579ABFDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +119,8 @@ Global
 		{906571FF-D977-40DF-8178-9328C4F9B9D4} = {572990D2-8911-4AE9-8044-0FB52638049A}
 		{D85FC7F1-6897-4241-B689-00AC30269CC6} = {572990D2-8911-4AE9-8044-0FB52638049A}
 		{877C0888-82E3-4805-9CFD-3520620EFD5B} = {572990D2-8911-4AE9-8044-0FB52638049A}
+		{98671212-EA0D-4EC2-B33E-1A81C045765C} = {1AD45220-4343-4AA2-8BC0-32F9F3A6A238}
+		{CECDF8C4-70ED-4C12-8247-9411579ABFDD} = {7C6E188A-DDA0-4226-9BB4-4F265A92759E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E63A2F1-FBAA-484D-95C4-698FBA99EE7A}
