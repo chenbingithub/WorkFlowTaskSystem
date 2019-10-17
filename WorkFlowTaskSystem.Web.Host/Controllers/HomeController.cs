@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using WorkFlowTaskSystem.Application.Basics.PermissionInfos;
 using WorkFlowTaskSystem.Application.TreeNodes;
@@ -21,6 +22,7 @@ using WorkFlowTaskSystem.Controllers;
 using WorkFlowTaskSystem.Core;
 using WorkFlowTaskSystem.Core.Damain.Entities;
 using WorkFlowTaskSystem.Core.Reports;
+using WorkFlowTaskSystem.Web.Core.Configuration;
 using WorkFlowTaskSystem.Web.Host.Models;
 
 namespace WorkFlowTaskSystem.Web.Host.Controllers
@@ -31,12 +33,14 @@ namespace WorkFlowTaskSystem.Web.Host.Controllers
         private IDocumentTreeNodeAppService _documentTreeNodeAppService;
         private IHostingEnvironment _hostingEnvironment;
         private ISmtpEmailSender _emailSender;
+        private readonly IConfigurationRoot _appConfiguration;
         public HomeController(IPermissionInfoAppService permissionInfoAppService, IDocumentTreeNodeAppService documentTreeNodeAppService, IHostingEnvironment hostingEnvironment, ISmtpEmailSender emailSender)
         {
             _permissionInfoAppService = permissionInfoAppService;
             _documentTreeNodeAppService = documentTreeNodeAppService;
             _hostingEnvironment = hostingEnvironment;
             _emailSender = emailSender;
+            _appConfiguration = _hostingEnvironment.GetAppConfiguration();
         }
         public IActionResult Index()
         {
@@ -82,6 +86,12 @@ namespace WorkFlowTaskSystem.Web.Host.Controllers
             //}
             return Redirect("/swagger");
             //return View();
+        }
+
+        public IActionResult apollo()
+        {
+            return Json(this._appConfiguration["Test"]);
+
         }
 
         public IActionResult testEmails()

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Com.Ctrip.Framework.Apollo;
+using Com.Ctrip.Framework.Apollo.Enums;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
 namespace WorkFlowTaskSystem.Web.Core.Configuration
@@ -21,7 +23,8 @@ namespace WorkFlowTaskSystem.Web.Core.Configuration
             
             builder.AddEnvironmentVariables();
             //这返回一个配置文件跟节点：IConfigurationRoot
-           
+            builder.AddApollo(builder.Build().GetSection("apollo"))
+                .AddDefault();
             return builder.Build();
         }
     }

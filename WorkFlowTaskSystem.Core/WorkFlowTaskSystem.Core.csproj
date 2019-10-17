@@ -30,6 +30,7 @@
     <PackageReference Include="App.Metrics.Reporting.InfluxDB" Version="3.1.0" />
     <PackageReference Include="Aspose.Cells" Version="19.9.0" />
     <PackageReference Include="CHSPinYinConv" Version="1.0.0" />
+    <PackageReference Include="Com.Ctrip.Framework.Apollo.Configuration" Version="2.1.0" />
     <PackageReference Include="DotNetCore.NPOI" Version="1.2.2" />
     <PackageReference Include="Ocelot" Version="13.5.2" />
   </ItemGroup>
