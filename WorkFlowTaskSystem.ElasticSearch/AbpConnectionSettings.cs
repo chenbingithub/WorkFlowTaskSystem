@@ -10,7 +10,7 @@ namespace Abp.ElasticSearch
     {
         public AbpConnectionSettings(IAbpConnectionPool pool):base(pool)
         {
-            this.DefaultIndex("abpindex");
+            this.DefaultIndex("themepark_ota");
         }
     }
 }

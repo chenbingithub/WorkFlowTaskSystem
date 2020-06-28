@@ -61,5 +61,63 @@ namespace WorkFlowTaskSystem.Application.ES
             }
            
         }
+        public List<FinOrderBookExpire> GetElasticSearchTest()
+        {
+            try
+            {
+                // Searching
+                var searchResponse = _abpElasticClient.Search<FinOrderBookExpire>(s => s
+                    .From(1)
+                    .Size(100000)
+
+                );
+
+                return searchResponse.Documents.ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+        }
+        public ISearchResponse<FinOrderBookExpire> GetElasticSearchGroup()
+        {
+            try
+            {
+                // Searching
+                var searchResponse = _abpElasticClient.Search<FinOrderBookExpire>(s => s
+                    .Size(0)
+                    .Aggregations(u=>
+                        u.Terms("ParkId",
+                        t=>t.Field(f=>f.ParkId)
+                            .Aggregations(ag=>ag.Terms("AgencyId", t2=>t2.Field(fd=>fd.AgencyId).
+                                Aggregations(agg=> agg.Sum("SettlementAmount", m => m.Field(f => f.SettlementAmount)))
+                                ))
+                            
+                            ))
+
+                );
+
+                return searchResponse;
+                }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+        }
+        public async Task<IndexResponse> IndexFinOrderBookExpireAsync()
+        {
+            // indexing
+            var line = new FinOrderBookExpire()
+            {
+                ToHeaderId="1234567"
+            };
+            var result = await _abpElasticClient.IndexDocumentAsync(line);
+            return result;
+
+        }
     }
 }
